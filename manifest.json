@@ -1,6 +1,6 @@
 {
-	"name": "SAVHESAKI WebRadio",
-	"short_name": "SAVHESAKI",
+	"name": "Can3X WebRadio",
+	"short_name": "Can3X",
 	"start_url": "/index.html",
 	"display": "standalone",
 	"background_color": "#ffffff",

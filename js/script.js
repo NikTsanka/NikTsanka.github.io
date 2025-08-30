@@ -1,4 +1,4 @@
-const RADIO_NAME = 'SAVHESAKI WebRadio';
+const RADIO_NAME = 'Can3X WebRadio';
 
 //Stream URL Here, Supports, ICECAST, ZENO, SHOUTCAST, RADIOJAR and any other stream service.
 const URL_STREAMING = 'https://stream.zeno.fm/bjclt64fhc4uv';
