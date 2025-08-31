@@ -5,132 +5,84 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Radio Can3X</title>
-	<link rel="icon" type="image/png" href="img/cover.png" />
-	<link rel="stylesheet" href="css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="css/animate.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/styles.css">
-	<link rel="manifest" href="/manifest.json">
+	<link rel="icon" type="image/png"
+		href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	<link rel="stylesheet" href="css/style.css">
+
 </head>
 
 <body>
-	<div class="cover-site">
-		<div id="bgCover"></div>
-		<div class="bg-mask"></div>
-	</div>
-	<main>
-		<section id="player">
-			<div class="container">
-				<div class="row web-player">
-					<div class="col-12 col-lg-10">
-						<div class="row">
-							<div class="col-12 col-md-5">
-								<div class="cover-album">
-									<div id="currentCoverArt"></div>
-									<div class="watermark"></div>
-								</div>
-							</div>
-							<div class="col-12 ml-md-auto col-md-6">
-								<div class="row">
-									<div class="col-12">
-										<div class="info-current-song">
-											<h2 id="currentSong" class="current-song text-uppercase">Music</h2>
-											<h3 id="currentArtist" class="current-artist text-captalize">Artist</h3>
-										</div>
-									</div>
-									<div class="col-12">
-										<div class="row">
-											<div class="play-pause col-12 col-md-6 text-center">
-												<button type="button" class="btn-play" onclick="togglePlay()">
-													<i id="playerButton" class="fa fa-play"></i> <span id="buttonPlay">PLAY</span>
-												</button>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-12 col-md-6 text-center">
-												<div class="row volume-control">
-													<div class="volume-icon col-1">
-														<i class="fa fa-volume-up"></i>
-													</div>
-													<div class="volume-slide col-10 text-center">
-														<input type="range" id="volume" step="2" min="0" max="100" value="80"
-															onchange="updateVolume(this.value)">
-														<label for="volume">Volume</label>
-														<span id="volIndicator">80</span> %
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-12 col-md-6 text-center call-lyrics">
-												<a href="#" class="lyrics" data-target="#modalLyrics">Lyrics</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row historic hidden">
-					<div class="col-12">
-						<h2>RECENT SONGS</h2>
-						<div class="row" id="historicSong">
-							<article class="col-12 col-md-6">
-								<div class="cover-historic" id="cover-historic-1"></div>
-								<div class="music-info">
-									<div class="song">Music</div>
-									<div class="artist">Artist</div>
-								</div>
-							</article>
-							<article class="col-12 col-md-6">
-								<div class="cover-historic" id="cover-historic-2"></div>
-								<div class="music-info">
-									<div class="song">Music</div>
-									<div class="artist">Artist</div>
-								</div>
-							</article>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	</main>
-	<div class="modal fade" id="modalLyrics" tabindex="-1" role="dialog" aria-labelledby="lyricsSong" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="lyricsSong">Letra</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
+	<!-- Background Elements -->
+	<div class="background-cover" id="backgroundCover"></div>
+	<div class="background-overlay"></div>
 
-				<div class="modal-body" id="lyric"></div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-success" data-dismiss="modal">Fechar</button>
-				</div>
+	<!-- Header -->
+	<div class="header">
+		<div class="logo">
+			<div class="logo-icon">
+				<i class="fas fa-radio"></i>
+			</div>
+			<span>Radio Can3X</span>
+		</div>
+	</div>
+
+	<div class="main-container">
+		<!-- Left Panel - Song History -->
+		<div class="left-panel">
+			<div class="history-title">Recent Songs</div>
+			<div id="songHistory">
+				<!-- Song history items will be populated here -->
+			</div>
+		</div>
+
+		<!-- Right Panel - Current Song -->
+		<div class="right-panel">
+			<div class="current-cover" id="currentCoverArt"></div>
+			<div class="current-info">
+				<h2 id="currentSong" class="current-song">Loading...</h2>
+				<h3 id="currentArtist" class="current-artist">Please wait</h3>
+				<div id="currentAlbum" class="current-album">Connecting to stream...</div>
+			</div>
+			<a href="#" class="lyrics-button" id="lyricsButton" data-target="#modalLyrics">View Lyrics</a>
+		</div>
+	</div>
+
+	<!-- Bottom Controls -->
+	<div class="bottom-controls">
+		<button type="button" class="play-button" onclick="togglePlay()">
+			<i id="playerButton" class="fa fa-play"></i>
+		</button>
+
+		<div class="volume-control">
+			<div class="volume-icon">
+				<i class="fa fa-volume-up" onclick="mute()"></i>
+			</div>
+			<div class="volume-slider">
+				<input type="range" id="volume" step="2" min="0" max="100" value="80" oninput="updateVolume(this.value)">
+			</div>
+			<div class="volume-value">
+				<span id="volIndicator">80</span>%
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript"
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="js/script.js"></script>
-	<script>
-		if ('serviceWorker' in navigator) {
-			window.addEventListener('load', function () {
-				navigator.serviceWorker.register('/service-worker.js')
-					.then(function (registration) {
-						console.log('Service Worker successfully registered:', registration);
-					}, function (err) {
-						console.log('Failed to register Service Worker:', err);
-					});
-			});
-		}
-	</script>
 
+	<!-- Lyrics Modal -->
+	<div class="modal" id="modalLyrics">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="lyricsSong">Lyrics</h5>
+				<button type="button" class="close" onclick="closeModal()">&times;</button>
+			</div>
+			<div class="modal-body" id="lyric">
+				<p>Lyrics will appear here when available...</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn" onclick="closeModal()">Close</button>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/script.js"></script>
 </body>
 
 </html>
