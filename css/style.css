@@ -21,11 +21,11 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background-image: url('cover.png');
+			background-image: url('/img/cover.png');
 			background-size: cover;
 			background-position: center;
 			background-repeat: no-repeat;
-			filter: blur(3px);
+			filter: blur(2px);
 			transform: scale(1.1);
 			opacity: 80%;
 			z-index: -2;
@@ -46,6 +46,11 @@
 			display: flex;
 			height: 100vh;
 			position: relative;
+		}
+
+		/* icon */
+		.reload-icon {
+			border-radius: 50%;
 		}
 
 		/* Header */
@@ -74,7 +79,7 @@
 		.logo-icon {
 			width: 30px;
 			height: 30px;
-			background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+			background-image: url('/img/cover.png');
 			border-radius: 50%;
 			display: flex;
 			align-items: center;
@@ -140,7 +145,7 @@
 		.song-cover {
 			width: 50px;
 			height: 50px;
-			background-image: url('cover.png');
+			background-image: url('/img/cover.png');
 			background-size: cover;
 			background-position: center;
 			background-repeat: no-repeat;
@@ -184,7 +189,7 @@
 		.current-cover {
 			width: 300px;
 			height: 300px;
-			background-image: url('cover.png');
+			background-image: url('/img/cover.png');
 			background-size: cover;
 			background-position: center;
 			background-repeat: no-repeat;
@@ -271,7 +276,11 @@
 		.play-button {
 			width: 60px;
 			height: 60px;
-			background: linear-gradient(45deg, #4ecdc4, #45b7aa);
+			background-image: url('/img/cover.png');
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			/* background: linear-gradient(45deg, #4ecdc4, #45b7aa); */
 			border: none;
 			border-radius: 50%;
 			display: flex;
@@ -327,7 +336,9 @@
 			appearance: none;
 			width: 18px;
 			height: 18px;
-			background: linear-gradient(45deg, #4ecdc4, #45b7aa);
+			background-image: url('/img/cover.png');
+			background-size: cover;
+			/* background: linear-gradient(45deg, #4ecdc4, #45b7aa); */
 			border-radius: 50%;
 			cursor: pointer;
 			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
@@ -336,7 +347,9 @@
 		.volume-slider input[type="range"]::-moz-range-thumb {
 			width: 18px;
 			height: 18px;
-			background: linear-gradient(45deg, #4ecdc4, #45b7aa);
+			background-image: url('/img/cover.png');
+			background-size: cover;
+			/* background: linear-gradient(45deg, #4ecdc4, #45b7aa); */
 			border-radius: 50%;
 			cursor: pointer;
 			border: none;

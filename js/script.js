@@ -4,10 +4,15 @@ const url = 'https://api.zeno.fm/mounts/metadata/subscribe/bjclt64fhc4uv';
 const API_KEY = "7e1295fe03484ef960e8edc5d4dc04a5";
 let showHistory = true;
 
-// Initialize audio
-var audio = new Audio(URL_STREAMING);
+// Initialize audio with autoplay attributes
+var audio = new Audio();
+audio.src = URL_STREAMING;
+audio.preload = 'auto';
+audio.crossOrigin = "anonymous";
+
 var musicHistory = [];
 var isPlaying = false;
+var autoplayAttempted = false;
 
 // Page class for DOM control
 class Page {
@@ -15,7 +20,7 @@ class Page {
 		document.title = title;
 	}
 
-	refreshCurrentSong(song, artist, album = 'Timeless') {
+	refreshCurrentSong(song, artist, album = '') {
 		var currentSong = document.getElementById('currentSong');
 		var currentArtist = document.getElementById('currentArtist');
 		var currentAlbum = document.getElementById('currentAlbum');
@@ -58,6 +63,7 @@ class Page {
 		var defaultVolume = 80;
 		document.getElementById('volume').value = defaultVolume;
 		document.getElementById('volIndicator').innerHTML = defaultVolume;
+		audio.volume = defaultVolume / 100;
 	}
 
 	refreshLyric(currentSong, currentArtist) {
@@ -71,21 +77,65 @@ class Page {
 
 // Player class
 class Player {
-	play() {
-		audio.crossOrigin = "anonymous";
-		audio.play().then(() => {
+	async play() {
+		try {
+			await audio.play();
 			isPlaying = true;
-			var defaultVolume = document.getElementById('volume').value;
-			audio.volume = intToDecimal(defaultVolume);
-			document.getElementById('volIndicator').innerHTML = defaultVolume;
-		}).catch(e => {
-			console.log('Playback failed:', e);
-		});
+			console.log('Audio started playing successfully');
+		} catch (error) {
+			console.log('Autoplay failed:', error.message);
+			isPlaying = false;
+
+			// Show user-friendly message for autoplay failure
+			this.showAutoplayMessage();
+		}
 	}
 
 	pause() {
 		audio.pause();
 		isPlaying = false;
+	}
+
+	showAutoplayMessage() {
+		// Create a subtle notification for autoplay failure
+		const notification = document.createElement('div');
+		notification.style.cssText = `
+			position: fixed;
+			top: 70px;
+			left: 50%;
+			transform: translateX(-50%);
+			background: rgba(78, 205, 196, 0.9);
+			color: white;
+			padding: 10px 20px;
+			border-radius: 20px;
+			font-size: 14px;
+			z-index: 1001;
+			animation: slideDown 0.3s ease;
+		`;
+		notification.innerHTML = '🎵 Click the play button to start the radio';
+		document.body.appendChild(notification);
+
+		// Remove notification after 5 seconds
+		setTimeout(() => {
+			if (notification.parentNode) {
+				notification.remove();
+			}
+		}, 5000);
+
+		// Remove notification if user clicks play
+		document.getElementById('playerButton').addEventListener('click', () => {
+			if (notification.parentNode) {
+				notification.remove();
+			}
+		}, { once: true });
+	}
+
+	// Attempt autoplay on first user interaction
+	attemptAutoplayOnInteraction() {
+		if (!autoplayAttempted && !isPlaying) {
+			autoplayAttempted = true;
+			this.play();
+		}
 	}
 }
 
@@ -95,6 +145,7 @@ function handleDeezerResponse(data) {
 	var backgroundCover = document.getElementById('backgroundCover');
 	coverArt.classList.remove('loading');
 
+	// Default cover image path
 	const defaultCoverUrl = 'cover.png';
 
 	if (data.data && data.data.length > 0) {
@@ -150,13 +201,22 @@ audio.onerror = function () {
 	}
 }
 
+// Enhanced audio loading events
+audio.oncanplaythrough = function () {
+	console.log('Audio can play through - ready for autoplay attempt');
+}
+
+audio.onloadeddata = function () {
+	console.log('Audio data loaded');
+}
+
 // Control functions
 function togglePlay() {
 	if (!audio.paused) {
 		audio.pause();
 	} else {
 		audio.load();
-		audio.play();
+		audio.play().catch(e => console.log('Play failed:', e));
 	}
 }
 
@@ -330,11 +390,15 @@ window.onclick = function (event) {
 	}
 }
 
-// Keyboard shortcuts
+// Enhanced keyboard shortcuts with autoplay trigger
 document.addEventListener('keydown', function (event) {
 	var key = event.key;
 	var slideVolume = document.getElementById('volume');
 	var page = new Page();
+	var player = new Player();
+
+	// Trigger autoplay on any key interaction if not attempted yet
+	player.attemptAutoplayOnInteraction();
 
 	switch (key) {
 		case 'ArrowUp':
@@ -383,21 +447,43 @@ document.addEventListener('keydown', function (event) {
 	}
 });
 
-// Initialize the application
+// Add click event listeners for autoplay trigger
+function addAutoplayTriggers() {
+	var player = new Player();
+
+	// Add event listeners to common interactive elements
+	document.body.addEventListener('click', function () {
+		player.attemptAutoplayOnInteraction();
+	}, { once: true });
+
+	// Specific listeners for volume and play controls
+	document.getElementById('volume').addEventListener('input', function () {
+		player.attemptAutoplayOnInteraction();
+	});
+
+	document.querySelector('.volume-icon').addEventListener('click', function () {
+		player.attemptAutoplayOnInteraction();
+	});
+}
+
+// Initialize the application with autoplay
 window.onload = function () {
 	var page = new Page();
+	var player = new Player();
+
 	page.changeTitlePage();
 	page.setVolume();
 
-	var player = new Player();
+	// Add autoplay interaction triggers
+	addAutoplayTriggers();
 
 	// Connect to real-time streaming data
 	connectToEventSource(url);
 
 	// Load initial song data
 	getStreamingData(JSON.stringify({
-		currentSong: "All I Need",
-		currentArtist: "Radiohead"
+		currentSong: "Music Title",
+		currentArtist: "Artist"
 	}));
 
 	// Set up lyrics button click handler
@@ -407,4 +493,10 @@ window.onload = function () {
 			openModal();
 		}
 	};
+
+	// Attempt autoplay after a short delay to ensure page is fully loaded
+	setTimeout(function () {
+		console.log('Attempting autoplay...');
+		player.play();
+	}, 1000);
 };
