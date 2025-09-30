@@ -1,4 +1,4 @@
-const RADIO_NAME = 'Can3X WebRadio';
+const RADIO_NAME = 'Radio CANKAS BUDE';
 const URL_STREAMING = 'https://stream.zeno.fm/bjclt64fhc4uv';
 const url = 'https://api.zeno.fm/mounts/metadata/subscribe/bjclt64fhc4uv';
 const API_KEY = "7e1295fe03484ef960e8edc5d4dc04a5";
