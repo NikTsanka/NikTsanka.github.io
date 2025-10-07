@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Official Georgian Lari (GEL) exchange rates from the National Bank of Georgia">
+	<meta name="keywords" content="Georgian Lari, GEL, exchange rates, NBG, currency, Georgia">
+	<meta name="author" content="NBG Exchange Rates">
+	<meta name="theme-color" content="#2c5530">
+	<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E₾%3C/text%3E%3C/svg%3E">
+	<title>Georgian Lari Exchange Rates - NBG Official Rates</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+	<div class="container">
+		<header class="header">
+			<div class="header-content">
+				<h1 class="header-title">
+					<span class="currency-symbol">₾</span>
+					Official Exchange Rates
+				</h1>
+				<p class="header-subtitle">National Bank of Georgia</p>
+				<div class="date-display" id="current-date"></div>
+			</div>
+		</header>
+
+		<main class="main-content">
+			<div class="controls">
+				<div class="search-container">
+					<input type="search" id="currency-search" placeholder="Search currencies..." aria-label="Search currencies">
+					<div class="search-icon">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<circle cx="11" cy="11" r="8"></circle>
+							<path d="m21 21-4.35-4.35"></path>
+						</svg>
+					</div>
+				</div>
+				<button class="refresh-btn" id="refresh-btn" aria-label="Refresh exchange rates">
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<polyline points="23 4 23 10 17 10"></polyline>
+						<polyline points="1 20 1 14 7 14"></polyline>
+						<path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+					</svg>
+					Refresh
+				</button>
+			</div>
+
+			<div class="loading-state" id="loading-state">
+				<div class="spinner"></div>
+				<p>Loading exchange rates...</p>
+			</div>
+
+			<div class="error-state" id="error-state" style="display: none;">
+				<div class="error-icon">⚠️</div>
+				<h3>Unable to load exchange rates</h3>
+				<p id="error-message">Please check your connection and try again.</p>
+				<button class="retry-btn" id="retry-btn">Try Again</button>
+			</div>
+
+			<div class="table-container" id="table-container" style="display: none;">
+				<table class="currency-table" id="currency-table" role="table" aria-label="Currency exchange rates">
+					<thead>
+						<tr>
+							<th scope="col" class="sortable" data-sort="code" aria-sort="none">
+								<span>Code</span>
+								<span class="sort-icon">↕</span>
+							</th>
+							<th scope="col" class="currency-name">Currency</th>
+							<th scope="col" class="sortable" data-sort="quantity" aria-sort="none">
+								<span>Qty</span>
+								<span class="sort-icon">↕</span>
+							</th>
+							<th scope="col" class="sortable" data-sort="rate" aria-sort="none">
+								<span>Rate (₾)</span>
+								<span class="sort-icon">↕</span>
+							</th>
+							<th scope="col" class="sortable" data-sort="change" aria-sort="none">
+								<span>Change</span>
+								<span class="sort-icon">↕</span>
+							</th>
+						</tr>
+					</thead>
+					<tbody id="currency-table-body">
+						<!-- Data will be populated here -->
+					</tbody>
+				</table>
+			</div>
+
+			<div class="no-results" id="no-results" style="display: none;">
+				<p>No currencies found matching your search.</p>
+			</div>
+		</main>
+
+		<footer class="footer">
+			<p>Data provided by the <a href="https://nbg.gov.ge" target="_blank" rel="noopener">National Bank of Georgia</a></p>
+			<p class="last-updated" id="last-updated"></p>
+		</footer>
+	</div>
+
+	<script src="script.js"></script>
+</body>
+
+</html>
