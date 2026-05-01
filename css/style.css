@@ -58,18 +58,21 @@
 			border-radius: 50%;
 		}
 
-		/* Header */
+		/* Header-ის მოდიფიკაცია */
 		.header {
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			height: 60px;
-			background: rgba(0, 0, 0, 0.3);
+			position: relative;
+			/* absolute-ის ნაცვლად უკეთესია მობილურისთვის */
+			height: auto;
+			/* სიმაღლე მოერგოს კონტენტს */
+			min-height: 60px;
+			background: rgba(0, 0, 0, 0.5);
 			backdrop-filter: blur(10px);
 			display: flex;
+			flex-wrap: wrap;
+			/* საშუალებას აძლევს ელემენტებს გადავიდნენ ახალ ხაზზე */
 			align-items: center;
-			padding: 0 20px;
+			justify-content: space-between;
+			padding: 10px 20px;
 			z-index: 1000;
 		}
 
@@ -92,16 +95,28 @@
 		}
 
 		.about-btn {
+			display: flex;
+			gap: 8px;
+			flex-wrap: wrap;
+			/* ღილაკები ჩაიშალოს თუ ადგილი არ ეყოფა */
+			justify-content: flex-end;
 			margin-left: auto;
 		}
 
 		.about-author-btn {
+
+			padding: 6px 12px;
+			/* ოდნავ პატარა ზომა მობილურისთვის */
+			font-size: 12px;
+			white-space: nowrap;
+			/* ტექსტი არ გაიჭრას */
+
 			/* Shape: Rounded rectangle for modern look */
 			border-radius: 8px;
 
 			/* Size and spacing */
-			padding: 10px 16px;
-			font-size: 14px;
+			/* padding: 10px 16px; */
+			/* font-size: 14px; */
 			font-weight: 500;
 
 			/* Colors: Subtle gradient with dark theme */
@@ -122,8 +137,6 @@
 			text-decoration: none;
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
-
-
 		}
 
 		.about-author-btn:hover {
@@ -672,5 +685,81 @@
 
 			100% {
 				left: 100%;
+			}
+		}
+
+		/* Responsive Styles */
+		@media (max-width: 768px) {
+			body {
+				overflow-y: auto;
+				/* მობილურზე სქროლი საჭიროა */
+			}
+
+			.main-container {
+				flex-direction: column;
+				height: auto;
+				padding-bottom: 120px;
+				/* ადგილი ქვედა კონტროლერებისთვის */
+			}
+
+			.header {
+				justify-content: center;
+				/* ცენტრში მოექცეს ლოგო პატარა ეკრანზე */
+				gap: 10px;
+			}
+
+			.about-btn {
+				justify-content: center;
+				width: 100%;
+				/* ღილაკებმა დაიკავონ სრული სიგანე */
+			}
+
+			.left-panel {
+				width: 100%;
+				height: 250px;
+				order: 2;
+				/* გადავიდეს ქვემოთ */
+				border-right: none;
+				border-top: 1px solid rgba(255, 255, 255, 0.1);
+				padding: 20px;
+			}
+
+			.right-panel {
+				width: 100%;
+				order: 1;
+				/* სიმღერა იყოს პირველი */
+				padding: 40px 20px;
+			}
+
+			.current-cover {
+				width: 220px;
+				height: 220px;
+			}
+
+			.current-song {
+				font-size: 22px;
+			}
+
+			/* ქვედა მენიუს ოპტიმიზაცია */
+			.bottom-controls {
+				height: auto;
+				padding: 15px;
+				flex-direction: column;
+				gap: 15px;
+			}
+
+			.volume-control {
+				min-width: 100%;
+				justify-content: center;
+			}
+		}
+
+		/* ძალიან პატარა ეკრანებისთვის (iPhone SE და ა.შ) */
+		@media (max-width: 400px) {
+			.about-author-btn {
+				flex: 1 1 45%;
+				/* ღილაკები განლაგდეს წყვილებად */
+				text-align: center;
+				font-size: 11px;
 			}
 		}
