@@ -1,4 +1,4 @@
-const RADIO_NAME = 'Radio CANKAS BUDE';
+const RADIO_NAME = 'Radio Bude';
 const URL_STREAMING = 'https://stream.zeno.fm/bjclt64fhc4uv';
 const url = 'https://api.zeno.fm/mounts/metadata/subscribe/bjclt64fhc4uv';
 const API_KEY = "7e1295fe03484ef960e8edc5d4dc04a5";
@@ -66,11 +66,44 @@ class Page {
 		audio.volume = defaultVolume / 100;
 	}
 
+	// refreshLyric(currentSong, currentArtist) {
+	// 	var openLyric = document.getElementById('lyricsButton');
+	// 	openLyric.style.opacity = "0.5";
+	// 	openLyric.onclick = function () {
+	// 		alert('Lyrics service temporarily unavailable');
+	// 	};
+	// }
+
+	// განაახლე ეს ფუნქცია script.js-ში
 	refreshLyric(currentSong, currentArtist) {
 		var openLyric = document.getElementById('lyricsButton');
-		openLyric.style.opacity = "0.5";
-		openLyric.onclick = function () {
-			alert('Lyrics service temporarily unavailable');
+		var lyricContainer = document.getElementById('lyric');
+		var lyricTitle = document.getElementById('lyricsSong');
+
+		openLyric.style.opacity = "1"; // ღილაკის გააქტიურება
+
+		openLyric.onclick = async function (e) {
+			e.preventDefault();
+			openModal();
+
+			lyricTitle.innerHTML = `${currentArtist} - ${currentSong}`;
+			lyricContainer.innerHTML = '<p class="loading-lyrics">Loading lyrics...</p>';
+
+			try {
+				// ვიყენებთ lyrics.ovh API-ს
+				const response = await fetch(`https://api.lyrics.ovh/v1/${encodeURIComponent(currentArtist)}/${encodeURIComponent(currentSong)}`);
+				const data = await response.json();
+
+				if (data.lyrics) {
+					// ტექსტში ახალი ხაზების (\n) შენარჩუნება
+					lyricContainer.innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit;">${data.lyrics}</pre>`;
+				} else {
+					lyricContainer.innerHTML = '<p>Lyrics not found for this song.</p>';
+				}
+			} catch (error) {
+				console.error('Error fetching lyrics:', error);
+				lyricContainer.innerHTML = '<p>Error loading lyrics. Please try again later.</p>';
+			}
 		};
 	}
 }
@@ -487,12 +520,12 @@ window.onload = function () {
 	}));
 
 	// Set up lyrics button click handler
-	document.getElementById('lyricsButton').onclick = function (e) {
-		e.preventDefault();
-		if (this.style.opacity !== "0.5") {
-			openModal();
-		}
-	};
+	// document.getElementById('lyricsButton').onclick = function (e) {
+	// 	e.preventDefault();
+	// 	if (this.style.opacity !== "0.5") {
+	// 		openModal();
+	// 	}
+	// };
 
 	// Attempt autoplay after a short delay to ensure page is fully loaded
 	setTimeout(function () {

@@ -58,6 +58,21 @@
 			border-radius: 50%;
 		}
 
+		/* Header */
+		/* .header {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 60px;
+			background: rgba(0, 0, 0, 0.3);
+			backdrop-filter: blur(10px);
+			display: flex;
+			align-items: center;
+			padding: 0 20px;
+			z-index: 1000;
+		} */
+
 		/* Header-ის მოდიფიკაცია */
 		.header {
 			position: relative;
@@ -93,6 +108,10 @@
 			align-items: center;
 			justify-content: center;
 		}
+
+		/* .about-btn {
+			margin-left: auto;
+		} */
 
 		.about-btn {
 			display: flex;
@@ -519,12 +538,24 @@
 			opacity: 1;
 		}
 
-		.modal-body {
+		/* .modal-body {
 			padding: 20px;
 			max-height: 400px;
 			overflow-y: auto;
 			line-height: 1.6;
+		} */
+
+		.modal-body {
+			padding: 25px;
+			max-height: 60vh;
+			/* სიმაღლის შეზღუდვა ეკრანის მიხედვით */
+			overflow-y: auto;
+			line-height: 1.8;
+			text-align: center;
+			font-size: 16px;
+			color: #eee;
 		}
+
 
 		.modal-footer {
 			padding: 15px 20px;
@@ -761,5 +792,33 @@
 				/* ღილაკები განლაგდეს წყვილებად */
 				text-align: center;
 				font-size: 11px;
+			}
+		}
+
+		.loading-lyrics {
+			font-style: italic;
+			opacity: 0.6;
+			animation: pulse 1.5s infinite;
+		}
+
+		@keyframes pulse {
+			0% {
+				opacity: 0.4;
+			}
+
+			50% {
+				opacity: 0.8;
+			}
+
+			100% {
+				opacity: 0.4;
+			}
+		}
+
+		/* პატარა ეკრანებისთვის */
+		@media (max-width: 768px) {
+			.modal-content {
+				width: 95%;
+				margin: 10% auto;
 			}
 		}
