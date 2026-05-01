@@ -1,0 +1,242 @@
+/* CSS ცვლადები შენი ფერებისთვის */
+        :root {
+            --black: #0f1115;
+            --blue: #0044cc;
+            --pearl: #fdfbf7;
+            --white: #ffffff;
+            --accent: #0077ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--pearl);
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        /* ანიმაციები */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero სექცია */
+        header {
+            background: linear-gradient(135deg, var(--black) 0%, var(--blue) 100%);
+            color: var(--white);
+            padding: 100px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--pearl);
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInDown 1.2s ease;
+        }
+
+        /* სერვისების კატალოგი */
+        .services-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--black);
+        }
+
+        .cards-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 40px 30px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,68,204,0.15);
+            border: 1px solid var(--accent);
+        }
+
+        .card h3 {
+            color: var(--blue);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .card .price {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--black);
+        }
+
+        /* კალკულატორი */
+        .calculator-section {
+            background-color: var(--white);
+            padding: 80px 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .calc-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--pearl);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.02), 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .calc-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .calc-item label {
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .calc-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--blue);
+        }
+
+        .total-box {
+            margin-top: 30px;
+            text-align: right;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--blue);
+        }
+
+        /* კონტაქტი */
+        .contact-section {
+            background-color: var(--black);
+            color: var(--white);
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .btn {
+            background-color: var(--accent);
+            color: var(--white);
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #005ce6;
+        }
+
+        /* ========================================= */
+        /* Media Queries - პატარა ეკრანებისთვის (Responsive) */
+        /* ========================================= */
+
+        @media (max-width: 768px) {
+            /* Hero სექცია */
+            header {
+                padding: 60px 15px; /* ვამცირებთ დაშორებებს */
+            }
+
+            header h1 {
+                font-size: 2rem; /* ვამცირებთ ტექსტის ზომას, რომ ჩაეტიოს */
+                margin-bottom: 15px;
+            }
+
+            header p {
+                font-size: 1rem; /* ვამცირებთ ქვეტექსტის ზომას */
+            }
+
+            /* სერვისების კატალოგი */
+            .services-section {
+                padding: 50px 15px;
+            }
+
+            .section-title {
+                font-size: 1.8rem; /* ვამცირებთ სექციის სათაურს */
+                margin-bottom: 30px;
+            }
+
+            .cards-container {
+                gap: 20px; /* ვამცირებთ დაშორებებს კარტებს შორის */
+                flex-direction: column; /* კარტები ლაგდება ერთმანეთის ქვეშ */
+                align-items: center; /* ვაცენტრებთ კარტებს */
+            }
+
+            .card {
+                width: 100%; /* კარტა იკავებს სრულ ხელმისაწვდომ სიგანეს */
+                max-width: 350px; /* მაგრამ არ აჭარბებს მაქსიმალურ სიგანეს */
+                padding: 30px 20px;
+            }
+
+            /* კალკულატორი */
+            .calculator-section {
+                padding: 50px 15px;
+            }
+
+            .calc-container {
+                padding: 20px; /* ვამცირებთ შიდა დაშორებას */
+            }
+
+            .calc-item {
+                flex-direction: column; /* ელემენტები ლაგდება ერთმანეთის ქვეშ */
+                align-items: flex-start; /* ვასწორებთ მარცხნივ */
+                gap: 10px; /* ვამცირებთ დაშორებებს */
+                padding: 10px 0;
+            }
+
+            .calc-item label {
+                font-size: 1rem;
+            }
+
+            .total-box {
+                font-size: 1.5rem; /* ვამცირებთ ჯამური ფასის ზომას */
+                text-align: center; /* ვაცენტრებთ */
+            }
+        }
