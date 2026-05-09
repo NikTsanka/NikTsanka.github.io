@@ -8,15 +8,15 @@
 	<link rel="icon" type="image/png" href="/img/cover.png" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 	<link rel="stylesheet" href="css/style.css">
-	<!-- <link rel="stylesheet" href="resume/css/config.css"> -->
-
-
 </head>
 
 <body>
 	<!-- Background Elements -->
 	<div class="background-cover" id="backgroundCover"></div>
 	<div class="background-overlay"></div>
+
+	<!-- Toast Notification -->
+	<div class="toast" id="toast"></div>
 
 	<!-- Header -->
 	<div class="header">
@@ -28,36 +28,40 @@
 			<span>Radio Bude</span>
 		</div>
 
-		<!-- <nav class="nav-links"> -->
-		<!-- You can add "target="_blank" to open new page -->
 		<div class="about-btn">
-			<a href="/DM/website/index.html" target="_blank">
-				<button class="about-author-btn gold-accent">
-					<span>DM</span>
+			<div class="nav-menu">
+				<button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu()">
+					<i class="fas fa-bars"></i>
 				</button>
-			</a>
-			<a href="/service/index.html" target="_blank">
-				<button class="about-author-btn gold-accent">
-					<span>web service</span>
-				</button>
-			</a>
-			<a href="/nbg/index.html" target="_blank">
-				<button class="about-author-btn gold-accent">
-					<span>Rates of LARI</span>
-				</button>
-			</a>
-			<a href="/resume/index.html" target="_blank">
-				<button class="about-author-btn gold-accent">
-					<span>about author</span>
-				</button>
-			</a>
+				<div class="nav-dropdown" id="navDropdown">
+					<a href="/DM/website/index.html" target="_blank">
+						<button class="about-author-btn gold-accent full-width">
+							<span>DM</span>
+						</button>
+					</a>
+					<a href="/service/index.html" target="_blank">
+						<button class="about-author-btn gold-accent full-width">
+							<span>web service</span>
+						</button>
+					</a>
+					<a href="/nbg/index.html" target="_blank">
+						<button class="about-author-btn gold-accent full-width">
+							<span>Rates of LARI</span>
+						</button>
+					</a>
+					<a href="/resume/index.html" target="_blank">
+						<button class="about-author-btn gold-accent full-width">
+							<span>about author</span>
+						</button>
+					</a>
+				</div>
+			</div>
 			<a href="https://ko-fi.com/canka" target="_blank">
 				<button class="about-author-btn gold-accent">
 					<i class="fas fa-coffee"></i> <span>support</span>
 				</button>
 			</a>
 		</div>
-		<!-- </nav> -->
 	</div>
 
 	<!-- Main Container -->
@@ -65,9 +69,7 @@
 		<!-- Left Panel - Song History -->
 		<div class="left-panel">
 			<div class="history-title">Recent Songs</div>
-			<div id="songHistory">
-				<!-- Song history items will be populated here -->
-			</div>
+			<div id="songHistory"></div>
 		</div>
 
 		<!-- Right Panel - Current Song -->
@@ -77,11 +79,29 @@
 				<span></span><span></span><span></span><span></span><span></span>
 			</div>
 			<div class="current-info">
-				<h2 id="currentSong" class="current-song">Loading...</h2>
+				<div class="song-title-wrapper">
+					<h2 id="currentSong" class="current-song">Loading...</h2>
+				</div>
 				<h3 id="currentArtist" class="current-artist">Please wait</h3>
 				<div id="currentAlbum" class="current-album">Connecting to stream...</div>
 			</div>
-			<a href="#" class="lyrics-button" id="lyricsButton" data-target="#modalLyrics">View Lyrics</a>
+		</div>
+	</div>
+
+	<!-- Lyrics Tab (desktop) -->
+	<div class="lyrics-tab" id="lyricsTab" onclick="toggleLyricsPanel()">
+		<i class="fas fa-music"></i>
+		<span>LYRICS</span>
+	</div>
+
+	<!-- Lyrics Panel -->
+	<div class="lyrics-panel" id="lyricsPanel">
+		<div class="lyrics-panel-header">
+			<h5 id="lyricsSong">Lyrics</h5>
+			<button class="lyrics-panel-close" onclick="toggleLyricsPanel()">&times;</button>
+		</div>
+		<div class="lyrics-panel-body" id="lyric">
+			<p>Lyrics will appear here when available...</p>
 		</div>
 	</div>
 
@@ -93,7 +113,7 @@
 
 		<div class="volume-control">
 			<div class="volume-icon">
-				<i class="fa fa-volume-up" onclick="mute()"></i>
+				<i class="fa fa-volume-up" id="muteIcon" onclick="mute()"></i>
 			</div>
 			<div class="volume-slider">
 				<input type="range" id="volume" step="2" min="0" max="100" value="80" oninput="updateVolume(this.value)">
@@ -103,26 +123,15 @@
 			</div>
 		</div>
 
+		<button class="lyrics-mobile-btn" onclick="toggleLyricsPanel()">
+			<i class="fas fa-music"></i>
+		</button>
+
 		<div class="footer-credit">
 			&copy; 2026 Radio Bude &middot; Made by <a href="/resume/index.html" target="_blank">NikTsanka</a>
 		</div>
 	</div>
 
-	<!-- Lyrics Modal -->
-	<div class="modal" id="modalLyrics">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="lyricsSong">Lyrics</h5>
-				<button type="button" class="close" onclick="closeModal()">&times;</button>
-			</div>
-			<div class="modal-body" id="lyric">
-				<p>Lyrics will appear here when available...</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn" onclick="closeModal()">Close</button>
-			</div>
-		</div>
-	</div>
 	<script type="text/javascript" src="js/script.js"></script>
 </body>
 

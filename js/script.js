@@ -37,6 +37,7 @@ class Page {
 			setTimeout(function () {
 				currentSong.className = 'current-song';
 				currentArtist.className = 'current-artist';
+				checkMarquee();
 			}, 2000);
 		}
 	}
@@ -74,37 +75,8 @@ class Page {
 	// 	};
 	// }
 
-	// განაახლე ეს ფუნქცია script.js-ში
 	refreshLyric(currentSong, currentArtist) {
-		var openLyric = document.getElementById('lyricsButton');
-		var lyricContainer = document.getElementById('lyric');
-		var lyricTitle = document.getElementById('lyricsSong');
-
-		openLyric.style.opacity = "1"; // ღილაკის გააქტიურება
-
-		openLyric.onclick = async function (e) {
-			e.preventDefault();
-			openModal();
-
-			lyricTitle.innerHTML = `${currentArtist} - ${currentSong}`;
-			lyricContainer.innerHTML = '<p class="loading-lyrics">Loading lyrics...</p>';
-
-			try {
-				// ვიყენებთ lyrics.ovh API-ს
-				const response = await fetch(`https://api.lyrics.ovh/v1/${encodeURIComponent(currentArtist)}/${encodeURIComponent(currentSong)}`);
-				const data = await response.json();
-
-				if (data.lyrics) {
-					// ტექსტში ახალი ხაზების (\n) შენარჩუნება
-					lyricContainer.innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit;">${data.lyrics}</pre>`;
-				} else {
-					lyricContainer.innerHTML = '<p>Lyrics not found for this song.</p>';
-				}
-			} catch (error) {
-				console.error('Error fetching lyrics:', error);
-				lyricContainer.innerHTML = '<p>Error loading lyrics. Please try again later.</p>';
-			}
-		};
+		fetchLyrics(currentSong, currentArtist);
 	}
 }
 
@@ -264,17 +236,20 @@ function updateVolume(value) {
 }
 
 function mute() {
+	var icon = document.getElementById('muteIcon');
 	if (!audio.muted) {
 		document.getElementById('volIndicator').innerHTML = 0;
 		document.getElementById('volume').value = 0;
 		audio.volume = 0;
 		audio.muted = true;
+		icon.className = 'fa fa-volume-off';
 	} else {
 		var defaultVolume = 80;
 		document.getElementById('volIndicator').innerHTML = defaultVolume;
 		document.getElementById('volume').value = defaultVolume;
 		audio.volume = intToDecimal(defaultVolume);
 		audio.muted = false;
+		icon.className = 'fa fa-volume-up';
 	}
 }
 
@@ -288,7 +263,6 @@ function decimalToInt(vol) {
 
 // Mock streaming data function (since we can't connect to external APIs in this environment)
 function getStreamingData(data) {
-	// This function will be called when actual streaming data is received
 	var jsonData = JSON.parse(data);
 	var page = new Page();
 
@@ -299,6 +273,7 @@ function getStreamingData(data) {
 	page.refreshCover(song, artist);
 	page.refreshCurrentSong(song, artist);
 	page.refreshLyric(song, artist);
+	showToast(song, artist);
 
 	if (showHistory) {
 		if (musicHistory.length === 0 || (musicHistory[0].song !== song)) {
@@ -410,20 +385,77 @@ function refreshCoverForHistory(song, artist, index) {
 	};
 }
 
-// Modal functions
-function openModal() {
-	document.getElementById('modalLyrics').style.display = 'block';
+// Lyrics panel
+function toggleLyricsPanel() {
+	var panel = document.getElementById('lyricsPanel');
+	var tab = document.getElementById('lyricsTab');
+	panel.classList.toggle('open');
+	if (tab) tab.classList.toggle('panel-open');
 }
 
+function openModal() { toggleLyricsPanel(); }
 function closeModal() {
-	document.getElementById('modalLyrics').style.display = 'none';
+	document.getElementById('lyricsPanel').classList.remove('open');
+	var tab = document.getElementById('lyricsTab');
+	if (tab) tab.classList.remove('panel-open');
 }
 
-// Close modal when clicking outside
-window.onclick = function (event) {
-	var modal = document.getElementById('modalLyrics');
-	if (event.target == modal) {
-		modal.style.display = 'none';
+// Hamburger menu
+function toggleMenu() {
+	document.getElementById('navDropdown').classList.toggle('open');
+}
+
+document.addEventListener('click', function (e) {
+	var btn = document.getElementById('hamburgerBtn');
+	var dropdown = document.getElementById('navDropdown');
+	if (dropdown && btn && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+		dropdown.classList.remove('open');
+	}
+});
+
+// Toast notification
+var toastEnabled = false;
+
+function showToast(song, artist) {
+	if (!toastEnabled) return;
+	var toast = document.getElementById('toast');
+	toast.innerHTML = `<i class="fas fa-music"></i> Now Playing: <strong>${song}</strong>`;
+	toast.classList.add('show');
+	setTimeout(function () { toast.classList.remove('show'); }, 3500);
+}
+
+// Marquee for long song titles
+function checkMarquee() {
+	var el = document.getElementById('currentSong');
+	var wrapper = el.parentElement;
+	var overflow = el.scrollWidth - wrapper.offsetWidth;
+	if (overflow > 10) {
+		el.classList.add('marquee');
+		el.style.setProperty('--marquee-offset', `-${overflow}px`);
+	} else {
+		el.classList.remove('marquee');
+		el.style.removeProperty('--marquee-offset');
+	}
+}
+
+// Fetch lyrics automatically on song change
+async function fetchLyrics(song, artist) {
+	var lyricContainer = document.getElementById('lyric');
+	var lyricTitle = document.getElementById('lyricsSong');
+
+	lyricTitle.innerHTML = `${artist} - ${song}`;
+	lyricContainer.innerHTML = '<p class="loading-lyrics">Loading lyrics...</p>';
+
+	try {
+		const response = await fetch(`https://api.lyrics.ovh/v1/${encodeURIComponent(artist)}/${encodeURIComponent(song)}`);
+		const data = await response.json();
+		if (data.lyrics) {
+			lyricContainer.innerHTML = `<pre>${data.lyrics}</pre>`;
+		} else {
+			lyricContainer.innerHTML = '<p>Lyrics not found for this song.</p>';
+		}
+	} catch (error) {
+		lyricContainer.innerHTML = '<p>Error loading lyrics.</p>';
 	}
 }
 
@@ -536,4 +568,6 @@ window.onload = function () {
 		console.log('Attempting autoplay...');
 		player.play();
 	}, 1000);
+
+	setTimeout(function () { toastEnabled = true; }, 3000);
 };
