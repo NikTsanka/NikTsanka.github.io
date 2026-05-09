@@ -73,6 +73,9 @@
 		<div class="left-panel">
 			<div class="history-title">Recent Songs</div>
 			<div id="songHistory"></div>
+			<div class="scroll-fade" id="scrollFade">
+				<i class="fas fa-chevron-down"></i>
+			</div>
 		</div>
 
 		<!-- Right Panel - Current Song -->
@@ -119,6 +122,7 @@
 		<div class="shortcut-item"><kbd>M</kbd> Mute</div>
 		<div class="shortcut-item"><kbd>↑ ↓</kbd> Volume</div>
 		<div class="shortcut-item"><kbd>0 – 9</kbd> Volume level</div>
+		<div class="shortcut-item"><kbd>L</kbd> Lyrics panel</div>
 	</div>
 
 	<!-- Bottom Controls -->
@@ -147,6 +151,12 @@
 		<button class="lyrics-mobile-btn" onclick="toggleLyricsPanel()">
 			<i class="fas fa-music"></i>
 		</button>
+
+		<div class="bottom-right">
+			<button class="sleep-timer-btn" id="sleepTimerBtn" onclick="cycleSleepTimer()" title="Sleep timer: Off">
+				<i class="fas fa-moon"></i>
+			</button>
+		</div>
 
 		<div class="footer-credit">
 			&copy; 2026 Radio Bude &middot; Made by <a href="/resume/index.html" target="_blank">NikTsanka</a>

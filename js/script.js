@@ -155,11 +155,11 @@ function handleDeezerResponse(data) {
 
 	if (data.data && data.data.length > 0) {
 		var artworkUrl = data.data[0].album.cover_big;
+		currentCoverUrl = artworkUrl;
 		coverArt.style.backgroundImage = 'url(' + artworkUrl + ')';
 		coverArt.className = 'current-cover animated bounceInLeft';
-
-		// Update background with album art
 		backgroundCover.style.backgroundImage = 'url(' + artworkUrl + ')';
+		extractAmbientColor(artworkUrl);
 
 		if (isPlaying) {
 			coverArt.classList.add('playing');
@@ -276,6 +276,7 @@ function getStreamingData(data) {
 	page.refreshCurrentSong(song, artist);
 	page.refreshLyric(song, artist);
 	showToast('Now Playing: <strong>' + song + '</strong>');
+	sendNowPlayingNotification(song, artist);
 
 	if (showHistory) {
 		if (musicHistory.length === 0 || (musicHistory[0].song !== song)) {
@@ -361,6 +362,7 @@ function updateHistoryUI() {
 		items.forEach(item => {
 			item.classList.remove('animated', 'slideInRight');
 		});
+		updateScrollIndicator();
 	}, 2000);
 }
 
@@ -381,6 +383,110 @@ function refreshCoverForHistory(song, artist, index) {
 			el.style.backgroundImage = 'url(' + defaultCoverUrl + ')';
 		}
 	};
+}
+
+// Sleep timer
+var sleepTimerOptions = [0, 15, 30, 60];
+var sleepTimerIndex = 0;
+var sleepTimerTimeout = null;
+var sleepTimerInterval = null;
+
+function cycleSleepTimer() {
+	sleepTimerIndex = (sleepTimerIndex + 1) % sleepTimerOptions.length;
+	var minutes = sleepTimerOptions[sleepTimerIndex];
+	var btn = document.getElementById('sleepTimerBtn');
+
+	clearTimeout(sleepTimerTimeout);
+	clearInterval(sleepTimerInterval);
+
+	if (minutes === 0) {
+		btn.innerHTML = '<i class="fas fa-moon"></i>';
+		btn.title = 'Sleep timer: Off';
+		btn.classList.remove('active');
+		return;
+	}
+
+	btn.classList.add('active');
+	btn.title = 'Sleep timer: ' + minutes + ' min';
+	var remaining = minutes * 60;
+	updateSleepTimerDisplay(remaining);
+
+	sleepTimerInterval = setInterval(function () {
+		remaining--;
+		updateSleepTimerDisplay(remaining);
+	}, 1000);
+
+	sleepTimerTimeout = setTimeout(function () {
+		clearInterval(sleepTimerInterval);
+		audio.pause();
+		sleepTimerIndex = 0;
+		btn.innerHTML = '<i class="fas fa-moon"></i>';
+		btn.classList.remove('active');
+		showToast('Sleep timer: Radio paused', true);
+	}, minutes * 60 * 1000);
+}
+
+function updateSleepTimerDisplay(seconds) {
+	var mins = Math.floor(seconds / 60);
+	var secs = seconds % 60;
+	document.getElementById('sleepTimerBtn').innerHTML =
+		'<i class="fas fa-moon"></i><span class="timer-countdown">' + mins + ':' + (secs < 10 ? '0' : '') + secs + '</span>';
+}
+
+// Browser notifications
+var currentCoverUrl = '/img/cover.png';
+
+function requestNotificationPermission() {
+	if ('Notification' in window && Notification.permission === 'default') {
+		Notification.requestPermission();
+	}
+}
+
+function sendNowPlayingNotification(song, artist) {
+	if ('Notification' in window && Notification.permission === 'granted' && document.hidden) {
+		new Notification('♪ ' + song, {
+			body: artist,
+			icon: currentCoverUrl,
+			tag: 'now-playing',
+			silent: true
+		});
+	}
+}
+
+// Scroll indicator
+function updateScrollIndicator() {
+	var panel = document.querySelector('.left-panel');
+	var fade = document.getElementById('scrollFade');
+	if (!panel || !fade) return;
+	var atBottom = panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 10;
+	fade.style.opacity = atBottom ? '0' : '1';
+}
+
+// Ambient color from cover art
+function extractAmbientColor(imageUrl) {
+	var img = new Image();
+	img.crossOrigin = 'anonymous';
+	img.onload = function () {
+		var canvas = document.createElement('canvas');
+		canvas.width = 8;
+		canvas.height = 8;
+		var ctx = canvas.getContext('2d');
+		ctx.drawImage(img, 0, 0, 8, 8);
+		try {
+			var data = ctx.getImageData(0, 0, 8, 8).data;
+			var r = 0, g = 0, b = 0, count = data.length / 4;
+			for (var i = 0; i < data.length; i += 4) {
+				r += data[i]; g += data[i + 1]; b += data[i + 2];
+			}
+			applyAmbientColor(Math.round(r / count), Math.round(g / count), Math.round(b / count));
+		} catch (e) {}
+	};
+	img.src = imageUrl;
+}
+
+function applyAmbientColor(r, g, b) {
+	document.querySelector('.right-panel').style.background =
+		'radial-gradient(ellipse at center, rgba(' + r + ',' + g + ',' + b + ',0.18) 0%, transparent 70%)';
 }
 
 // Theme toggle
@@ -556,6 +662,11 @@ document.addEventListener('keydown', function (event) {
 			event.preventDefault();
 			mute();
 			break;
+		case 'l':
+		case 'L':
+			event.preventDefault();
+			toggleLyricsPanel();
+			break;
 		case '0':
 		case '1':
 		case '2':
@@ -610,6 +721,16 @@ window.onload = function () {
 
 	// Add autoplay interaction triggers
 	addAutoplayTriggers();
+
+	// Notification permission
+	requestNotificationPermission();
+
+	// Scroll indicator
+	var leftPanel = document.querySelector('.left-panel');
+	if (leftPanel) {
+		leftPanel.addEventListener('scroll', updateScrollIndicator);
+		updateScrollIndicator();
+	}
 
 	// Connect to real-time streaming data
 	connectToEventSource(url);

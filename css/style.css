@@ -193,6 +193,7 @@
 
 		/* Left Panel - Song History */
 		.left-panel {
+			position: relative;
 			width: 350px;
 			background: rgba(0, 0, 0, 0.2);
 			backdrop-filter: blur(10px);
@@ -282,6 +283,23 @@
 			text-overflow: ellipsis;
 		}
 
+		/* Scroll Fade */
+		.scroll-fade {
+			position: sticky;
+			bottom: 0;
+			height: 50px;
+			background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+			display: flex;
+			align-items: flex-end;
+			justify-content: center;
+			padding-bottom: 6px;
+			color: rgba(255, 255, 255, 0.4);
+			font-size: 12px;
+			pointer-events: none;
+			transition: opacity 0.3s ease;
+			margin-top: -50px;
+		}
+
 		/* Right Panel - Current Song */
 		.right-panel {
 			flex: 1;
@@ -291,6 +309,7 @@
 			justify-content: center;
 			padding: 80px 40px 120px 40px;
 			text-align: center;
+			transition: background 1.5s ease;
 		}
 
 		.current-cover {
@@ -1323,7 +1342,49 @@
 			100% { background-position: -200% 0; }
 		}
 
+		/* Sleep Timer */
+		.bottom-right {
+			position: absolute;
+			right: 20px;
+			top: 50%;
+			transform: translateY(-50%);
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.sleep-timer-btn {
+			background: rgba(255, 255, 255, 0.08);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			color: rgba(255, 255, 255, 0.5);
+			border-radius: 20px;
+			padding: 4px 10px;
+			cursor: pointer;
+			font-size: 12px;
+			display: flex;
+			align-items: center;
+			gap: 5px;
+			transition: all 0.2s ease;
+		}
+
+		.sleep-timer-btn.active {
+			border-color: #c9a96e;
+			color: #c9a96e;
+			background: rgba(201, 169, 110, 0.1);
+		}
+
+		.sleep-timer-btn:hover {
+			border-color: rgba(255, 255, 255, 0.4);
+			color: rgba(255, 255, 255, 0.8);
+		}
+
+		.timer-countdown {
+			font-size: 11px;
+			font-variant-numeric: tabular-nums;
+		}
+
 		@media (max-width: 768px) {
 			.bottom-left { gap: 8px; }
 			.shortcuts-popup { left: 10px; }
+			.bottom-right { display: none; }
 		}
