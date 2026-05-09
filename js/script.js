@@ -184,6 +184,7 @@ audio.onplay = function () {
 	button.className = 'fa fa-pause';
 	document.getElementById('currentCoverArt').classList.add('playing');
 	document.getElementById('equalizer').classList.add('active');
+	setStreamStatus('connected');
 	isPlaying = true;
 }
 
@@ -192,6 +193,7 @@ audio.onpause = function () {
 	button.className = 'fa fa-play';
 	document.getElementById('currentCoverArt').classList.remove('playing');
 	document.getElementById('equalizer').classList.remove('active');
+	setStreamStatus('');
 	isPlaying = false;
 }
 
@@ -273,7 +275,7 @@ function getStreamingData(data) {
 	page.refreshCover(song, artist);
 	page.refreshCurrentSong(song, artist);
 	page.refreshLyric(song, artist);
-	showToast(song, artist);
+	showToast('Now Playing: <strong>' + song + '</strong>');
 
 	if (showHistory) {
 		if (musicHistory.length === 0 || (musicHistory[0].song !== song)) {
@@ -293,6 +295,7 @@ function connectToEventSource(url) {
 
 	eventSource.addEventListener('error', function (event) {
 		console.error('Event source connection error:', event);
+		setStreamStatus('reconnecting');
 		setTimeout(function () {
 			connectToEventSource(url);
 		}, 5000);
@@ -340,7 +343,7 @@ function updateHistoryUI() {
 		songItem.className = 'song-item animated slideInRight';
 
 		songItem.innerHTML = `
-                    <div class="song-cover" style="background-image: url('data:image/svg+xml,<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 100 100\\"><rect width=\\"100\\" height=\\"100\\" fill=\\"%23333\\"/><text x=\\"50\\" y=\\"55\\" font-family=\\"Arial\\" font-size=\\"30\\" text-anchor=\\"middle\\" fill=\\"%23fff\\"></text></svg></div>
+                    <div class="song-cover skeleton"></div>
                     <div class="song-info">
                         <div class="song-name">${musicHistory[i].song}</div>
                         <div class="song-artist">${musicHistory[i].artist}</div>
@@ -368,22 +371,76 @@ function refreshCoverForHistory(song, artist, index) {
 
 	window['handleDeezerResponseForHistory_' + index] = function (data) {
 		const defaultCoverUrl = 'cover.png';
-
+		var coverElements = document.querySelectorAll('#songHistory .song-cover');
+		var el = coverElements[index];
+		if (!el) return;
+		el.classList.remove('skeleton');
 		if (data.data && data.data.length > 0) {
-			var artworkUrl = data.data[0].album.cover_big;
-			var coverElements = document.querySelectorAll('#songHistory .song-cover');
-			if (coverElements[index]) {
-				coverElements[index].style.backgroundImage = 'url(' + artworkUrl + ')';
-			}
+			el.style.backgroundImage = 'url(' + data.data[0].album.cover_big + ')';
 		} else {
-			// Use default cover.png when no album art is found
-			var coverElements = document.querySelectorAll('#songHistory .song-cover');
-			if (coverElements[index]) {
-				coverElements[index].style.backgroundImage = 'url(' + defaultCoverUrl + ')';
-			}
+			el.style.backgroundImage = 'url(' + defaultCoverUrl + ')';
 		}
 	};
 }
+
+// Theme toggle
+function toggleTheme() {
+	var body = document.body;
+	var icon = document.getElementById('themeIcon');
+	body.classList.toggle('light-mode');
+	if (body.classList.contains('light-mode')) {
+		icon.className = 'fas fa-sun';
+		localStorage.setItem('rb-theme', 'light');
+	} else {
+		icon.className = 'fas fa-moon';
+		localStorage.setItem('rb-theme', 'dark');
+	}
+}
+
+// Share current song
+function shareCurrentSong() {
+	var song = document.getElementById('currentSong').innerText;
+	var artist = document.getElementById('currentArtist').innerText;
+	var text = '🎵 Now listening to: ' + song + ' by ' + artist + ' on Radio Bude | radiobude.com';
+
+	if (navigator.share) {
+		navigator.share({ title: 'Radio Bude', text: text, url: window.location.href }).catch(function(){});
+	} else if (navigator.clipboard) {
+		navigator.clipboard.writeText(text).then(function () {
+			showToast('Copied to clipboard!', true);
+		});
+	} else {
+		var el = document.createElement('textarea');
+		el.value = text;
+		document.body.appendChild(el);
+		el.select();
+		document.execCommand('copy');
+		document.body.removeChild(el);
+		showToast('Copied to clipboard!', true);
+	}
+}
+
+// Stream quality indicator
+function setStreamStatus(status) {
+	var dot = document.getElementById('streamIndicator');
+	if (!dot) return;
+	dot.className = 'stream-indicator ' + status;
+	var labels = { connected: 'Connected', reconnecting: 'Reconnecting...', error: 'Stream error', '': 'Disconnected' };
+	dot.title = labels[status] || 'Disconnected';
+}
+
+// Shortcuts popup
+function toggleShortcuts() {
+	document.getElementById('shortcutsPopup').classList.toggle('open');
+}
+
+document.addEventListener('click', function (e) {
+	var btn = document.getElementById('shortcutsBtn');
+	var popup = document.getElementById('shortcutsPopup');
+	if (popup && btn && !popup.contains(e.target) && !btn.contains(e.target)) {
+		popup.classList.remove('open');
+	}
+});
 
 // Lyrics panel
 function toggleLyricsPanel() {
@@ -415,13 +472,15 @@ document.addEventListener('click', function (e) {
 
 // Toast notification
 var toastEnabled = false;
+var toastTimer = null;
 
-function showToast(song, artist) {
-	if (!toastEnabled) return;
+function showToast(message, force) {
+	if (!toastEnabled && !force) return;
 	var toast = document.getElementById('toast');
-	toast.innerHTML = `<i class="fas fa-music"></i> Now Playing: <strong>${song}</strong>`;
+	toast.innerHTML = '<i class="fas fa-music"></i> ' + message;
 	toast.classList.add('show');
-	setTimeout(function () { toast.classList.remove('show'); }, 3500);
+	clearTimeout(toastTimer);
+	toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 3500);
 }
 
 // Marquee for long song titles
@@ -542,6 +601,12 @@ window.onload = function () {
 
 	page.changeTitlePage();
 	page.setVolume();
+
+	// Load saved theme
+	if (localStorage.getItem('rb-theme') === 'light') {
+		document.body.classList.add('light-mode');
+		document.getElementById('themeIcon').className = 'fas fa-sun';
+	}
 
 	// Add autoplay interaction triggers
 	addAutoplayTriggers();

@@ -1124,3 +1124,206 @@
 		@media (min-width: 769px) {
 			.lyrics-mobile-btn { display: none; }
 		}
+
+		/* Theme Toggle */
+		.theme-toggle {
+			background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			color: rgba(255, 255, 255, 0.7);
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+			cursor: pointer;
+			font-size: 13px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: all 0.2s ease;
+		}
+
+		.theme-toggle:hover {
+			border-color: #c9a96e;
+			color: #c9a96e;
+		}
+
+		/* Light Mode */
+		body.light-mode .background-overlay { background: rgba(255, 255, 255, 0.55); }
+		body.light-mode .header { background: rgba(255, 255, 255, 0.75); border-bottom-color: rgba(201, 169, 110, 0.3); }
+		body.light-mode .logo span { color: #1a1a1a; }
+		body.light-mode .left-panel { background: rgba(255, 255, 255, 0.25); border-right-color: rgba(0,0,0,0.1); }
+		body.light-mode .history-title { color: #1a1a1a; }
+		body.light-mode .song-item { background: rgba(0, 0, 0, 0.05); }
+		body.light-mode .song-item:hover { background: rgba(201, 169, 110, 0.12); }
+		body.light-mode .song-name { color: #1a1a1a; }
+		body.light-mode .song-artist { color: #555; opacity: 1; }
+		body.light-mode .current-artist { color: #333; opacity: 1; }
+		body.light-mode .current-album { color: #666; opacity: 1; }
+		body.light-mode .bottom-controls { background: rgba(255, 255, 255, 0.75); border-top-color: rgba(0,0,0,0.1); }
+		body.light-mode .footer-credit { color: rgba(0, 0, 0, 0.4); }
+		body.light-mode .footer-credit a { color: #b8862a; }
+		body.light-mode .volume-icon i { color: #333; }
+		body.light-mode .volume-value { color: #333; }
+		body.light-mode #volIndicator { color: #333; }
+		body.light-mode .lyrics-panel { background: rgba(245, 245, 245, 0.97); }
+		body.light-mode .lyrics-panel-body { color: #333; }
+		body.light-mode .lyrics-panel-close { color: #555; }
+		body.light-mode .lyrics-tab { background: rgba(255, 255, 255, 0.75); }
+		body.light-mode .toast { background: rgba(240, 240, 240, 0.95); color: #1a1a1a; border-color: rgba(201, 169, 110, 0.4); }
+		body.light-mode .shortcuts-popup { background: rgba(245, 245, 245, 0.97); color: #1a1a1a; border-color: rgba(0,0,0,0.1); }
+		body.light-mode .shortcuts-title { color: #1a1a1a; }
+		body.light-mode kbd { background: #e0e0e0; color: #1a1a1a; border-color: #bbb; }
+		body.light-mode .shortcuts-btn { background: rgba(0,0,0,0.08); border-color: rgba(0,0,0,0.2); color: #333; }
+		body.light-mode .hamburger-btn { background: linear-gradient(135deg, #e0e0e0, #d0d0d0); color: #555; }
+		body.light-mode .theme-toggle { background: linear-gradient(135deg, #e0e0e0, #d0d0d0); color: #555; border-color: rgba(0,0,0,0.2); }
+		body.light-mode .nav-dropdown { background: rgba(245, 245, 245, 0.97); border-color: rgba(0,0,0,0.1); }
+		body.light-mode .stream-indicator.connected { box-shadow: 0 0 6px #2ab098; }
+
+		/* Share Button */
+		.share-btn {
+			background: rgba(255, 255, 255, 0.08);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			color: rgba(255, 255, 255, 0.6);
+			width: 38px;
+			height: 38px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			font-size: 14px;
+			margin-top: 12px;
+			transition: all 0.2s ease;
+		}
+
+		.share-btn:hover {
+			background: rgba(201, 169, 110, 0.15);
+			border-color: #c9a96e;
+			color: #c9a96e;
+		}
+
+		/* Stream Indicator + Bottom Left */
+		.bottom-left {
+			position: absolute;
+			left: 20px;
+			top: 50%;
+			transform: translateY(-50%);
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.stream-indicator {
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.25);
+			transition: all 0.4s ease;
+		}
+
+		.stream-indicator.connected {
+			background: #4ecdc4;
+			box-shadow: 0 0 6px #4ecdc4;
+			animation: dot-pulse 2s ease-in-out infinite;
+		}
+
+		.stream-indicator.reconnecting {
+			background: #f0a500;
+			animation: dot-pulse 0.8s ease-in-out infinite;
+		}
+
+		.stream-indicator.error {
+			background: #ff6b6b;
+		}
+
+		@keyframes dot-pulse {
+			0%, 100% { opacity: 1; }
+			50% { opacity: 0.4; }
+		}
+
+		/* Shortcuts Button + Popup */
+		.shortcuts-btn {
+			width: 26px;
+			height: 26px;
+			border-radius: 50%;
+			border: 1px solid rgba(255, 255, 255, 0.25);
+			background: rgba(255, 255, 255, 0.08);
+			color: rgba(255, 255, 255, 0.6);
+			font-size: 13px;
+			font-weight: bold;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: all 0.2s ease;
+		}
+
+		.shortcuts-btn:hover {
+			border-color: #c9a96e;
+			color: #c9a96e;
+		}
+
+		.shortcuts-popup {
+			position: fixed;
+			bottom: 108px;
+			left: 20px;
+			background: rgba(10, 10, 10, 0.95);
+			backdrop-filter: blur(20px);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			border-radius: 12px;
+			padding: 14px 16px;
+			display: none;
+			z-index: 2000;
+			min-width: 200px;
+		}
+
+		.shortcuts-popup.open { display: block; }
+
+		.shortcuts-title {
+			font-size: 11px;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			color: #c9a96e;
+			margin-bottom: 10px;
+			font-weight: 600;
+		}
+
+		.shortcut-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			font-size: 12px;
+			color: rgba(255, 255, 255, 0.7);
+			padding: 4px 0;
+			gap: 16px;
+		}
+
+		kbd {
+			background: rgba(255, 255, 255, 0.1);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			border-radius: 4px;
+			padding: 2px 6px;
+			font-size: 11px;
+			font-family: inherit;
+			color: #c9a96e;
+			white-space: nowrap;
+		}
+
+		/* Skeleton Loading for History */
+		.song-cover.skeleton {
+			background: linear-gradient(90deg,
+				rgba(255,255,255,0.04) 25%,
+				rgba(255,255,255,0.10) 50%,
+				rgba(255,255,255,0.04) 75%);
+			background-size: 200% 100%;
+			animation: skeleton-shimmer 1.5s infinite;
+		}
+
+		@keyframes skeleton-shimmer {
+			0% { background-position: 200% 0; }
+			100% { background-position: -200% 0; }
+		}
+
+		@media (max-width: 768px) {
+			.bottom-left { gap: 8px; }
+			.shortcuts-popup { left: 10px; }
+		}

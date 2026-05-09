@@ -29,6 +29,9 @@
 		</div>
 
 		<div class="about-btn">
+			<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">
+				<i class="fas fa-moon" id="themeIcon"></i>
+			</button>
 			<div class="nav-menu">
 				<button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu()">
 					<i class="fas fa-bars"></i>
@@ -85,6 +88,9 @@
 				<h3 id="currentArtist" class="current-artist">Please wait</h3>
 				<div id="currentAlbum" class="current-album">Connecting to stream...</div>
 			</div>
+			<button class="share-btn" onclick="shareCurrentSong()" title="Share current song">
+				<i class="fas fa-share-alt"></i>
+			</button>
 		</div>
 	</div>
 
@@ -105,8 +111,23 @@
 		</div>
 	</div>
 
+	<!-- Shortcuts Popup -->
+	<div class="shortcuts-popup" id="shortcutsPopup">
+		<div class="shortcuts-title">Keyboard Shortcuts</div>
+		<div class="shortcut-item"><kbd>Space</kbd> Play / Pause</div>
+		<div class="shortcut-item"><kbd>P</kbd> Play / Pause</div>
+		<div class="shortcut-item"><kbd>M</kbd> Mute</div>
+		<div class="shortcut-item"><kbd>↑ ↓</kbd> Volume</div>
+		<div class="shortcut-item"><kbd>0 – 9</kbd> Volume level</div>
+	</div>
+
 	<!-- Bottom Controls -->
 	<div class="bottom-controls">
+		<div class="bottom-left">
+			<div class="stream-indicator" id="streamIndicator" title="Disconnected"></div>
+			<button class="shortcuts-btn" id="shortcutsBtn" onclick="toggleShortcuts()" title="Keyboard shortcuts">?</button>
+		</div>
+
 		<button type="button" class="play-button" onclick="togglePlay()">
 			<i id="playerButton" class="fa fa-play"></i>
 		</button>
