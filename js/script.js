@@ -211,6 +211,7 @@ audio.onplay = function () {
 	var button = document.getElementById('playerButton');
 	button.className = 'fa fa-pause';
 	document.getElementById('currentCoverArt').classList.add('playing');
+	document.getElementById('equalizer').classList.add('active');
 	isPlaying = true;
 }
 
@@ -218,6 +219,7 @@ audio.onpause = function () {
 	var button = document.getElementById('playerButton');
 	button.className = 'fa fa-play';
 	document.getElementById('currentCoverArt').classList.remove('playing');
+	document.getElementById('equalizer').classList.remove('active');
 	isPlaying = false;
 }
 
@@ -257,6 +259,8 @@ function updateVolume(value) {
 	audio.volume = intToDecimal(value);
 	var page = new Page();
 	page.changeVolumeIndicator(value);
+	var slider = document.getElementById('volume');
+	slider.style.background = `linear-gradient(to right, #c9a96e ${value}%, rgba(255,255,255,0.2) ${value}%)`;
 }
 
 function mute() {
