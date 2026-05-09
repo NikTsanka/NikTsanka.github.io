@@ -665,7 +665,9 @@ document.addEventListener('keydown', function (event) {
 		case 'l':
 		case 'L':
 			event.preventDefault();
-			toggleLyricsPanel();
+			document.getElementById('lyricsPanel').classList.add('open');
+			var tab = document.getElementById('lyricsTab');
+			if (tab) tab.classList.add('panel-open');
 			break;
 		case '0':
 		case '1':

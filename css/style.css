@@ -459,7 +459,7 @@
 			align-items: center;
 			justify-content: center;
 			gap: 40px;
-			padding: 0 20px;
+			padding: 0 160px;
 		}
 
 		.footer-credit {
@@ -482,6 +482,8 @@
 		.play-button {
 			width: 60px;
 			height: 60px;
+			min-width: 60px;
+			flex-shrink: 0;
 			background-image: url('/img/cover.png');
 			background-size: cover;
 			background-position: center;
@@ -876,9 +878,14 @@
 			/* ქვედა მენიუს ოპტიმიზაცია */
 			.bottom-controls {
 				height: auto;
-				padding: 15px;
+				padding: 15px 15px 15px 15px;
 				flex-direction: column;
 				gap: 15px;
+			}
+
+			.bottom-left {
+				position: static;
+				transform: none;
 			}
 
 			.volume-control {
@@ -1224,11 +1231,10 @@
 		.bottom-left {
 			position: absolute;
 			left: 20px;
-			top: 50%;
-			transform: translateY(-50%);
+			bottom: 8px;
 			display: flex;
 			align-items: center;
-			gap: 10px;
+			gap: 8px;
 		}
 
 		.stream-indicator {
@@ -1283,7 +1289,7 @@
 
 		.shortcuts-popup {
 			position: fixed;
-			bottom: 108px;
+			bottom: 42px;
 			left: 20px;
 			background: rgba(10, 10, 10, 0.95);
 			backdrop-filter: blur(20px);
