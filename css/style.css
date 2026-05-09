@@ -377,6 +377,23 @@
 			padding: 0 20px;
 		}
 
+		.footer-credit {
+			position: absolute;
+			right: 20px;
+			bottom: 8px;
+			font-size: 11px;
+			color: rgba(255, 255, 255, 0.4);
+		}
+
+		.footer-credit a {
+			color: #c9a96e;
+			text-decoration: none;
+		}
+
+		.footer-credit a:hover {
+			color: #d4b577;
+		}
+
 		.play-button {
 			width: 60px;
 			height: 60px;
