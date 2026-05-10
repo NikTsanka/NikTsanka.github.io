@@ -57,21 +57,47 @@ filterBtns.forEach(btn => {
 });
 
 // ===== CONTACT FORM =====
-const contactForm = document.querySelector('.contact-form');
+const contactForm = document.getElementById('contactForm');
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = contactForm.querySelector('button[type="submit"]');
-        const orig = btn.textContent;
-        btn.textContent = 'გაგზავნილია ✓';
-        btn.style.background = '#27AE60';
+        const btn = document.getElementById('submitBtn');
+        const res = document.getElementById('formResponse');
+        const data = Object.fromEntries(new FormData(contactForm));
+
+        if (!data.name.trim() || !data.phone.trim() || !data.message.trim()) {
+            res.className = 'form-msg form-msg-error';
+            res.textContent = '✗ შეავსეთ სავალდებულო ველები (*)';
+            res.style.display = 'block';
+            return;
+        }
+
+        btn.textContent = 'იგზავნება...';
         btn.disabled = true;
-        setTimeout(() => {
-            btn.textContent = orig;
-            btn.style.background = '';
-            btn.disabled = false;
-            contactForm.reset();
-        }, 3000);
+        res.style.display = 'none';
+
+        try {
+            const r = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const json = await r.json();
+            if (json.success) {
+                res.className = 'form-msg form-msg-success';
+                res.textContent = '✓ შეტყობინება გაიგზავნა! 24 საათში დაგიკავშირდებით.';
+                contactForm.reset();
+            } else {
+                throw new Error('failed');
+            }
+        } catch {
+            res.className = 'form-msg form-msg-error';
+            res.textContent = '✗ გაგზავნა ვერ მოხდა. სცადეთ ხელახლა ან დაგვიძახეთ: +995 555 123 456';
+        }
+
+        res.style.display = 'block';
+        btn.textContent = 'გაგზავნა →';
+        btn.disabled = false;
     });
 }
 

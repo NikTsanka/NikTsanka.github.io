@@ -82,6 +82,66 @@
 		</div>
 	</section>
 
+	<section class="section section-alt">
+		<div class="container">
+			<div class="section-header fade-up">
+				<div class="section-tag">შეტყობინება</div>
+				<h2>მოგვწერეთ</h2>
+				<p>შეავსეთ ფორმა — 24 საათში გიპასუხებთ</p>
+			</div>
+			<form id="contactForm" class="contact-form-wrap fade-up" style="max-width:680px;margin:0 auto;" novalidate>
+
+				<!-- ══════════════════════════════════════════════
+				     მეილის შეცვლა:
+				     1. გადი  https://web3forms.com
+				     2. შეიყვანე ახალი მეილი → მიიღე access key
+				     3. ჩაანაცვლე value="..." ქვემოთ
+				     ══════════════════════════════════════════════ -->
+				<input type="hidden" name="access_key" value="fd312a08-45a5-4fa5-8ee1-0f70a4b7cc34">
+
+				<input type="hidden" name="subject" value="ახალი შეტყობინება — DM საიტიდან">
+				<input type="hidden" name="from_name" value="DM საიტი">
+				<input type="checkbox" name="botcheck" style="display:none" tabindex="-1">
+
+				<div class="form-row">
+					<div class="form-group">
+						<label for="fname">სახელი *</label>
+						<input type="text" id="fname" name="name" placeholder="თქვენი სახელი" required>
+					</div>
+					<div class="form-group">
+						<label for="fphone">ტელეფონი *</label>
+						<input type="tel" id="fphone" name="phone" placeholder="+995 5XX XXX XXX" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="femail">ელ. ფოსტა</label>
+					<input type="email" id="femail" name="email" placeholder="your@email.com">
+				</div>
+				<div class="form-group">
+					<label for="fservice">სერვისი</label>
+					<select id="fservice" name="service">
+						<option value="">— აირჩიეთ —</option>
+						<option>⚡ ელექტრომონტაჟი</option>
+						<option>🔥 სახანძრო უსაფრთხოება</option>
+						<option>🔒 სიგნალიზაცია</option>
+						<option>📦 პროდუქცია / შეკვეთა</option>
+						<option>სხვა</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="fmsg">შეტყობინება *</label>
+					<textarea id="fmsg" name="message" placeholder="დაწერეთ თქვენი შეკითხვა ან მოთხოვნა..." required></textarea>
+				</div>
+
+				<div id="formResponse" class="form-msg" style="display:none;"></div>
+
+				<button type="submit" id="submitBtn" class="btn btn-green" style="width:100%;font-size:1rem;padding:14px;">
+					გაგზავნა →
+				</button>
+			</form>
+		</div>
+	</section>
+
 	<section class="cta-section">
 		<div class="container">
 			<h2>გჭირდებათ გადაუდებელი დახმარება?</h2>

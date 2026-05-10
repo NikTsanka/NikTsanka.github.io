@@ -1429,6 +1429,27 @@ ul {
 	min-height: 120px;
 }
 
+.form-msg {
+	padding: 13px 16px;
+	border-radius: var(--radius);
+	font-size: 0.9rem;
+	font-weight: 600;
+	margin-bottom: 16px;
+	line-height: 1.4;
+}
+
+.form-msg-success {
+	background: var(--green-light);
+	color: var(--green-dark);
+	border: 1px solid #b2dfcc;
+}
+
+.form-msg-error {
+	background: #fdecea;
+	color: #c0392b;
+	border: 1px solid #f5c6cb;
+}
+
 .map-placeholder {
 	margin-top: 40px;
 	border-radius: var(--radius-lg);
