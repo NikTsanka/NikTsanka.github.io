@@ -67,12 +67,12 @@ if (contactForm) {
 
         if (!data.name.trim() || !data.phone.trim() || !data.message.trim()) {
             res.className = 'form-msg form-msg-error';
-            res.textContent = '✗ შეავსეთ სავალდებულო ველები (*)';
+            res.textContent = window.i18nT ? window.i18nT('contact.form.val') : '✗ შეავსეთ სავალდებულო ველები (*)';
             res.style.display = 'block';
             return;
         }
 
-        btn.textContent = 'იგზავნება...';
+        btn.textContent = window.i18nT ? window.i18nT('contact.form.sending') : 'იგზავნება...';
         btn.disabled = true;
         res.style.display = 'none';
 
@@ -85,18 +85,18 @@ if (contactForm) {
             const json = await r.json();
             if (json.success) {
                 res.className = 'form-msg form-msg-success';
-                res.textContent = '✓ შეტყობინება გაიგზავნა! 24 საათში დაგიკავშირდებით.';
+                res.textContent = window.i18nT ? window.i18nT('contact.form.ok') : '✓ შეტყობინება გაიგზავნა! 24 საათში დაგიკავშირდებით.';
                 contactForm.reset();
             } else {
                 throw new Error('failed');
             }
         } catch {
             res.className = 'form-msg form-msg-error';
-            res.textContent = '✗ გაგზავნა ვერ მოხდა. სცადეთ ხელახლა ან დაგვიძახეთ: +995 555 123 456';
+            res.textContent = window.i18nT ? window.i18nT('contact.form.err') : '✗ გაგზავნა ვერ მოხდა. სცადეთ ხელახლა ან დაგვიძახეთ: +995 555 123 456';
         }
 
         res.style.display = 'block';
-        btn.textContent = 'გაგზავნა →';
+        btn.textContent = window.i18nT ? window.i18nT('contact.form.submit') : 'გაგზავნა →';
         btn.disabled = false;
     });
 }

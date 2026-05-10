@@ -14,32 +14,37 @@
 		<div class="header-inner">
 			<a href="index.html" class="logo">
 				<img src="../dm.jpeg" alt="DM Logo" class="logo-img">
-				<div class="logo-text">DM<span>დანადგარების მონტაჟი</span></div>
+				<div class="logo-text">DM<span data-i18n="footer.tagline">დანადგარების მონტაჟი</span></div>
 			</a>
 			<nav class="nav" id="nav">
-				<div class="nav-item"><a href="index.html" class="nav-link">მთავარი</a></div>
+				<div class="nav-item"><a href="index.html" class="nav-link" data-i18n="nav.home">მთავარი</a></div>
 				<div class="nav-item has-dropdown">
-					<a href="#" class="nav-link">სერვისები ▾</a>
+					<a href="#" class="nav-link" data-i18n="nav.services">სერვისები ▾</a>
 					<div class="dropdown-menu">
-						<a href="electricity.html" class="dropdown-link"><span class="di">⚡</span>ელექტრომონტაჟი</a>
-						<a href="fire-safety.html" class="dropdown-link"><span class="di">🔥</span>სახანძრო უსაფრთხოება</a>
-						<a href="alarm.html" class="dropdown-link"><span class="di">🔒</span>სიგნალიზაცია</a>
+						<a href="electricity.html" class="dropdown-link"><span class="di">⚡</span><span data-i18n="nav.dd.electric">ელექტრომონტაჟი</span></a>
+						<a href="fire-safety.html" class="dropdown-link"><span class="di">🔥</span><span data-i18n="nav.dd.fire">სახანძრო უსაფრთხოება</span></a>
+						<a href="alarm.html" class="dropdown-link"><span class="di">🔒</span><span data-i18n="nav.dd.alarm">სიგნალიზაცია</span></a>
 					</div>
 				</div>
-				<div class="nav-item"><a href="products.html" class="nav-link">პროდუქცია</a></div>
-				<div class="nav-item"><a href="contact.html" class="nav-link active">კონტაქტი</a></div>
+				<div class="nav-item"><a href="products.html" class="nav-link" data-i18n="nav.products">პროდუქცია</a></div>
+				<div class="nav-item"><a href="contact.html" class="nav-link active" data-i18n="nav.contact">კონტაქტი</a></div>
 			</nav>
+			<div class="lang-switcher">
+				<button class="lang-btn" data-lang="ka">GEO</button>
+				<button class="lang-btn" data-lang="en">ENG</button>
+				<button class="lang-btn" data-lang="ru">RUS</button>
+			</div>
 			<div class="header-contact"><span>📞</span><span>+995 555 123 456</span></div>
 			<button class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
 		</div>
 	</header>
 
 	<div class="page-banner">
-		<h2>📞 კონტაქტი</h2>
+		<h2 data-i18n="contact.banner.h2">📞 კონტაქტი</h2>
 		<div class="breadcrumb">
-			<a href="index.html">მთავარი</a>
+			<a href="index.html" data-i18n="bc.home">მთავარი</a>
 			<span class="sep">›</span>
-			<span>კონტაქტი</span>
+			<span data-i18n="bc.contact">კონტაქტი</span>
 		</div>
 	</div>
 
@@ -49,33 +54,33 @@
 				<div class="contact-card fade-up">
 					<div class="contact-card-icon">📞</div>
 					<div>
-						<h4>ტელეფონი</h4>
+						<h4 data-i18n="contact.card1.title">ტელეფონი</h4>
 						<p>+995 555 123 456</p>
-						<p style="font-size:0.82rem;color:#888;font-weight:400;margin-top:2px;">ყოველდღე 9:00–20:00</p>
+						<p style="font-size:0.82rem;color:#888;font-weight:400;margin-top:2px;" data-i18n="contact.card1.sub">ყოველდღე 9:00–20:00</p>
 					</div>
 				</div>
 				<div class="contact-card fade-up">
 					<div class="contact-card-icon">📧</div>
 					<div>
-						<h4>ელ. ფოსტა</h4>
+						<h4 data-i18n="contact.card2.title">ელ. ფოსტა</h4>
 						<p>info@dm-energy.ge</p>
-						<p style="font-size:0.82rem;color:#888;font-weight:400;margin-top:2px;">24 საათში გიპასუხებთ</p>
+						<p style="font-size:0.82rem;color:#888;font-weight:400;margin-top:2px;" data-i18n="contact.card2.sub">24 საათში გიპასუხებთ</p>
 					</div>
 				</div>
 				<div class="contact-card fade-up">
 					<div class="contact-card-icon">📍</div>
 					<div>
-						<h4>მისამართი</h4>
-						<p>თბილისი, საქართველო</p>
-						<p style="font-size:0.82rem;color:#888;font-weight:400;margin-top:2px;">ვაკე-საბურთალოს რაიონი</p>
+						<h4 data-i18n="contact.card3.title">მისამართი</h4>
+						<p data-i18n="contact.card3.val">თბილისი, საქართველო</p>
+						<p style="font-size:0.82rem;color:#888;font-weight:400;margin-top:2px;" data-i18n="contact.card3.sub">ვაკე-საბურთალოს რაიონი</p>
 					</div>
 				</div>
 				<div class="contact-card fade-up">
 					<div class="contact-card-icon">🕐</div>
 					<div>
-						<h4>სამუშაო საათები</h4>
-						<p>ორშ–შაბათი: 9:00–18:00</p>
-						<p style="font-size:0.82rem;color:#888;font-weight:400;margin-top:2px;">საგანგებო: 24/7</p>
+						<h4 data-i18n="contact.card4.title">სამუშაო საათები</h4>
+						<p data-i18n="contact.card4.val">ორშ–შაბათი: 9:00–18:00</p>
+						<p style="font-size:0.82rem;color:#888;font-weight:400;margin-top:2px;" data-i18n="contact.card4.sub">საგანგებო: 24/7</p>
 					</div>
 				</div>
 			</div>
@@ -85,9 +90,9 @@
 	<section class="section section-alt">
 		<div class="container">
 			<div class="section-header fade-up">
-				<div class="section-tag">შეტყობინება</div>
-				<h2>მოგვწერეთ</h2>
-				<p>შეავსეთ ფორმა — 24 საათში გიპასუხებთ</p>
+				<div class="section-tag" data-i18n="contact.form.tag">შეტყობინება</div>
+				<h2 data-i18n="contact.form.h2">მოგვწერეთ</h2>
+				<p data-i18n="contact.form.p">შეავსეთ ფორმა — 24 საათში გიპასუხებთ</p>
 			</div>
 			<form id="contactForm" class="contact-form-wrap fade-up" style="max-width:680px;margin:0 auto;" novalidate>
 
@@ -105,20 +110,20 @@
 
 				<div class="form-row">
 					<div class="form-group">
-						<label for="fname">სახელი *</label>
-						<input type="text" id="fname" name="name" placeholder="თქვენი სახელი" required>
+						<label for="fname" data-i18n="contact.form.name">სახელი *</label>
+						<input type="text" id="fname" name="name" data-i18n-ph="contact.ph.name" placeholder="თქვენი სახელი" required>
 					</div>
 					<div class="form-group">
-						<label for="fphone">ტელეფონი *</label>
+						<label for="fphone" data-i18n="contact.form.phone">ტელეფონი *</label>
 						<input type="tel" id="fphone" name="phone" placeholder="+995 5XX XXX XXX" required>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="femail">ელ. ფოსტა</label>
+					<label for="femail" data-i18n="contact.form.email">ელ. ფოსტა</label>
 					<input type="email" id="femail" name="email" placeholder="your@email.com">
 				</div>
 				<div class="form-group">
-					<label for="fservice">სერვისი</label>
+					<label for="fservice" data-i18n="contact.form.service">სერვისი</label>
 					<select id="fservice" name="service">
 						<option value="">— აირჩიეთ —</option>
 						<option>⚡ ელექტრომონტაჟი</option>
@@ -129,13 +134,13 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<label for="fmsg">შეტყობინება *</label>
-					<textarea id="fmsg" name="message" placeholder="დაწერეთ თქვენი შეკითხვა ან მოთხოვნა..." required></textarea>
+					<label for="fmsg" data-i18n="contact.form.msg">შეტყობინება *</label>
+					<textarea id="fmsg" name="message" data-i18n-ph="contact.ph.msg" placeholder="დაწერეთ თქვენი შეკითხვა ან მოთხოვნა..." required></textarea>
 				</div>
 
 				<div id="formResponse" class="form-msg" style="display:none;"></div>
 
-				<button type="submit" id="submitBtn" class="btn btn-green" style="width:100%;font-size:1rem;padding:14px;">
+				<button type="submit" id="submitBtn" class="btn btn-green" style="width:100%;font-size:1rem;padding:14px;" data-i18n="contact.form.submit">
 					გაგზავნა →
 				</button>
 			</form>
@@ -144,11 +149,10 @@
 
 	<section class="cta-section">
 		<div class="container">
-			<h2>გჭირდებათ გადაუდებელი დახმარება?</h2>
-			<p>ელექტრო ან სახანძრო გადაუდებელ შემთხვევაში — დაგვიძახეთ დაუყოვნებლივ</p>
+			<h2 data-i18n="contact.cta.h2">გჭირდებათ გადაუდებელი დახმარება?</h2>
+			<p data-i18n="contact.cta.p">ელექტრო ან სახანძრო გადაუდებელ შემთხვევაში — დაგვიძახეთ დაუყოვნებლივ</p>
 			<div class="cta-buttons">
-				<a href="tel:+995555123456" class="btn btn-primary">📞 +995 555 123 456</a>
-				<!-- <a href="gallery.html" class="btn btn-outline">ჩვენი სამუშაოები →</a> -->
+				<a href="tel:+995555123456" class="btn btn-primary" data-i18n="shared.cta.btn.phone">📞 +995 555 123 456</a>
 			</div>
 		</div>
 	</section>
@@ -159,37 +163,32 @@
 				<div class="footer-brand">
 					<a href="index.html" class="logo">
 						<img src="../dm.jpeg" alt="DM Logo" class="logo-img">
-						<div class="logo-text">DM<span>დანადგარების მონტაჟი</span></div>
+						<div class="logo-text">DM<span data-i18n="footer.tagline">დანადგარების მონტაჟი</span></div>
 					</a>
-					<p>პროფესიული ელექტრომონტაჟი, სახანძრო უსაფრთხოება და სიგნალიზაციის სისტემები.</p>
-					<!-- <div class="social-links">
-						<a href="#" class="social-link">FB</a>
-						<a href="#" class="social-link">IN</a>
-						<a href="#" class="social-link">YT</a>
-					</div> -->
+					<p data-i18n="footer.brand.p">პროფესიული ელექტრომონტაჟი, სახანძრო უსაფრთხოება და სიგნალიზაციის სისტემები.</p>
 				</div>
 				<div class="footer-col">
-					<h4>გვერდები</h4>
+					<h4 data-i18n="footer.pages">გვერდები</h4>
 					<ul class="footer-links">
-						<li><a href="index.html">► მთავარი</a></li>
-						<li><a href="contact.html">► კონტაქტი</a></li>
+						<li><a href="index.html" data-i18n="footer.link.home">► მთავარი</a></li>
+						<li><a href="products.html" data-i18n="footer.link.products">► პროდუქცია</a></li>
+						<li><a href="contact.html" data-i18n="footer.link.contact">► კონტაქტი</a></li>
 					</ul>
 				</div>
 				<div class="footer-col">
-					<h4>სერვისები</h4>
+					<h4 data-i18n="footer.services">სერვისები</h4>
 					<ul class="footer-links">
-						<li><a href="electricity.html">► ელექტრომონტაჟი</a></li>
-						<li><a href="fire-safety.html">► სახანძრო სისტემა</a></li>
-						<li><a href="alarm.html">► სიგნალიზაცია</a></li>
+						<li><a href="electricity.html" data-i18n="footer.link.electric">► ელექტრომონტაჟი</a></li>
+						<li><a href="fire-safety.html" data-i18n="footer.link.fire">► სახანძრო სისტემა</a></li>
+						<li><a href="alarm.html" data-i18n="footer.link.alarm">► სიგნალიზაცია</a></li>
 					</ul>
 				</div>
 				<div class="footer-col">
-					<h4>კონტაქტი</h4>
+					<h4 data-i18n="footer.contact">კონტაქტი</h4>
 					<div class="footer-contact-items">
-						<div class="f-contact-item"><span>📍</span><span>თბილისი, საქართველო</span></div>
+						<div class="f-contact-item"><span>📍</span><span data-i18n="footer.city">თბილისი, საქართველო</span></div>
 						<div class="f-contact-item"><span>📞</span><span>+995 555 123 456</span></div>
 						<div class="f-contact-item"><span>📧</span><span>info@dm-energy.ge</span></div>
-						<div class="f-contact-item"><span>🕐</span><span>ორშ–შაბ: 9:00–18:00</span></div>
 					</div>
 				</div>
 			</div>
@@ -197,17 +196,15 @@
 		<div class="footer-bottom">
 			<div class="container">
 				<div class="footer-bottom-inner">
-					<p>© 2026 DM — დანადგარების მონტაჟი. ყველა უფლება დაცულია.</p>
-					<p>
-						Built by <a href="https://niktsanka.github.io/resume/index.html" target="_blank"
-							rel="noopener">CANKA.Dev</a>
-					</p>
-					<p>კონფიდენციალობა | გამოყენების პირობები</p>
+					<p data-i18n="footer.copy">© 2026 DM — დანადგარების მონტაჟი. ყველა უფლება დაცულია.</p>
+					<p>Built by <a href="https://niktsanka.github.io/resume/index.html" target="_blank" rel="noopener">CANKA.Dev</a></p>
+					<p data-i18n="footer.privacy">კონფიდენციალობა | გამოყენების პირობები</p>
 				</div>
 			</div>
 		</div>
 	</footer>
 
+	<script src="js/i18n.js"></script>
 	<script src="js/main.js"></script>
 </body>
 

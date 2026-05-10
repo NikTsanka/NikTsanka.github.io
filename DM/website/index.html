@@ -17,29 +17,35 @@
 				<img src="../dm.jpeg" alt="DM Logo" class="logo-img">
 				<div class="logo-text">
 					DM
-					<span>დანადგარების მონტაჟი</span>
+					<span data-i18n="footer.tagline">დანადგარების მონტაჟი</span>
 				</div>
 			</a>
 
 			<nav class="nav" id="nav">
 				<div class="nav-item">
-					<a href="index.html" class="nav-link active">მთავარი</a>
+					<a href="index.html" class="nav-link active" data-i18n="nav.home">მთავარი</a>
 				</div>
 				<div class="nav-item has-dropdown">
-					<a href="#" class="nav-link">სერვისები ▾</a>
+					<a href="#" class="nav-link" data-i18n="nav.services">სერვისები ▾</a>
 					<div class="dropdown-menu">
-						<a href="electricity.html" class="dropdown-link"><span class="di">⚡</span>ელექტრომონტაჟი</a>
-						<a href="fire-safety.html" class="dropdown-link"><span class="di">🔥</span>სახანძრო უსაფრთხოება</a>
-						<a href="alarm.html" class="dropdown-link"><span class="di">🔒</span>სიგნალიზაცია</a>
+						<a href="electricity.html" class="dropdown-link"><span class="di">⚡</span><span data-i18n="nav.dd.electric">ელექტრომონტაჟი</span></a>
+						<a href="fire-safety.html" class="dropdown-link"><span class="di">🔥</span><span data-i18n="nav.dd.fire">სახანძრო უსაფრთხოება</span></a>
+						<a href="alarm.html" class="dropdown-link"><span class="di">🔒</span><span data-i18n="nav.dd.alarm">სიგნალიზაცია</span></a>
 					</div>
 				</div>
 				<div class="nav-item">
-					<a href="products.html" class="nav-link">პროდუქცია</a>
+					<a href="products.html" class="nav-link" data-i18n="nav.products">პროდუქცია</a>
 				</div>
 				<div class="nav-item">
-					<a href="contact.html" class="nav-link">კონტაქტი</a>
+					<a href="contact.html" class="nav-link" data-i18n="nav.contact">კონტაქტი</a>
 				</div>
 			</nav>
+
+			<div class="lang-switcher">
+				<button class="lang-btn" data-lang="ka">GEO</button>
+				<button class="lang-btn" data-lang="en">ENG</button>
+				<button class="lang-btn" data-lang="ru">RUS</button>
+			</div>
 
 			<div class="header-contact">
 				<span>📞</span>
@@ -56,99 +62,48 @@
 	<section class="hero">
 		<div class="hero-bg"></div>
 		<div class="hero-content container">
-			<div class="hero-badge">🏆 სანდო კომპანია საქართველოში</div>
-			<h1>პროფესიონალური <span class="highlight">ელექტრომონტაჟი</span> და უსაფრთხოების სისტემები</h1>
-			<p>DM გთავაზობთ სრულ სპექტრს — ელექტრო ინსტალაციიდან სახანძრო სიგნალიზაციამდე. ხარისხი, სწრაფობა, სანდოობა.</p>
+			<div class="hero-badge" data-i18n="idx.badge">🏆 სანდო კომპანია საქართველოში</div>
+			<h1 data-i18n-html="idx.h1">პროფესიონალური <span class="highlight">ელექტრომონტაჟი</span> და უსაფრთხოების სისტემები</h1>
+			<p data-i18n="idx.hero.p">DM გთავაზობთ სრულ სპექტრს — ელექტრო ინსტალაციიდან სახანძრო სიგნალიზაციამდე. ხარისხი, სწრაფობა, სანდოობა.</p>
 			<div class="hero-buttons">
-				<a href="contact.html" class="btn btn-primary">უფასო კონსულტაცია</a>
-				<a href="#services" class="btn btn-outline">სერვისები →</a>
+				<a href="contact.html" class="btn btn-primary" data-i18n="idx.hero.btn1">უფასო კონსულტაცია</a>
+				<a href="#services" class="btn btn-outline" data-i18n="idx.hero.btn2">სერვისები →</a>
 			</div>
-			<!-- <div class="hero-stats">
-				<div class="stat-item">
-					<div class="stat-number" data-count="500" data-suffix="+">0+</div>
-					<div class="stat-label">შესრულებული პროექტი</div>
-				</div>
-				<div class="stat-item">
-					<div class="stat-number" data-count="10" data-suffix="+">0+</div>
-					<div class="stat-label">წლიანი გამოცდილება</div>
-				</div>
-				<div class="stat-item">
-					<div class="stat-number" data-count="98" data-suffix="%">0%</div>
-					<div class="stat-label">კმაყოფილი კლიენტი</div>
-				</div>
-				<div class="stat-item">
-					<div class="stat-number" data-count="24" data-suffix="/7">0/7</div>
-					<div class="stat-label">ტექნიკური მხარდაჭერა</div>
-				</div>
-			</div> -->
 		</div>
 	</section>
-
-	<!-- ===== ABOUT ===== -->
-	<!-- <section class="section" id="about">
-		<div class="container">
-			<div class="about-grid">
-				<div class="about-img-wrapper">
-					<div class="about-img-placeholder">⚡</div>
-					<div class="about-badge">
-						<div class="num">10+</div>
-						<div class="lbl">წლიანი გამოცდილება</div>
-					</div>
-				</div>
-				<div class="about-content fade-up">
-					<div class="section-tag">ჩვენ შესახებ</div>
-					<h2>ვინ ვართ ჩვენ?</h2>
-					<p>DM — დანადგარების მონტაჟი — არის წამყვანი კომპანია ელექტრომონტაჟისა და უსაფრთხოების სისტემების სფეროში.
-						ჩვენ ვთავაზობთ სრულ კომპლექსურ გადაწყვეტებს სახელმწიფო სტანდარტების შესაბამისად.</p>
-					<p>ჩვენი გამოცდილი სპეციალისტები მუშაობენ საცხოვრებელ, კომერციულ და სამრეწველო ობიექტებზე. ყველა სამუშაო
-						სრულდება ნორმებისა და ტექნიკური რეგლამენტების სრული დაცვით.</p>
-					<ul class="about-features">
-						<li>სახელმწიფო ლიცენზირებული კომპანია</li>
-						<li>10+ წლიანი გამოცდილება დარგში</li>
-						<li>500+ წარმატებით შესრულებული პროექტი</li>
-						<li>24/7 ტექნიკური მხარდაჭერა</li>
-						<li>გარანტია ყველა სამუშაოზე — 1-3 წელი</li>
-					</ul>
-					<a href="contact.html" class="btn btn-green">დაგვიკავშირდით</a>
-				</div>
-			</div>
-		</div>
-	</section> -->
 
 	<!-- ===== SERVICES ===== -->
 	<section class="section section-alt" id="services">
 		<div class="container">
 			<div class="section-header">
-				<div class="section-tag">სერვისები</div>
-				<h2>ჩვენი სერვისები</h2>
-				<p>ვთავაზობთ სრულ კომპლექსს — ელექტრო ინსტალაციიდან თანამედროვე უსაფრთხოების სისტემებამდე</p>
+				<div class="section-tag" data-i18n="idx.svc.tag">სერვისები</div>
+				<h2 data-i18n="idx.svc.h2">ჩვენი სერვისები</h2>
+				<p data-i18n="idx.svc.p">ვთავაზობთ სრულ კომპლექსს — ელექტრო ინსტალაციიდან თანამედროვე უსაფრთხოების სისტემებამდე</p>
 			</div>
 			<div class="services-grid">
 				<a href="electricity.html" class="service-card fade-up">
 					<div class="service-icon">⚡</div>
-					<h3>ელექტრომონტაჟი</h3>
-					<p>სრული ელექტრო ინსტალაცია საცხოვრებელ და კომერციულ ობიექტებზე. გაყვანილობა, ელ-ფარები, განათება,
-						გამანაწილებელი კაბინეტები.</p>
-					<span class="service-link">დაწვრილებით →</span>
+					<h3 data-i18n="idx.svc1.title">ელექტრომონტაჟი</h3>
+					<p data-i18n="idx.svc1.desc">სრული ელექტრო ინსტალაცია საცხოვრებელ და კომერციულ ობიექტებზე. გაყვანილობა, ელ-ფარები, განათება, გამანაწილებელი კაბინეტები.</p>
+					<span class="service-link" data-i18n="idx.svc1.link">დაწვრილებით →</span>
 				</a>
 				<a href="fire-safety.html" class="service-card fade-up">
 					<div class="service-icon">🔥</div>
-					<h3>სახანძრო უსაფრთხოება</h3>
-					<p>სახანძრო სიგნალიზაციის დაყენება, სპრინკლერული სისტემები, კვამლის დეტექტორები და ხანძარსაწინააღმდეგო სრული
-						გადაწყვეტები.</p>
-					<span class="service-link">დაწვრილებით →</span>
+					<h3 data-i18n="idx.svc2.title">სახანძრო უსაფრთხოება</h3>
+					<p data-i18n="idx.svc2.desc">სახანძრო სიგნალიზაციის დაყენება, სპრინკლერული სისტემები, კვამლის დეტექტორები და ხანძარსაწინააღმდეგო სრული გადაწყვეტები.</p>
+					<span class="service-link" data-i18n="idx.svc2.link">დაწვრილებით →</span>
 				</a>
 				<a href="alarm.html" class="service-card fade-up">
 					<div class="service-icon">🔒</div>
-					<h3>სიგნალიზაცია</h3>
-					<p>თანამედროვე დაცვის სისტემები, მოძრაობის სენსორები, წვდომის კონტროლი და 24/7 მონიტორინგი.</p>
-					<span class="service-link">დაწვრილებით →</span>
+					<h3 data-i18n="idx.svc3.title">სიგნალიზაცია</h3>
+					<p data-i18n="idx.svc3.desc">თანამედროვე დაცვის სისტემები, მოძრაობის სენსორები, წვდომის კონტროლი და 24/7 მონიტორინგი.</p>
+					<span class="service-link" data-i18n="idx.svc3.link">დაწვრილებით →</span>
 				</a>
 				<a href="alarm.html" class="service-card fade-up">
 					<div class="service-icon">📹</div>
-					<h3>ვიდეოთვალყურეობა</h3>
-					<p>IP კამერების დაყენება, ციფრული ვიდეო ჩამწერი სისტემები, ღრუბლოვანი მონიტორინგი და დისტანციური წვდომა.</p>
-					<span class="service-link">დაწვრილებით →</span>
+					<h3 data-i18n="idx.svc4.title">ვიდეოთვალყურეობა</h3>
+					<p data-i18n="idx.svc4.desc">IP კამერების დაყენება, ციფრული ვიდეო ჩამწერი სისტემები, ღრუბლოვანი მონიტორინგი და დისტანციური წვდომა.</p>
+					<span class="service-link" data-i18n="idx.svc4.link">დაწვრილებით →</span>
 				</a>
 			</div>
 		</div>
@@ -162,37 +117,36 @@
 					<div class="why-circle">🛡️</div>
 				</div>
 				<div class="fade-up">
-					<div class="section-tag">რატომ ჩვენ?</div>
-					<h2>რატომ უნდა აირჩიოთ DM?</h2>
-					<p>ჩვენი კომპანია გამოირჩევა პროფესიონალიზმით, სანდოობით და გამჭვირვალე მიდგომით — თქვენი უსაფრთხოება ჩვენი
-						პრიორიტეტია.</p>
+					<div class="section-tag" data-i18n="idx.why.tag">რატომ ჩვენ?</div>
+					<h2 data-i18n="idx.why.h2">რატომ უნდა აირჩიოთ DM?</h2>
+					<p data-i18n="idx.why.p">ჩვენი კომპანია გამოირჩევა პროფესიონალიზმით, სანდოობით და გამჭვირვალე მიდგომით — თქვენი უსაფრთხოება ჩვენი პრიორიტეტია.</p>
 					<div class="why-features">
 						<div class="why-item fade-up">
 							<div class="why-item-icon">🏅</div>
 							<div>
-								<h4>ლიცენზირებული სპეციალისტები</h4>
-								<p>ყველა ჩვენი სპეციალისტი სერტიფიცირებულია სახელმწიფო სტანდარტებით</p>
+								<h4 data-i18n="idx.why1.title">ლიცენზირებული სპეციალისტები</h4>
+								<p data-i18n="idx.why1.desc">ყველა ჩვენი სპეციალისტი სერტიფიცირებულია სახელმწიფო სტანდარტებით</p>
 							</div>
 						</div>
 						<div class="why-item fade-up">
 							<div class="why-item-icon">⚡</div>
 							<div>
-								<h4>სწრაფი გამოძახება</h4>
-								<p>გადაუდებელ შემთხვევებში 2 საათში ვართ ნებისმიერ ადგილზე</p>
+								<h4 data-i18n="idx.why2.title">სწრაფი გამოძახება</h4>
+								<p data-i18n="idx.why2.desc">გადაუდებელ შემთხვევებში 2 საათში ვართ ნებისმიერ ადგილზე</p>
 							</div>
 						</div>
 						<div class="why-item fade-up">
 							<div class="why-item-icon">💰</div>
 							<div>
-								<h4>კონკურენტული ფასები</h4>
-								<p>გამჭვირვალე ღირებულება — ფასდაკლება გახანგრძლივებული თანამშრომლობისას</p>
+								<h4 data-i18n="idx.why3.title">კონკურენტული ფასები</h4>
+								<p data-i18n="idx.why3.desc">გამჭვირვალე ღირებულება — ფასდაკლება გახანგრძლივებული თანამშრომლობისას</p>
 							</div>
 						</div>
 						<div class="why-item fade-up">
 							<div class="why-item-icon">🔧</div>
 							<div>
-								<h4>გარანტია და ტექ. მხარდაჭერა</h4>
-								<p>ყველა სამუშაოზე ვიძლევით 1-3 წლიან გარანტიას + უფასო ტექ. მხარდაჭერა</p>
+								<h4 data-i18n="idx.why4.title">გარანტია და ტექ. მხარდაჭერა</h4>
+								<p data-i18n="idx.why4.desc">ყველა სამუშაოზე ვიძლევით 1-3 წლიან გარანტიას + უფასო ტექ. მხარდაჭერა</p>
 							</div>
 						</div>
 					</div>
@@ -201,54 +155,14 @@
 		</div>
 	</section>
 
-	<!-- ===== PROJECTS ===== -->
-	<!-- <section class="section section-alt" id="projects">
-		<div class="container">
-			<div class="section-header">
-				<div class="section-tag">პროექტები</div>
-				<h2>შესრულებული სამუშაოები</h2>
-				<p>ჩვენი გუნდი წარმატებით ახორციელებს ასობით პროექტს მთელ საქართველოში</p>
-			</div>
-			<div class="projects-grid">
-				<div class="project-card fade-up">
-					<div class="project-img" style="background:linear-gradient(135deg,#0d1f3c,#1d4ed8);">⚡</div>
-					<div class="project-info">
-						<span class="project-tag">ელექტრომონტაჟი</span>
-						<h3>საცხოვრებელი კომპლექსი — თბილისი</h3>
-						<p>120 ბინის სრული ელექტრო ინსტალაცია, გამანაწილებელი კაბინეტები, განათება</p>
-					</div>
-				</div>
-				<div class="project-card fade-up">
-					<div class="project-img" style="background:linear-gradient(135deg,#3c0d0d,#dc2626);">🔥</div>
-					<div class="project-info">
-						<span class="project-tag">სახანძრო სისტემა</span>
-						<h3>ბიზნეს ცენტრი — რუსთავი</h3>
-						<p>სახანძრო სიგნალიზაცია და სპრინკლერული სისტემა 5-სართულიანი შენობისთვის</p>
-					</div>
-				</div>
-				<div class="project-card fade-up">
-					<div class="project-img" style="background:linear-gradient(135deg,#1a0d3c,#7c3aed);">🔒</div>
-					<div class="project-info">
-						<span class="project-tag">სიგნალიზაცია</span>
-						<h3>სუპერმარკეტი — ბათუმი</h3>
-						<p>CCTV კამერები, ქურდობის საწინააღმდეგო სიგნალიზაცია და წვდომის კონტროლი</p>
-					</div>
-				</div>
-			</div>
-			<div class="text-center mt-32">
-				<a href="electricity.html" class="btn btn-green">მეტი სამუშაო →</a>
-			</div>
-		</div>
-	</section> -->
-
 	<!-- ===== CTA ===== -->
 	<section class="cta-section">
 		<div class="container">
-			<h2>მზად ხართ თქვენი პროექტის დასაწყებად?</h2>
-			<p>მოგვწერეთ ან დაგვიძახეთ — მივიღებთ უფასო კონსულტაციასა და ხარჯთაღრიცხვას</p>
+			<h2 data-i18n="idx.cta.h2">მზად ხართ თქვენი პროექტის დასაწყებად?</h2>
+			<p data-i18n="idx.cta.p">მოგვწერეთ ან დაგვიძახეთ — მივიღებთ უფასო კონსულტაციასა და ხარჯთაღრიცხვას</p>
 			<div class="cta-buttons">
-				<a href="contact.html" class="btn btn-primary">კონსულტაციის მოთხოვნა</a>
-				<a href="tel:+995555123456" class="btn btn-outline">📞 +995 555 123 456</a>
+				<a href="contact.html" class="btn btn-primary" data-i18n="idx.cta.btn1">კონსულტაციის მოთხოვნა</a>
+				<a href="tel:+995555123456" class="btn btn-outline" data-i18n="shared.cta.btn.phone">📞 +995 555 123 456</a>
 			</div>
 		</div>
 	</section>
@@ -260,35 +174,30 @@
 				<div class="footer-brand">
 					<a href="index.html" class="logo">
 						<img src="../dm.jpeg" alt="DM Logo" class="logo-img">
-						<div class="logo-text">DM<span>დანადგარების მონტაჟი</span></div>
+						<div class="logo-text">DM<span data-i18n="footer.tagline">დანადგარების მონტაჟი</span></div>
 					</a>
-					<p>პროფესიული ელექტრომონტაჟი, სახანძრო უსაფრთხოება და სიგნალიზაციის სისტემები მთელ საქართველოში.</p>
-					<!-- <div class="social-links">
-						<a href="#" class="social-link">FB</a>
-						<a href="#" class="social-link">IN</a>
-						<a href="#" class="social-link">YT</a>
-					</div> -->
+					<p data-i18n="footer.brand.p">პროფესიული ელექტრომონტაჟი, სახანძრო უსაფრთხოება და სიგნალიზაციის სისტემები მთელ საქართველოში.</p>
 				</div>
 				<div class="footer-col">
-					<h4>გვერდები</h4>
+					<h4 data-i18n="footer.pages">გვერდები</h4>
 					<ul class="footer-links">
-						<li><a href="index.html">► მთავარი</a></li>
-						<li><a href="products.html">► პროდუქცია</a></li>
-						<li><a href="contact.html">► კონტაქტი</a></li>
+						<li><a href="index.html" data-i18n="footer.link.home">► მთავარი</a></li>
+						<li><a href="products.html" data-i18n="footer.link.products">► პროდუქცია</a></li>
+						<li><a href="contact.html" data-i18n="footer.link.contact">► კონტაქტი</a></li>
 					</ul>
 				</div>
 				<div class="footer-col">
-					<h4>სერვისები</h4>
+					<h4 data-i18n="footer.services">სერვისები</h4>
 					<ul class="footer-links">
-						<li><a href="electricity.html">► ელექტრომონტაჟი</a></li>
-						<li><a href="fire-safety.html">► სახანძრო სისტემა</a></li>
-						<li><a href="alarm.html">► სიგნალიზაცია</a></li>
+						<li><a href="electricity.html" data-i18n="footer.link.electric">► ელექტრომონტაჟი</a></li>
+						<li><a href="fire-safety.html" data-i18n="footer.link.fire">► სახანძრო სისტემა</a></li>
+						<li><a href="alarm.html" data-i18n="footer.link.alarm">► სიგნალიზაცია</a></li>
 					</ul>
 				</div>
 				<div class="footer-col">
-					<h4>კონტაქტი</h4>
+					<h4 data-i18n="footer.contact">კონტაქტი</h4>
 					<div class="footer-contact-items">
-						<div class="f-contact-item"><span>📍</span><span>თბილისი, საქართველო</span></div>
+						<div class="f-contact-item"><span>📍</span><span data-i18n="footer.city">თბილისი, საქართველო</span></div>
 						<div class="f-contact-item"><span>📞</span><span>+995 555 123 456</span></div>
 						<div class="f-contact-item"><span>📧</span><span>info@dm-energy.ge</span></div>
 						<div class="f-contact-item"><span>🕐</span><span>ორშ–შაბ: 9:00–18:00</span></div>
@@ -299,17 +208,15 @@
 		<div class="footer-bottom">
 			<div class="container">
 				<div class="footer-bottom-inner">
-					<p>© 2026 DM — დანადგარების მონტაჟი. ყველა უფლება დაცულია.</p>
-					<p>
-						Built by <a href="https://niktsanka.github.io/resume/index.html" target="_blank"
-							rel="noopener">CANKA.Dev</a>
-					</p>
-					<p>კონფიდენციალობა | გამოყენების პირობები</p>
+					<p data-i18n="footer.copy">© 2026 DM — დანადგარების მონტაჟი. ყველა უფლება დაცულია.</p>
+					<p>Built by <a href="https://niktsanka.github.io/resume/index.html" target="_blank" rel="noopener">CANKA.Dev</a></p>
+					<p data-i18n="footer.privacy">კონფიდენციალობა | გამოყენების პირობები</p>
 				</div>
 			</div>
 		</div>
 	</footer>
 
+	<script src="js/i18n.js"></script>
 	<script src="js/main.js"></script>
 </body>
 

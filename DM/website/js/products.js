@@ -1,5 +1,7 @@
 // ===== PRODUCTS PAGE LOGIC =====
 (function () {
+    let currentFilter = 'all';
+
     const CATEGORY_EMOJI = {
         'განათება': '💡',
         'სახანძრო': '🔥',
@@ -29,13 +31,14 @@
                     <p class="product-desc">${p.description}</p>
                     <div class="product-footer">
                         <span class="product-price">${p.price}</span>
-                        <a href="contact.html" class="product-contact-btn">შეკვეთა →</a>
+                        <a href="contact.html" class="product-contact-btn">${window.i18nT ? window.i18nT('products.order') : 'შეკვეთა →'}</a>
                     </div>
                 </div>
             </div>`;
     }
 
     function render(filter) {
+        currentFilter = filter;
         const grid = document.getElementById('productsGrid');
         const empty = document.getElementById('noProducts');
         const list = filter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
@@ -73,6 +76,8 @@
             });
         });
     }
+
+    document.addEventListener('dm:lang', () => render(currentFilter));
 
     // ===== LIGHTBOX =====
     const lightbox   = document.getElementById('lightbox');

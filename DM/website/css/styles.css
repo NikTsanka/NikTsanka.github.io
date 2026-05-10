@@ -1471,6 +1471,41 @@ ul {
 	margin: 0;
 }
 
+/* ===== LANGUAGE SWITCHER ===== */
+.lang-switcher {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	background: rgba(255, 255, 255, 0.15);
+	border-radius: 6px;
+	padding: 3px;
+	flex-shrink: 0;
+}
+
+.lang-btn {
+	background: transparent;
+	border: none;
+	color: rgba(255, 255, 255, 0.75);
+	font-size: 0.68rem;
+	font-weight: 700;
+	padding: 5px 7px;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	letter-spacing: 0.5px;
+	font-family: inherit;
+}
+
+.lang-btn:hover {
+	color: var(--white);
+	background: rgba(255, 255, 255, 0.15);
+}
+
+.lang-btn.active {
+	background: var(--white);
+	color: var(--green-dark);
+}
+
 /* ===== WHATSAPP BUTTON ===== */
 .wa-btn {
 	position: fixed;
