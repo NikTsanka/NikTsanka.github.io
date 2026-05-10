@@ -109,6 +109,18 @@ const counterObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
 
+// ===== WHATSAPP BUTTON =====
+(function () {
+    const wa = document.createElement('a');
+    wa.href = 'https://wa.me/995555123456';
+    wa.target = '_blank';
+    wa.rel = 'noopener noreferrer';
+    wa.className = 'wa-btn';
+    wa.setAttribute('aria-label', 'WhatsApp-ზე დაგვიკავშირდით');
+    wa.innerHTML = `<svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.488 2.027 7.797L0 32l8.454-2.007A15.944 15.944 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.266 13.266 0 01-6.773-1.852l-.486-.288-5.017 1.19 1.26-4.891-.317-.502A13.267 13.267 0 012.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.27-9.927c-.398-.199-2.358-1.163-2.723-1.296-.365-.133-.63-.199-.896.199-.265.398-1.03 1.296-1.262 1.562-.232.265-.465.298-.863.1-.398-.199-1.68-.619-3.2-1.977-1.183-1.056-1.981-2.36-2.213-2.758-.232-.398-.025-.614.174-.812.179-.178.398-.465.597-.698.199-.232.265-.398.398-.663.133-.265.066-.498-.033-.697-.1-.199-.896-2.16-1.228-2.957-.323-.776-.651-.671-.896-.683l-.763-.013c-.265 0-.697.1-1.062.498-.365.398-1.394 1.362-1.394 3.322s1.428 3.853 1.627 4.118c.199.265 2.81 4.29 6.808 6.019.952.411 1.694.657 2.273.84.955.304 1.824.261 2.512.158.766-.114 2.358-.964 2.69-1.895.332-.93.332-1.728.232-1.895-.1-.166-.365-.265-.763-.464z"/></svg><span class="wa-tooltip">WhatsApp-ზე დაგვიკავშირდით</span>`;
+    document.body.appendChild(wa);
+})();
+
 // ===== FADE-IN KEYFRAME =====
 const style = document.createElement('style');
 style.textContent = '@keyframes fadeIn { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }';

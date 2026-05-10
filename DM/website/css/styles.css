@@ -1450,6 +1450,71 @@ ul {
 	margin: 0;
 }
 
+/* ===== WHATSAPP BUTTON ===== */
+.wa-btn {
+	position: fixed;
+	bottom: 28px;
+	right: 28px;
+	width: 58px;
+	height: 58px;
+	background: #25D366;
+	color: var(--white);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 998;
+	box-shadow: 0 4px 20px rgba(37, 211, 102, 0.45);
+	transition: transform 0.25s ease, box-shadow 0.25s ease;
+	animation: wa-pulse 2.8s ease-in-out infinite;
+}
+
+.wa-btn svg {
+	width: 30px;
+	height: 30px;
+}
+
+.wa-btn:hover {
+	transform: scale(1.12);
+	box-shadow: 0 6px 28px rgba(37, 211, 102, 0.65);
+	animation: none;
+}
+
+.wa-tooltip {
+	position: absolute;
+	right: 68px;
+	background: #1a1a1a;
+	color: var(--white);
+	font-size: 0.78rem;
+	font-weight: 600;
+	padding: 7px 12px;
+	border-radius: 6px;
+	white-space: nowrap;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.2s ease;
+}
+
+.wa-tooltip::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	right: -5px;
+	transform: translateY(-50%);
+	border: 5px solid transparent;
+	border-left-color: #1a1a1a;
+	border-right: none;
+}
+
+.wa-btn:hover .wa-tooltip {
+	opacity: 1;
+}
+
+@keyframes wa-pulse {
+	0%, 100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.45); }
+	50%       { box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7), 0 0 0 10px rgba(37, 211, 102, 0.1); }
+}
+
 /* ===== SCROLL ANIMATIONS ===== */
 .fade-up {
 	opacity: 0;
