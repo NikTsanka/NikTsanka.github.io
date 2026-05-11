@@ -9,15 +9,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mobileMenuToggle) {
         mobileMenuToggle.addEventListener('click', function() {
             const isActive = this.classList.contains('active');
-            
             if (isActive) {
-                // Close menu
-                this.classList.remove('active');
-                headerMenu.classList.remove('active');
-                this.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
+                closeMobileMenu();
             } else {
-                // Open menu
                 this.classList.add('active');
                 headerMenu.classList.add('active');
                 this.setAttribute('aria-expanded', 'true');
@@ -26,29 +20,47 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Close menu when clicking on menu links
+    // Portfolio dropdown — click-based on mobile, hover on desktop
+    const dropdownItems = document.querySelectorAll('.has-dropdown');
+    dropdownItems.forEach(item => {
+        const link = item.querySelector(':scope > a');
+        link.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                item.classList.toggle('open');
+            }
+        });
+    });
+
+    // Close dropdown when mobile menu closes
+    function closeMobileMenu() {
+        if (mobileMenuToggle) {
+            mobileMenuToggle.classList.remove('active');
+            headerMenu.classList.remove('active');
+            mobileMenuToggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+        dropdownItems.forEach(item => item.classList.remove('open'));
+    }
+
+    // Close menu when clicking on menu links (not the Portfolio toggle itself)
     menuLinks.forEach(link => {
         link.addEventListener('click', function() {
             if (mobileMenuToggle && mobileMenuToggle.classList.contains('active')) {
-                mobileMenuToggle.classList.remove('active');
-                headerMenu.classList.remove('active');
-                mobileMenuToggle.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
+                if (!this.parentElement.classList.contains('has-dropdown')) {
+                    closeMobileMenu();
+                }
             }
         });
     });
 
     // Close menu when clicking outside
     document.addEventListener('click', function(event) {
-        if (mobileMenuToggle && 
-            !mobileMenuToggle.contains(event.target) && 
+        if (mobileMenuToggle &&
+            !mobileMenuToggle.contains(event.target) &&
             !headerMenu.contains(event.target) &&
             mobileMenuToggle.classList.contains('active')) {
-            
-            mobileMenuToggle.classList.remove('active');
-            headerMenu.classList.remove('active');
-            mobileMenuToggle.setAttribute('aria-expanded', 'false');
-            document.body.style.overflow = '';
+            closeMobileMenu();
         }
     });
 
@@ -84,13 +96,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle window resize
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768) {
-            // Reset mobile menu state on larger screens
-            if (mobileMenuToggle && mobileMenuToggle.classList.contains('active')) {
-                mobileMenuToggle.classList.remove('active');
-                headerMenu.classList.remove('active');
-                mobileMenuToggle.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
-            }
+            closeMobileMenu();
+            dropdownItems.forEach(item => item.classList.remove('open'));
         }
     });
 

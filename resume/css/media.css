@@ -20,7 +20,7 @@
 		font-size: 20px;
 	}
 
-	.header-menu ul {
+	.header-menu > ul {
 		gap: 15px;
 	}
 
@@ -51,6 +51,26 @@
 		width: 100%;
 		max-width: 600px;
 	}
+
+	.contactBox {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.contactText {
+		margin: 0 50px 50px 50px;
+		text-align: center;
+	}
+
+	.contactText p {
+		width: 100%;
+	}
+
+	.formBox {
+		width: 100%;
+		max-width: 600px;
+		margin: 0 0 100px 0;
+	}
 }
 
 @media (max-width: 768px) {
@@ -75,32 +95,33 @@
 		top: 100%;
 		left: 0;
 		width: 100%;
+		padding: 0 20px;
 		background: rgba(0, 0, 0, 0.95);
-		transform: translateY(-100%);
+		max-height: 0;
+		overflow: hidden;
 		opacity: 0;
-		visibility: hidden;
-		transition: all 0.3s ease;
-		padding: 20px;
+		z-index: 998;
+		transition: max-height 0.35s ease, opacity 0.25s ease;
 	}
 
 	header.sticky .header-menu {
 		background: rgba(255, 255, 255, 0.95);
-		box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 	}
 
 	.header-menu.active {
-		transform: translateY(0);
+		max-height: 600px;
 		opacity: 1;
-		visibility: visible;
+		padding: 20px;
+		box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 	}
 
-	.header-menu ul {
+	.header-menu > ul {
 		flex-direction: column;
 		gap: 15px;
 		text-align: center;
 	}
 
-	.header-menu ul li a {
+	.header-menu > ul > li > a {
 		font-size: 18px;
 		padding: 10px;
 		display: block;
@@ -125,23 +146,48 @@
 	}
 
 	.content .fa {
-		margin: 80px 20px 25px 0;
 		font-size: 22px;
 	}
 
-	.content .fa:last-of-type {
-		margin-right: 0;
+	.social-icons {
+		margin-top: 80px;
+		justify-content: center;
 	}
 
-	/* Center social icons on mobile */
+	/* Center content on mobile */
 	.banner .content {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 	}
 
-	.banner .content > div:first-of-type {
-		align-self: center;
+	/* Portfolio dropdown — click-based on mobile */
+	.has-dropdown:hover .dropdown-menu {
+		display: none;
+	}
+
+	.has-dropdown.open .dropdown-menu {
+		display: block;
+		position: static;
+		transform: none;
+		background: rgba(30, 30, 30, 0.95);
+		margin-top: 5px;
+		border-radius: 4px;
+		box-shadow: none;
+		padding: 5px 0;
+	}
+
+	header.sticky .has-dropdown.open .dropdown-menu {
+		background: rgba(240, 240, 240, 0.95);
+	}
+
+	.has-dropdown.open .dropdown-menu li a {
+		color: #fff;
+		font-size: 16px;
+	}
+
+	header.sticky .has-dropdown.open .dropdown-menu li a {
+		color: #464646;
 	}
 
 	.btn {
@@ -178,8 +224,13 @@
 		margin-top: 15px;
 	}
 
+	.contactBox {
+		flex-direction: column;
+		align-items: center;
+	}
+
 	.contactText {
-		margin: 0 20px 80px 20px;
+		margin: 0 20px 50px 20px;
 		text-align: center;
 	}
 
@@ -187,6 +238,14 @@
 		width: 100%;
 		max-width: 350px;
 		margin: 0 auto 10px auto;
+	}
+
+	.formBox {
+		width: 100%;
+		max-width: 500px;
+		margin: 0 0 80px 0;
+		padding: 0 20px;
+		box-sizing: border-box;
 	}
 }
 
@@ -203,12 +262,12 @@
 		padding: 60px 15px 0 15px;
 	}
 
-	.header-menu ul {
+	.header-menu > ul {
 		flex-direction: column;
 		gap: 10px;
 	}
 
-	.header-menu ul li a {
+	.header-menu > ul > li > a {
 		font-size: 16px;
 		padding: 12px;
 	}
@@ -245,8 +304,11 @@
 	}
 
 	.content .fa {
-		margin: 80px 20px 25px 0;
 		font-size: 20px;
+	}
+
+	.social-icons {
+		margin-top: 80px;
 	}
 
 	.btn {
@@ -304,12 +366,16 @@
 		margin-bottom: 40px;
 	}
 
+	.contactTitle {
+		margin-bottom: 50px;
+	}
+
 	.contactTitle h1 {
 		font-size: 24px;
 	}
 
 	.contactText {
-		margin: 0 15px 60px 15px;
+		margin: 0 15px 40px 15px;
 	}
 
 	.contactText h2 {
@@ -319,6 +385,27 @@
 	.contactText p {
 		font-size: 14px;
 		line-height: 1.5;
+	}
+
+	.formBox {
+		max-width: 100%;
+		padding: 0 15px;
+	}
+
+	.formBox form input,
+	.formBox form textarea {
+		font-size: 15px;
+		padding: 12px;
+	}
+
+	.formBox form button[type="submit"] {
+		max-width: 100%;
+		width: 100%;
+		letter-spacing: 3px;
+	}
+
+	.formBox form button[type="submit"]:hover {
+		max-width: 100%;
 	}
 
 	.copyright p {
@@ -348,8 +435,12 @@
 	}
 
 	.content .fa {
-		margin: 60px 15px 20px 0;
 		font-size: 18px;
+	}
+
+	.social-icons {
+		margin-top: 60px;
+		gap: 18px;
 	}
 
 	header {
@@ -365,6 +456,16 @@
 	}
 
 	.contactText {
-		margin: 0 10px 50px 10px;
+		margin: 0 10px 30px 10px;
+	}
+
+	.formBox {
+		padding: 0 10px;
+	}
+
+	.formBox form input,
+	.formBox form textarea {
+		font-size: 14px;
+		padding: 10px;
 	}
 }
