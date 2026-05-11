@@ -479,7 +479,7 @@ function extractAmbientColor(imageUrl) {
 				r += data[i]; g += data[i + 1]; b += data[i + 2];
 			}
 			applyAmbientColor(Math.round(r / count), Math.round(g / count), Math.round(b / count));
-		} catch (e) {}
+		} catch (e) { }
 	};
 	img.src = imageUrl;
 }
@@ -507,10 +507,10 @@ function toggleTheme() {
 function shareCurrentSong() {
 	var song = document.getElementById('currentSong').innerText;
 	var artist = document.getElementById('currentArtist').innerText;
-	var text = '🎵 Now listening to: ' + song + ' by ' + artist + ' on Radio Bude | radiobude.com';
+	var text = '🎵 Now listening to: ' + song + ' by ' + artist + ' on Radio Bude | niktsanka.github.io';
 
 	if (navigator.share) {
-		navigator.share({ title: 'Radio Bude', text: text, url: window.location.href }).catch(function(){});
+		navigator.share({ title: 'Radio Bude', text: text, url: window.location.href }).catch(function () { });
 	} else if (navigator.clipboard) {
 		navigator.clipboard.writeText(text).then(function () {
 			showToast('Copied to clipboard!', true);
