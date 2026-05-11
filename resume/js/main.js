@@ -20,15 +20,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Portfolio dropdown — click-based on mobile, hover on desktop
+    // Portfolio dropdown — click-based on all screen sizes
     const dropdownItems = document.querySelectorAll('.has-dropdown');
     dropdownItems.forEach(item => {
         const link = item.querySelector(':scope > a');
         link.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                item.classList.toggle('open');
-            }
+            e.preventDefault();
+            const isOpen = item.classList.contains('open');
+            dropdownItems.forEach(i => i.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        });
+    });
+
+    // Close dropdown when clicking outside on desktop
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.has-dropdown')) {
+            dropdownItems.forEach(i => i.classList.remove('open'));
+        }
+    });
+
+    // Close dropdown when a dropdown link is clicked
+    document.querySelectorAll('.dropdown-menu a').forEach(link => {
+        link.addEventListener('click', function() {
+            dropdownItems.forEach(i => i.classList.remove('open'));
         });
     });
 

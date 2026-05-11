@@ -161,11 +161,7 @@
 		align-items: center;
 	}
 
-	/* Portfolio dropdown — click-based on mobile */
-	.has-dropdown:hover .dropdown-menu {
-		display: none;
-	}
-
+	/* Portfolio dropdown — mobile layout */
 	.has-dropdown.open .dropdown-menu {
 		display: block;
 		position: static;
