@@ -367,7 +367,7 @@ section {
 	margin-bottom: 2px;
 }
 
-/* .formBox {
+.formBox {
 	min-width: 50%;
 	margin: 0 0 100px 100px;
 }
@@ -382,10 +382,9 @@ section {
 	margin-bottom: 20px;
 	padding: 15px;
 	font-size: 16px;
-	background: transparent;
+	background: #222;
 	border: none;
 	outline: none;
-	background: #222;
 	color: #fff;
 	resize: none;
 }
@@ -399,8 +398,9 @@ section {
 	color: #9b9a9a;
 }
 
-.formBox form input[type="submit"] {
+.formBox form button[type="submit"] {
 	max-width: 150px;
+	padding: 15px;
 	font-size: 16px;
 	color: #fff;
 	background: #ff0157;
@@ -408,13 +408,19 @@ section {
 	text-transform: uppercase;
 	letter-spacing: 2px;
 	transition: 0.5s;
+	border: none;
 }
 
-.formBox form input[type="submit"]:hover {
+.formBox form button[type="submit"]:hover {
 	max-width: 200px;
 	letter-spacing: 6px;
-	transition: 0.5s;
-} */
+}
+
+#form-status {
+	font-size: 14px;
+	margin-top: 5px;
+	min-height: 20px;
+}
 
 .footer {
 	height: 30px;
@@ -475,8 +481,93 @@ section {
 .project-item img {
 	width: 100%;
 	height: 200px;
-	/* შეგიძლია შეცვალო სასურველზე */
 	object-fit: cover;
-	/* სურათი არ გაიწელება, ლამაზად ჩაჯდება */
 	display: block;
+}
+
+/* ===== Project Card Overlay ===== */
+.project-item {
+	position: relative;
+	overflow: hidden;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transition: transform 0.3s ease;
+	display: block;
+	color: inherit;
+}
+
+.project-item:hover {
+	transform: translateY(-5px);
+}
+
+.project-overlay {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+	color: #fff;
+	padding: 30px 15px 15px;
+	transform: translateY(100%);
+	transition: transform 0.35s ease;
+}
+
+.project-item:hover .project-overlay {
+	transform: translateY(0);
+}
+
+.project-overlay h4 {
+	font-size: 14px;
+	font-weight: 600;
+	margin-bottom: 4px;
+}
+
+.project-overlay span {
+	font-size: 12px;
+	color: #ff0157;
+	letter-spacing: 0.5px;
+}
+
+@media (hover: none) {
+	.project-overlay {
+		transform: translateY(0);
+	}
+}
+
+/* ===== Skill Tags ===== */
+.skills-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	justify-content: center;
+	margin-top: 10px;
+}
+
+.skill-tag {
+	background: #f0f0f0;
+	color: #333;
+	padding: 6px 16px;
+	border-radius: 20px;
+	font-size: 13px;
+	font-weight: 500;
+	border: 1px solid #e0e0e0;
+	transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.skill-tag:hover {
+	background: #ff0157;
+	color: #fff;
+	border-color: #ff0157;
+}
+
+/* ===== Scroll Animations ===== */
+.fade-in {
+	opacity: 0;
+	transform: translateY(30px);
+	transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+	opacity: 1;
+	transform: translateY(0);
 }

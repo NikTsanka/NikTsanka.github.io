@@ -98,4 +98,51 @@ document.addEventListener('DOMContentLoaded', function() {
     if ('ontouchstart' in window) {
         document.body.classList.add('touch-device');
     }
+
+    // Scroll fade-in animations
+    const fadeEls = document.querySelectorAll('.fade-in');
+    if (fadeEls.length) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        fadeEls.forEach(el => observer.observe(el));
+    }
+
+    // Contact form AJAX submission
+    const contactForm = document.getElementById('contact-form');
+    const formStatus = document.getElementById('form-status');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            try {
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: new FormData(contactForm)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    formStatus.textContent = 'Message sent successfully!';
+                    formStatus.style.color = '#4CAF50';
+                    contactForm.reset();
+                } else {
+                    formStatus.textContent = 'Something went wrong. Please try again.';
+                    formStatus.style.color = '#ff0157';
+                }
+            } catch {
+                formStatus.textContent = 'Network error. Please try again.';
+                formStatus.style.color = '#ff0157';
+            }
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        });
+    }
 });
