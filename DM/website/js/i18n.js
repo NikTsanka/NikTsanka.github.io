@@ -43,6 +43,7 @@
             'idx.cta.h2': 'მზად ხართ თქვენი პროექტის დასაწყებად?',
             'idx.cta.p': 'მოგვწერეთ ან დაგვიძახეთ — მივიღებთ უფასო კონსულტაციასა და ხარჯთაღრიცხვას',
             'idx.cta.btn1': 'კონსულტაციის მოთხოვნა',
+            'idx.partners.label': 'ჩვენი პარტნიორები',
             // ELECTRICITY
             'elec.banner.h2': '⚡ ელექტრომონტაჟი', 'elec.process.h2': 'როგორ ვმუშაობთ?',
             'elec.process.p': 'გამჭვირვალე, სწრაფი და ეფექტური პროცესი — თქვენი დროის პატივისცემით',
@@ -130,6 +131,7 @@
             'idx.cta.h2': 'Ready to Start Your Project?',
             'idx.cta.p': 'Contact us — we will provide a free consultation and cost estimate',
             'idx.cta.btn1': 'Request Consultation',
+            'idx.partners.label': 'Our Partners',
             'elec.banner.h2': '⚡ Electrical Installation', 'elec.process.h2': 'How We Work',
             'elec.process.p': 'Transparent, fast and efficient process — respecting your time',
             'elec.step1.title': 'Request & Consultation', 'elec.step1.desc': 'Contact us by phone or form. We respond within 24 hours.',
@@ -212,6 +214,7 @@
             'idx.cta.h2': 'Готовы начать ваш проект?',
             'idx.cta.p': 'Напишите или позвоните нам — предоставим бесплатную консультацию и смету',
             'idx.cta.btn1': 'Запросить консультацию',
+            'idx.partners.label': 'Наши партнёры',
             'elec.banner.h2': '⚡ Электромонтаж', 'elec.process.h2': 'Как мы работаем',
             'elec.process.p': 'Прозрачный, быстрый и эффективный процесс — с уважением к вашему времени',
             'elec.step1.title': 'Заявка и консультация', 'elec.step1.desc': 'Свяжитесь с нами по телефону или через форму. Ответим в течение 24 часов.',

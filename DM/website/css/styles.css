@@ -1737,3 +1737,56 @@ ul {
 		align-items: center;
 	}
 }
+
+/* ===== PARTNERS ===== */
+.partners-section {
+	padding: 2.5rem 0;
+	background: var(--bg-light);
+	border-top: 1px solid var(--border);
+	border-bottom: 1px solid var(--border);
+}
+
+.partners-inner {
+	display: flex;
+	align-items: center;
+	gap: 2rem;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.partners-label {
+	font-size: 0.8rem;
+	font-weight: 600;
+	color: var(--text-light);
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	white-space: nowrap;
+}
+
+.partners-logos {
+	display: flex;
+	align-items: center;
+	gap: 3rem;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.partner-logo {
+	display: flex;
+	align-items: center;
+	opacity: 0.65;
+	transition: var(--transition);
+	filter: grayscale(40%);
+}
+
+.partner-logo:hover {
+	opacity: 1;
+	filter: grayscale(0%);
+}
+
+.partner-logo img {
+	height: 56px;
+	width: auto;
+	max-width: 180px;
+	object-fit: contain;
+}
