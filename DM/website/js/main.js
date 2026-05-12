@@ -147,6 +147,18 @@ document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(
     document.body.appendChild(wa);
 })();
 
+// ===== HERO SLIDESHOW =====
+(function () {
+    const slides = document.querySelectorAll('.hero-slide');
+    if (slides.length < 2) return;
+    let current = 0;
+    setInterval(() => {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+    }, 5000);
+})();
+
 // ===== FADE-IN KEYFRAME =====
 const style = document.createElement('style');
 style.textContent = '@keyframes fadeIn { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }';

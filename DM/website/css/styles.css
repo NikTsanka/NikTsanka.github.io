@@ -331,17 +331,30 @@ ul {
 .hero-bg {
 	position: absolute;
 	inset: 0;
-	background: linear-gradient(135deg, #0d2b14 0%, #1a5c30 75%, #228b22 100%);
 	z-index: 0;
 }
 
-/* background: linear-gradient(135deg, #0d2b14 0%, #1a5c30 650%, #3CB371 100%); */
+.hero-slide {
+	position: absolute;
+	inset: 0;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	opacity: 0;
+	transition: opacity 1.4s ease-in-out;
+	z-index: 0;
+}
+
+.hero-slide.active {
+	opacity: 1;
+}
 
 .hero-bg::before {
 	content: '';
 	position: absolute;
 	inset: 0;
-	background: radial-gradient(ellipse at 70% 50%, rgba(60, 179, 113, 0.3) 0%, transparent 60%);
+	background: linear-gradient(135deg, rgba(10, 30, 15, 0.82) 0%, rgba(20, 70, 35, 0.68) 100%);
+	z-index: 1;
 }
 
 .hero-bg::after {
@@ -349,6 +362,7 @@ ul {
 	position: absolute;
 	inset: 0;
 	background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M40 0L0 40l40 40 40-40z'/%3E%3C/g%3E%3C/svg%3E");
+	z-index: 2;
 }
 
 .hero-content {
