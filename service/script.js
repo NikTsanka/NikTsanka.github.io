@@ -1,7 +1,5 @@
 const checkboxes = document.querySelectorAll('.calc-checkbox');
 const totalPriceElement = document.getElementById('total-price');
-const computerCount = document.getElementById('computer-count');
-const itSupportPrice = document.getElementById('it-support-price');
 
 function calculateTotal() {
     let total = 0;
@@ -10,17 +8,12 @@ function calculateTotal() {
             total += parseInt(checkbox.value);
         }
     });
-    const count = parseInt(computerCount.value);
-    const itPrice = count * 100;
-    itSupportPrice.textContent = itPrice.toLocaleString('ka-GE') + ' ₾';
-    total += itPrice;
     totalPriceElement.textContent = total.toLocaleString('ka-GE');
 }
 
 checkboxes.forEach(checkbox => {
     checkbox.addEventListener('change', calculateTotal);
 });
-computerCount.addEventListener('change', calculateTotal);
 
 // განაცხადის ფორმა
 const contactForm = document.getElementById('contact-form');
