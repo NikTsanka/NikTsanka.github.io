@@ -139,6 +139,20 @@
             accent-color: var(--blue);
         }
 
+        .calc-select {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .calc-select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
         .total-box {
             margin-top: 30px;
             text-align: right;
@@ -153,6 +167,223 @@
             color: var(--white);
             padding: 60px 20px;
             text-align: center;
+        }
+
+        .contact-form {
+            max-width: 750px;
+            margin: 40px auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-size: 0.95rem;
+            color: var(--pearl);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            color: var(--white);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border 0.3s;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+
+        .form-group select option {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .form-success {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0,119,255,0.2);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            color: var(--pearl);
+        }
+
+        /* Hero ღილაკები */
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--white);
+            color: var(--white);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* რატომ მე? */
+        .why-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 25px;
+        }
+
+        .why-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .why-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .why-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--blue), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: var(--white);
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .why-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--black);
+        }
+
+        .why-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* როგორ ვმუშაობ */
+        .how-section {
+            background: var(--white);
+            padding: 80px 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .steps-container {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 15px;
+            max-width: 900px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            text-align: center;
+            max-width: 220px;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--blue);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+
+        .step h4 {
+            font-size: 1.1rem;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .step-arrow {
+            font-size: 2rem;
+            color: var(--accent);
+            padding-top: 15px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0a0d10;
+            color: var(--pearl);
+            padding: 35px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            font-size: 1rem;
+        }
+
+        .footer-copy {
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 0.85rem;
         }
 
         .btn {
@@ -236,7 +467,33 @@
             }
 
             .total-box {
-                font-size: 1.5rem; /* ვამცირებთ ჯამური ფასის ზომას */
-                text-align: center; /* ვაცენტრებთ */
+                font-size: 1.5rem;
+                text-align: center;
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+
+            .why-section {
+                padding: 50px 15px;
+            }
+
+            .how-section {
+                padding: 50px 15px;
+            }
+
+            .step-arrow {
+                display: none;
+            }
+
+            .steps-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 10px;
             }
         }

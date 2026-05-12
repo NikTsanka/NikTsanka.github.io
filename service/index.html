@@ -12,10 +12,12 @@
 
 	<!-- Hero Section -->
 	<header>
-		<h1>ციფრული ტრანსფორმაცია თქვენი ბიზნესისთვის</h1>
-		<p>პროფესიონალური ვებ-საიტების შექმნა და სრული IT აუთსორსინგი საქართველოში. ჩვენ ვზრუნავთ თქვენს ტექნოლოგიებზე, რათა
-			თქვენ იზრუნოთ ბიზნესის ზრდაზე.</p>
-		<a href="#calculator" class="btn" style="margin-top: 30px;">გამოთვალეთ ფასი</a>
+		<h1>ვებ-საიტი. IT მხარდაჭერა.<br>ყველაფერი ერთ ადგილას.</h1>
+		<p>სწრაფი და საიმედო IT გადაწყვეტილებები მცირე და საშუალო ბიზნესისთვის საქართველოში.</p>
+		<div class="hero-buttons">
+			<a href="#calculator" class="btn">გამოთვალეთ ფასი</a>
+			<a href="#contact" class="btn btn-outline">განაცხადის დატოვება</a>
+		</div>
 	</header>
 
 	<!-- Services Section -->
@@ -34,16 +36,68 @@
 				</ul>
 			</div>
 			<div class="card">
-				<h3>კორპორატიული</h3>
-				<div class="price">2500 ₾ -დან</div>
-				<p>საშუალო ბიზნესის სრული ციფრული სახე.</p>
+				<h3>ოფისის IT</h3>
+				<div class="price">100 ₾ / კომპ.</div>
+				<p>1–5 კომპიუტერიანი ოფისისთვის.</p>
 				<ul style="text-align: left; margin-top: 20px; list-style-position: inside;">
-					<li>მრავალგვერდიანი საიტი</li>
-					<li>ოფისის IT ინფრასტრუქტურა</li>
-					<li>3 თვიანი ტექნიკური მხარდაჭერა</li>
+					<li>OS + საოფისე პროგრამების ინსტალაცია</li>
+					<li>უსაფრთხოების სისტემა (Antivirus, Firewall)</li>
+					<li>ელ. ფოსტის კონფიგურაცია (Outlook და სხვ.)</li>
+					<li>პერიფერია + WIFI მიერთება/კონფიგ.</li>
 				</ul>
 			</div>
 
+		</div>
+	</section>
+
+	<!-- Why Me Section -->
+	<section class="why-section">
+		<h2 class="section-title">რატომ მე?</h2>
+		<div class="why-grid">
+			<div class="why-card">
+				<div class="why-icon">24h</div>
+				<h4>სწრაფი რეაგირება</h4>
+				<p>გამოძახებაზე ვრეაგირებ 24 საათის განმავლობაში</p>
+			</div>
+			<div class="why-card">
+				<div class="why-icon">&#8382;</div>
+				<h4>ფიქსირებული ფასი</h4>
+				<p>ფასი შეთანხმებულია წინასწარ — დამატებითი გადახდა არ არის</p>
+			</div>
+			<div class="why-card">
+				<div class="why-icon">&#10003;</div>
+				<h4>ხარისხის გარანტია</h4>
+				<p>სამუშაოს ხარისხი გარანტირებულია</p>
+			</div>
+			<div class="why-card">
+				<div class="why-icon">&#8250;</div>
+				<h4>გამოძახებით</h4>
+				<p>მოვალ სადაც გჭირდებათ — ოფისში ან სახლში</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- How I Work Section -->
+	<section class="how-section">
+		<h2 class="section-title">როგორ ვმუშაობ</h2>
+		<div class="steps-container">
+			<div class="step">
+				<div class="step-number">1</div>
+				<h4>განაცხადი</h4>
+				<p>შეავსეთ ფორმა ან დამირეკეთ — განვიხილავთ თქვენს საჭიროებებს</p>
+			</div>
+			<div class="step-arrow">&#8594;</div>
+			<div class="step">
+				<div class="step-number">2</div>
+				<h4>კონსულტაცია</h4>
+				<p>შევთანხმდებით პირობებსა და ვადებზე</p>
+			</div>
+			<div class="step-arrow">&#8594;</div>
+			<div class="step">
+				<div class="step-number">3</div>
+				<h4>შესრულება</h4>
+				<p>შევასრულებ სამუშაოს და დაგრჩებათ მხარდაჭერა</p>
+			</div>
 		</div>
 	</section>
 
@@ -56,7 +110,7 @@
 				<span>800 ₾</span>
 			</div>
 			<div class="calc-item">
-				<label><input type="checkbox" class="calc-checkbox" value="1500"> მრავალგვერდიანი კორპორატიული საიტი</label>
+				<label><input type="checkbox" class="calc-checkbox" value="1500"> მრავალგვერდიანი საიტი</label>
 				<span>1500 ₾</span>
 			</div>
 
@@ -71,6 +125,21 @@
 				<span>300 ₾ / თვე</span>
 			</div>
 
+			<div class="calc-item">
+				<label>
+					ოფისის IT მხარდაჭერა
+					<select id="computer-count" class="calc-select">
+						<option value="0">— არ მჭირდება —</option>
+						<option value="1">1 კომპიუტერი</option>
+						<option value="2">2 კომპიუტერი</option>
+						<option value="3">3 კომპიუტერი</option>
+						<option value="4">4 კომპიუტერი</option>
+						<option value="5">5 კომპიუტერი</option>
+					</select>
+				</label>
+				<span id="it-support-price">0 ₾</span>
+			</div>
+
 			<div class="total-box">
 				ჯამური ღირებულება: <span id="total-price">0</span> ₾
 			</div>
@@ -78,12 +147,57 @@
 	</section>
 
 	<!-- Contact Section -->
-	<section class="contact-section">
+	<section class="contact-section" id="contact">
 		<h2>დავიწყოთ თქვენი პროექტი?</h2>
 		<p style="margin-top: 15px; color: var(--pearl);">დაგვიტოვეთ მოთხოვნა და ჩვენი გუნდი დაგიკავშირდებათ დეტალების
 			განსახილველად.</p>
-		<button class="btn" onclick="alert('განაცხადის ფორმა გაიხსნება აქ!')">განაცხადის დატოვება</button>
+
+		<form class="contact-form" id="contact-form" novalidate>
+			<input type="hidden" name="access_key" value="fd4fb032-f88a-4835-8126-d751732d5ac8">
+			<div class="form-row">
+				<div class="form-group">
+					<label for="f-name">სახელი და გვარი *</label>
+					<input type="text" id="f-name" name="Name" placeholder="მაგ. გიორგი მამალაძე" required>
+				</div>
+				<div class="form-group">
+					<label for="f-phone">ტელეფონი *</label>
+					<input type="tel" id="f-phone" name="Phone" placeholder="+995 5XX XXX XXX" required>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group">
+					<label for="f-email">ელ. ფოსტა</label>
+					<input type="email" id="f-email" name="email" placeholder="example@gmail.com">
+				</div>
+				<div class="form-group">
+					<label for="f-service">სასურველი მომსახურება *</label>
+					<select id="f-service" name="Service" required>
+						<option value="">— აირჩიეთ —</option>
+						<option value="საბაზისო ვებ-საიტი (Landing Page)">საბაზისო ვებ-საიტი (Landing Page)</option>
+						<option value="მრავალგვერდიანი საიტი">მრავალგვერდიანი საიტი</option>
+						<option value="დომენი, ჰოსტინგი და SSL">დომენი, ჰოსტინგი და SSL</option>
+						<option value="ყოველთვიური IT მხარდაჭერა">ყოველთვიური IT მხარდაჭერა</option>
+						<option value="ოფისის IT მხარდაჭერა">ოფისის IT მხარდაჭერა</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="f-message">შეტყობინება</label>
+				<textarea id="f-message" name="Message" rows="4" placeholder="მოკლედ აღწერეთ თქვენი საჭიროება..."></textarea>
+			</div>
+			<button type="submit" class="btn" id="submit-btn">განაცხადის გაგზავნა</button>
+		</form>
+
+		<div class="form-success" id="form-success">
+			<p>✓ თქვენი განაცხადი მიღებულია! მალე დაგიკავშირდებით.</p>
+		</div>
 	</section>
+
+	<!-- Footer -->
+	<footer class="footer">
+
+		<p class="footer-copy">&copy; 2026 NikTsanka IT Services</p>
+	</footer>
 
 	<script src="script.js"></script>
 
