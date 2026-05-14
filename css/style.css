@@ -509,7 +509,9 @@
 
 		.play-button i {
 			font-size: 24px;
-			color: #fff;
+			color: #c9a96e;
+			text-shadow: 0 0 4px rgba(0,0,0,0.5), 0 2px 5px rgba(0,0,0,0.4);
+			filter: drop-shadow(0 0 2px rgba(0,0,0,0.4));
 		}
 
 		.volume-control {
