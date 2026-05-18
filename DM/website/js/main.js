@@ -92,7 +92,7 @@ if (contactForm) {
             }
         } catch {
             res.className = 'form-msg form-msg-error';
-            res.textContent = window.i18nT ? window.i18nT('contact.form.err') : '✗ გაგზავნა ვერ მოხდა. სცადეთ ხელახლა ან დაგვიძახეთ: +995 555 123 456';
+            res.textContent = window.i18nT ? window.i18nT('contact.form.err') : '✗ გაგზავნა ვერ მოხდა. სცადეთ ხელახლა ან დაგვიძახეთ: +995 599 658 935';
         }
 
         res.style.display = 'block';
@@ -138,7 +138,7 @@ document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(
 // ===== WHATSAPP BUTTON =====
 (function () {
     const wa = document.createElement('a');
-    wa.href = 'https://wa.me/995555123456';
+    wa.href = 'https://wa.me/995599658935';
     wa.target = '_blank';
     wa.rel = 'noopener noreferrer';
     wa.className = 'wa-btn';
