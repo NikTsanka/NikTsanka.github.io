@@ -1,4 +1,4 @@
-const RADIO_NAME = 'Radio Bude';
+const RADIO_NAME = 'Radio Hangi';
 const URL_STREAMING = 'https://stream.zeno.fm/bjclt64fhc4uv';
 const url = 'https://api.zeno.fm/mounts/metadata/subscribe/bjclt64fhc4uv';
 const API_KEY = "7e1295fe03484ef960e8edc5d4dc04a5";
@@ -507,10 +507,10 @@ function toggleTheme() {
 function shareCurrentSong() {
 	var song = document.getElementById('currentSong').innerText;
 	var artist = document.getElementById('currentArtist').innerText;
-	var text = '🎵 Now listening to: ' + song + ' by ' + artist + ' on Radio Bude | niktsanka.github.io';
+	var text = '🎵 Now listening to: ' + song + ' by ' + artist + ' on Radio Hangi | niktsanka.github.io';
 
 	if (navigator.share) {
-		navigator.share({ title: 'Radio Bude', text: text, url: window.location.href }).catch(function () { });
+		navigator.share({ title: 'Radio Hangi', text: text, url: window.location.href }).catch(function () { });
 	} else if (navigator.clipboard) {
 		navigator.clipboard.writeText(text).then(function () {
 			showToast('Copied to clipboard!', true);
