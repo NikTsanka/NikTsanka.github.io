@@ -1804,3 +1804,8 @@ ul {
 	max-width: 180px;
 	object-fit: contain;
 }
+
+/* canka.dev blinking cursor credit */
+.blink-cursor { animation: blink-caret 1s step-end infinite; }
+@keyframes blink-caret { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.canka-built-link { text-decoration: none; }

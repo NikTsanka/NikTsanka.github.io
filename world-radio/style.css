@@ -701,3 +701,15 @@ body.light-mode .load-more-btn { background: rgba(0,0,0,0.04); }
 @media (max-width: 768px) {
     .player-vol-slider { width: 70px; }
 }
+
+/* canka.dev blinking cursor credit */
+.footer-credit {
+    text-align: center;
+    padding: 10px 0 14px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+.footer-credit .canka-built-link { color: rgba(255, 255, 255, 0.65); }
+.blink-cursor { animation: blink-caret 1s step-end infinite; }
+@keyframes blink-caret { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.canka-built-link { text-decoration: none; }
