@@ -65,19 +65,40 @@ if (galleryLightbox && galleryItems.length) {
     const glbPrev = document.getElementById('glbPrev');
     const glbNext = document.getElementById('glbNext');
 
-    const galleryImages = Array.from(galleryItems).map(item => ({
-        src: item.querySelector('img')?.src || '',
-        alt: item.querySelector('img')?.alt || ''
-    }));
+    // The grid shows small thumbnails; the lightbox loads the full-size file
+    // recorded in data-full, so the gallery stays light until you open an image.
+    const galleryImages = Array.from(galleryItems).map(item => {
+        const img = item.querySelector('img');
+        return {
+            src: img?.dataset.full || img?.src || '',
+            thumb: img?.src || '',
+            alt: img?.alt || ''
+        };
+    });
 
     let galleryIndex = 0;
 
     function showGalleryImage(index) {
         galleryIndex = (index + galleryImages.length) % galleryImages.length;
-        const { src, alt } = galleryImages[galleryIndex];
-        glbImg.src = src;
+        const { src, thumb, alt } = galleryImages[galleryIndex];
+        const shownFor = galleryIndex;
+
+        // Paint the already-cached thumbnail straight away, then swap in the
+        // full-size file once it arrives — avoids a blank frame on open.
+        glbImg.src = thumb || src;
         glbImg.alt = alt;
         if (glbCaption) glbCaption.textContent = '';
+
+        if (src && src !== thumb) {
+            const full = new Image();
+            full.onload = () => {
+                // ignore if the user already moved to another image
+                if (galleryIndex === shownFor && galleryLightbox.classList.contains('open')) {
+                    glbImg.src = src;
+                }
+            };
+            full.src = src;
+        }
     }
 
     function openGalleryLightbox(index) {
