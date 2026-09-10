@@ -56,6 +56,62 @@ filterBtns.forEach(btn => {
     });
 });
 
+// ===== GALLERY LIGHTBOX =====
+const galleryLightbox = document.getElementById('galleryLightbox');
+if (galleryLightbox && galleryItems.length) {
+    const glbImg = document.getElementById('glbImg');
+    const glbCaption = document.getElementById('glbCaption');
+    const glbClose = document.getElementById('glbClose');
+    const glbPrev = document.getElementById('glbPrev');
+    const glbNext = document.getElementById('glbNext');
+
+    const galleryImages = Array.from(galleryItems).map(item => ({
+        src: item.querySelector('img')?.src || '',
+        alt: item.querySelector('img')?.alt || ''
+    }));
+
+    let galleryIndex = 0;
+
+    function showGalleryImage(index) {
+        galleryIndex = (index + galleryImages.length) % galleryImages.length;
+        const { src, alt } = galleryImages[galleryIndex];
+        glbImg.src = src;
+        glbImg.alt = alt;
+        if (glbCaption) glbCaption.textContent = '';
+    }
+
+    function openGalleryLightbox(index) {
+        showGalleryImage(index);
+        galleryLightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeGalleryLightbox() {
+        galleryLightbox.classList.remove('open');
+        document.body.style.overflow = '';
+        setTimeout(() => { glbImg.src = ''; }, 300);
+    }
+
+    galleryItems.forEach((item, index) => {
+        item.addEventListener('click', () => openGalleryLightbox(index));
+    });
+
+    glbClose.addEventListener('click', closeGalleryLightbox);
+    glbPrev.addEventListener('click', (e) => { e.stopPropagation(); showGalleryImage(galleryIndex - 1); });
+    glbNext.addEventListener('click', (e) => { e.stopPropagation(); showGalleryImage(galleryIndex + 1); });
+
+    galleryLightbox.addEventListener('click', (e) => {
+        if (e.target === galleryLightbox) closeGalleryLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (!galleryLightbox.classList.contains('open')) return;
+        if (e.key === 'Escape') closeGalleryLightbox();
+        if (e.key === 'ArrowLeft') showGalleryImage(galleryIndex - 1);
+        if (e.key === 'ArrowRight') showGalleryImage(galleryIndex + 1);
+    });
+}
+
 // ===== CONTACT FORM =====
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
@@ -148,15 +204,51 @@ document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(
 })();
 
 // ===== HERO SLIDESHOW =====
+// Slides 2..n carry their image in data-bg rather than an inline style, so the
+// browser does not download them during the initial page load. We attach them
+// once the page is idle, then start rotating.
 (function () {
     const slides = document.querySelectorAll('.hero-slide');
     if (slides.length < 2) return;
+
     let current = 0;
-    setInterval(() => {
-        slides[current].classList.remove('active');
-        current = (current + 1) % slides.length;
-        slides[current].classList.add('active');
-    }, 5000);
+    let rotating = false;
+
+    function startRotation() {
+        if (rotating) return;
+        rotating = true;
+        setInterval(() => {
+            slides[current].classList.remove('active');
+            current = (current + 1) % slides.length;
+            slides[current].classList.add('active');
+        }, 5000);
+    }
+
+    function loadDeferredSlides() {
+        const pending = Array.from(slides).filter(s => s.dataset.bg);
+        if (!pending.length) { startRotation(); return; }
+
+        let remaining = pending.length;
+        pending.forEach(slide => {
+            const url = slide.dataset.bg;
+            const pre = new Image();
+            const done = () => {
+                slide.style.backgroundImage = `url('${url}')`;
+                delete slide.dataset.bg;
+                // Rotate as soon as the next slide is ready, not after all of them.
+                if (--remaining >= 0) startRotation();
+            };
+            pre.onload = done;
+            pre.onerror = done;
+            pre.src = url;
+        });
+    }
+
+    if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadDeferredSlides, { timeout: 2500 });
+    } else {
+        window.addEventListener('load', () => setTimeout(loadDeferredSlides, 600));
+    }
 })();
 
 // ===== FADE-IN KEYFRAME =====

@@ -4,8 +4,54 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>DM - დანადგარების მონტაჟი</title>
+	<title>DM Energy — ელექტრომონტაჟი, სახანძრო უსაფრთხოება და სიგნალიზაცია</title>
+	<meta name="description"
+		content="DM Energy — დანადგარების მონტაჟი. პროფესიული ელექტრომონტაჟი, სახანძრო სიგნალიზაცია, დაცვის სისტემები და ვიდეოთვალყურეობა თბილისსა და მთელ საქართველოში. ლიცენზირებული სპეციალისტები, გარანტია.">
+	<link rel="canonical" href="https://dmenergy.ge/index.html">
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="DM Energy — დანადგარების მონტაჟი">
+	<meta property="og:locale" content="ka_GE">
+	<meta property="og:title" content="DM Energy — ელექტრომონტაჟი, სახანძრო უსაფრთხოება და სიგნალიზაცია">
+	<meta property="og:description"
+		content="პროფესიული ელექტრომონტაჟი, სახანძრო სიგნალიზაცია და დაცვის სისტემები მთელ საქართველოში.">
+	<meta property="og:image" content="https://dmenergy.ge/img/hero-1.jpg">
+	<meta property="og:image:width" content="1600">
+	<meta property="og:image:height" content="900">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="theme-color" content="#3CB371">
+	<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+	<link rel="alternate icon" href="img/dm.jpeg">
+	<link rel="apple-touch-icon" href="img/dm.jpeg">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="preload" as="image" href="img/hero-1.jpg" fetchpriority="high">
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;600;700&display=swap">
 	<link rel="stylesheet" href="css/styles.css">
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "LocalBusiness",
+		"name": "DM Energy — დანადგარების მონტაჟი",
+		"description": "ელექტრომონტაჟი, სახანძრო უსაფრთხოება და სიგნალიზაციის სისტემები.",
+		"image": "https://dmenergy.ge/img/hero-1.jpg",
+		"url": "https://dmenergy.ge/",
+		"telephone": ["+995599658935", "+995555501070", "+995555393404"],
+		"email": "info.energydm@gmail.com",
+		"address": {
+			"@type": "PostalAddress",
+			"addressLocality": "თბილისი",
+			"addressCountry": "GE"
+		},
+		"areaServed": "GE",
+		"openingHoursSpecification": [{
+			"@type": "OpeningHoursSpecification",
+			"dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+			"opens": "09:00",
+			"closes": "18:00"
+		}]
+	}
+	</script>
 </head>
 
 <body>
@@ -14,9 +60,9 @@
 	<header class="header" id="header">
 		<div class="header-inner">
 			<a href="index.html" class="logo">
-				<img src="img/dm.jpeg" alt="DM Logo" class="logo-img">
+				<img src="img/dm.jpeg" alt="DM Energy Logo" class="logo-img">
 				<div class="logo-text">
-					DM
+					DM Energy
 					<span data-i18n="footer.tagline">დანადგარების მონტაჟი</span>
 				</div>
 			</a>
@@ -28,11 +74,11 @@
 				<div class="nav-item has-dropdown">
 					<a href="#" class="nav-link" data-i18n="nav.services">სერვისები ▾</a>
 					<div class="dropdown-menu">
-						<a href="electricity.html" class="dropdown-link"><span class="di">⚡</span><span
+						<a href="electricity.html" class="dropdown-link"><span class="di"><i class="ico ico-bolt"></i></span><span
 								data-i18n="nav.dd.electric">ელექტრომონტაჟი</span></a>
-						<a href="fire-safety.html" class="dropdown-link"><span class="di">🔥</span><span
+						<a href="fire-safety.html" class="dropdown-link"><span class="di"><i class="ico ico-flame"></i></span><span
 								data-i18n="nav.dd.fire">სახანძრო უსაფრთხოება</span></a>
-						<a href="alarm.html" class="dropdown-link"><span class="di">🔒</span><span
+						<a href="alarm.html" class="dropdown-link"><span class="di"><i class="ico ico-lock"></i></span><span
 								data-i18n="nav.dd.alarm">სიგნალიზაცია</span></a>
 					</div>
 				</div>
@@ -51,7 +97,7 @@
 			</div>
 
 			<div class="header-contact">
-				<span>📞</span>
+				<span><i class="ico ico-phone"></i></span>
 				<span>+995 599 658 935</span>
 			</div>
 
@@ -63,18 +109,20 @@
 
 	<!-- ===== HERO ===== -->
 	<section class="hero">
+		<!-- Only the first slide loads up front; main.js fetches the rest once the
+		     page is idle, so the hero no longer costs 1.2 MB before first paint. -->
 		<div class="hero-bg">
-			<div class="hero-slide active" style="background-image: url('img/el1.jpeg')"></div>
-			<div class="hero-slide" style="background-image: url('img/el4.jpeg')"></div>
-			<div class="hero-slide" style="background-image: url('img/el6.jpeg')"></div>
-			<div class="hero-slide" style="background-image: url('img/el8.jpeg')"></div>
-			<div class="hero-slide" style="background-image: url('img/el11.jpeg')"></div>
+			<div class="hero-slide active" style="background-image: url('img/hero-1.jpg')"></div>
+			<div class="hero-slide" data-bg="img/hero-2.jpg"></div>
+			<div class="hero-slide" data-bg="img/hero-3.jpg"></div>
+			<div class="hero-slide" data-bg="img/hero-4.jpg"></div>
+			<div class="hero-slide" data-bg="img/hero-5.jpg"></div>
 		</div>
 		<div class="hero-content container">
-			<div class="hero-badge" data-i18n="idx.badge">🏆 სანდო კომპანია საქართველოში</div>
+			<div class="hero-badge"><i class="ico ico-trophy"></i> <span data-i18n="idx.badge">სანდო კომპანია საქართველოში</span></div>
 			<h1 data-i18n-html="idx.h1">პროფესიონალური <span class="highlight">ელექტრომონტაჟი</span> და უსაფრთხოების სისტემები
 			</h1>
-			<p data-i18n="idx.hero.p">DM გთავაზობთ სრულ სპექტრს — ელექტრო ინსტალაციიდან სახანძრო სიგნალიზაციამდე. ხარისხი,
+			<p data-i18n="idx.hero.p">DM Energy გთავაზობთ სრულ სპექტრს — ელექტრო ინსტალაციიდან სახანძრო სიგნალიზაციამდე. ხარისხი,
 				სწრაფობა, სანდოობა.</p>
 			<div class="hero-buttons">
 				<a href="contact.html" class="btn btn-primary" data-i18n="idx.hero.btn1">უფასო კონსულტაცია</a>
@@ -111,28 +159,28 @@
 			</div>
 			<div class="services-grid">
 				<a href="electricity.html" class="service-card fade-up">
-					<div class="service-icon">⚡</div>
+					<div class="service-icon"><i class="ico ico-bolt"></i></div>
 					<h3 data-i18n="idx.svc1.title">ელექტრომონტაჟი</h3>
 					<p data-i18n="idx.svc1.desc">სრული ელექტრო ინსტალაცია საცხოვრებელ და კომერციულ ობიექტებზე. გაყვანილობა,
 						ელ-ფარები, განათება, გამანაწილებელი კაბინეტები.</p>
 					<span class="service-link" data-i18n="idx.svc1.link">დაწვრილებით →</span>
 				</a>
 				<a href="fire-safety.html" class="service-card fade-up">
-					<div class="service-icon">🔥</div>
+					<div class="service-icon"><i class="ico ico-flame"></i></div>
 					<h3 data-i18n="idx.svc2.title">სახანძრო უსაფრთხოება</h3>
 					<p data-i18n="idx.svc2.desc">სახანძრო სიგნალიზაციის დაყენება, სპრინკლერული სისტემები, კვამლის დეტექტორები და
 						ხანძარსაწინააღმდეგო სრული გადაწყვეტები.</p>
 					<span class="service-link" data-i18n="idx.svc2.link">დაწვრილებით →</span>
 				</a>
 				<a href="alarm.html" class="service-card fade-up">
-					<div class="service-icon">🔒</div>
+					<div class="service-icon"><i class="ico ico-lock"></i></div>
 					<h3 data-i18n="idx.svc3.title">სიგნალიზაცია</h3>
 					<p data-i18n="idx.svc3.desc">თანამედროვე დაცვის სისტემები, მოძრაობის სენსორები, წვდომის კონტროლი და 24/7
 						მონიტორინგი.</p>
 					<span class="service-link" data-i18n="idx.svc3.link">დაწვრილებით →</span>
 				</a>
 				<a href="alarm.html" class="service-card fade-up">
-					<div class="service-icon">📹</div>
+					<div class="service-icon"><i class="ico ico-video"></i></div>
 					<h3 data-i18n="idx.svc4.title">ვიდეოთვალყურეობა</h3>
 					<p data-i18n="idx.svc4.desc">IP კამერების დაყენება, ციფრული ვიდეო ჩამწერი სისტემები, ღრუბლოვანი მონიტორინგი და
 						დისტანციური წვდომა.</p>
@@ -147,37 +195,37 @@
 		<div class="container">
 			<div class="why-us-grid">
 				<div style="display:flex;align-items:center;justify-content:center;">
-					<div class="why-circle">🛡️</div>
+					<div class="why-circle"><i class="ico ico-shield"></i></div>
 				</div>
 				<div class="fade-up">
 					<div class="section-tag" data-i18n="idx.why.tag">რატომ ჩვენ?</div>
-					<h2 data-i18n="idx.why.h2">რატომ უნდა აირჩიოთ DM?</h2>
+					<h2 data-i18n="idx.why.h2">რატომ უნდა აირჩიოთ DM Energy?</h2>
 					<p data-i18n="idx.why.p">ჩვენი კომპანია გამოირჩევა პროფესიონალიზმით, სანდოობით და გამჭვირვალე მიდგომით —
 						თქვენი უსაფრთხოება ჩვენი პრიორიტეტია.</p>
 					<div class="why-features">
 						<div class="why-item fade-up">
-							<div class="why-item-icon">🏅</div>
+							<div class="why-item-icon"><i class="ico ico-award"></i></div>
 							<div>
 								<h4 data-i18n="idx.why1.title">ლიცენზირებული სპეციალისტები</h4>
 								<p data-i18n="idx.why1.desc">ყველა ჩვენი სპეციალისტი სერტიფიცირებულია სახელმწიფო სტანდარტებით</p>
 							</div>
 						</div>
 						<div class="why-item fade-up">
-							<div class="why-item-icon">⚡</div>
+							<div class="why-item-icon"><i class="ico ico-bolt"></i></div>
 							<div>
 								<h4 data-i18n="idx.why2.title">სწრაფი გამოძახება</h4>
 								<p data-i18n="idx.why2.desc">გადაუდებელ შემთხვევებში 2 საათში ვართ ნებისმიერ ადგილზე</p>
 							</div>
 						</div>
 						<div class="why-item fade-up">
-							<div class="why-item-icon">💰</div>
+							<div class="why-item-icon"><i class="ico ico-tag"></i></div>
 							<div>
 								<h4 data-i18n="idx.why3.title">კონკურენტული ფასები</h4>
 								<p data-i18n="idx.why3.desc">გამჭვირვალე ღირებულება — ფასდაკლება გახანგრძლივებული თანამშრომლობისას</p>
 							</div>
 						</div>
 						<div class="why-item fade-up">
-							<div class="why-item-icon">🔧</div>
+							<div class="why-item-icon"><i class="ico ico-wrench"></i></div>
 							<div>
 								<h4 data-i18n="idx.why4.title">გარანტია და ტექ. მხარდაჭერა</h4>
 								<p data-i18n="idx.why4.desc">ყველა სამუშაოზე ვიძლევით 1-3 წლიან გარანტიას + უფასო ტექ. მხარდაჭერა</p>
@@ -196,7 +244,7 @@
 			<p data-i18n="idx.cta.p">მოგვწერეთ ან დაგვიძახეთ — მივიღებთ უფასო კონსულტაციასა და ხარჯთაღრიცხვას</p>
 			<div class="cta-buttons">
 				<a href="contact.html" class="btn btn-primary" data-i18n="idx.cta.btn1">კონსულტაციის მოთხოვნა</a>
-				<a href="tel:+995599658935" class="btn btn-outline" data-i18n="shared.cta.btn.phone">📞 +995 599 658 935</a>
+				<a href="tel:+995599658935" class="btn btn-outline"><i class="ico ico-phone"></i> <span data-i18n="shared.cta.btn.phone">+995 599 658 935</span></a>
 			</div>
 		</div>
 	</section>
@@ -207,8 +255,8 @@
 			<div class="footer-grid">
 				<div class="footer-brand">
 					<a href="index.html" class="logo">
-						<img src="img/dm.jpeg" alt="DM Logo" class="logo-img">
-						<div class="logo-text">DM<span data-i18n="footer.tagline">დანადგარების მონტაჟი</span></div>
+						<img src="img/dm.jpeg" alt="DM Energy Logo" class="logo-img">
+						<div class="logo-text">DM Energy<span data-i18n="footer.tagline">დანადგარების მონტაჟი</span></div>
 					</a>
 					<p data-i18n="footer.brand.p">პროფესიული ელექტრომონტაჟი, სახანძრო უსაფრთხოება და სიგნალიზაციის სისტემები მთელ
 						საქართველოში.</p>
@@ -217,7 +265,7 @@
 					<h4 data-i18n="footer.pages">გვერდები</h4>
 					<ul class="footer-links">
 						<li><a href="index.html" data-i18n="footer.link.home">► მთავარი</a></li>
-						<li><a href="products.html" data-i18n="footer.link.products">► პროდუქცია</a></li>
+						<!-- <li><a href="products.html" data-i18n="footer.link.products">► პროდუქცია</a></li> --> <!-- hidden until the products page is ready; nav link above is commented out too -->
 						<li><a href="contact.html" data-i18n="footer.link.contact">► კონტაქტი</a></li>
 					</ul>
 				</div>
@@ -232,12 +280,12 @@
 				<div class="footer-col">
 					<h4 data-i18n="footer.contact">კონტაქტი</h4>
 					<div class="footer-contact-items">
-						<div class="f-contact-item"><span>📍</span><span data-i18n="footer.city">თბილისი, საქართველო</span></div>
-						<div class="f-contact-item"><span>📞</span><span>+995 555 501 070</span></div>
-						<div class="f-contact-item"><span>📞</span><span>+995 599 658 935</span></div>
-						<div class="f-contact-item"><span>📞</span><span>+995 555 393 404</span></div>
-						<div class="f-contact-item"><span>📧</span><span>info.energydm@gmail.com</span></div>
-						<div class="f-contact-item"><span>🕐</span><span>ორშ–შაბ: 9:00–18:00</span></div>
+						<div class="f-contact-item"><span><i class="ico ico-pin"></i></span><span data-i18n="footer.city">თბილისი, საქართველო</span></div>
+						<div class="f-contact-item"><span><i class="ico ico-phone"></i></span><span>+995 555 501 070</span></div>
+						<div class="f-contact-item"><span><i class="ico ico-phone"></i></span><span>+995 599 658 935</span></div>
+						<div class="f-contact-item"><span><i class="ico ico-phone"></i></span><span>+995 555 393 404</span></div>
+						<div class="f-contact-item"><span><i class="ico ico-mail"></i></span><span>info.energydm@gmail.com</span></div>
+						<div class="f-contact-item"><span><i class="ico ico-clock"></i></span><span>ორშ–შაბ: 9:00–18:00</span></div>
 					</div>
 				</div>
 			</div>
@@ -245,7 +293,7 @@
 		<div class="footer-bottom">
 			<div class="container">
 				<div class="footer-bottom-inner">
-					<p data-i18n="footer.copy">© 2026 DM — დანადგარების მონტაჟი. ყველა უფლება დაცულია.</p>
+					<p data-i18n="footer.copy">© 2026 DM Energy — დანადგარების მონტაჟი. ყველა უფლება დაცულია.</p>
 									<p>Built by <a href="https://canka.dev/" target="_blank" rel="noopener" class="canka-built-link">canka.dev<span class="blink-cursor">_</span></a></p>
 					<p data-i18n="footer.privacy">კონფიდენციალობა | გამოყენების პირობები</p>
 				</div>

@@ -2,16 +2,25 @@
 (function () {
     let currentFilter = 'all';
 
-    const CATEGORY_EMOJI = {
-        'განათება': '💡',
-        'სახანძრო': '🔥',
-        'ვიდეო': '📹',
-        'ელექტრო': '⚡',
-        'სიგნალიზაცია': '🔒'
+    // Icon class per category — see the .ico rules in styles.css.
+    const CATEGORY_ICON = {
+        'განათება': 'ico-bulb',
+        'სახანძრო': 'ico-flame',
+        'ვიდეო': 'ico-video',
+        'ელექტრო': 'ico-bolt',
+        'სიგნალიზაცია': 'ico-lock'
     };
 
-    function emoji(cat) {
-        return CATEGORY_EMOJI[cat] || '📦';
+    function icon(cat) {
+        return `<i class="ico ${CATEGORY_ICON[cat] || 'ico-package'}"></i>`;
+    }
+
+    // The filter buttons moved from textContent to innerHTML so they can hold an
+    // icon, so category text has to be escaped on the way in.
+    function escapeHTML(s) {
+        return String(s).replace(/[&<>"']/g, c => (
+            { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+        ));
     }
 
     function cardHTML(p) {
@@ -20,13 +29,13 @@
             ? `class="product-img-wrap product-img-clickable" data-image="${p.image}" data-name="${p.name}"`
             : `class="product-img-wrap"`;
         const img = hasImg
-            ? `<img src="${p.image}" alt="${p.name}" loading="lazy"><div class="zoom-hint">🔍</div>`
-            : `<div class="product-img-placeholder">${emoji(p.category)}</div>`;
+            ? `<img src="${p.image}" alt="${p.name}" loading="lazy"><div class="zoom-hint"><i class="ico ico-search"></i></div>`
+            : `<div class="product-img-placeholder">${icon(p.category)}</div>`;
         return `
             <div class="product-card fade-up" data-cat="${p.category}">
                 <div ${wrapAttrs}>${img}</div>
                 <div class="product-body">
-                    <span class="product-category">${emoji(p.category)} ${p.category}</span>
+                    <span class="product-category">${icon(p.category)} ${p.category}</span>
                     <div class="product-name">${p.name}</div>
                     <p class="product-desc">${p.description}</p>
                     <div class="product-footer">
@@ -64,7 +73,8 @@
             const btn = document.createElement('button');
             btn.className = 'filter-btn';
             btn.dataset.cat = cat;
-            btn.textContent = `${emoji(cat)} ${cat}`;
+            // innerHTML, not textContent — the icon is markup now.
+            btn.innerHTML = `${icon(cat)} ${escapeHTML(cat)}`;
             container.appendChild(btn);
         });
 

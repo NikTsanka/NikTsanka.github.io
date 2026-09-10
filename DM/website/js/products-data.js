@@ -16,7 +16,7 @@ const PRODUCTS = [
 		description: "ენერგოდამზოგი LED განათება ოფისებისა და კომერციული სივრცეებისთვის. 600×600mm, 4000K, IP44.",
 		price: "85₾",
 		category: "განათება",
-		image: "img/el1.jpeg"
+		image: "img/electricity-01.jpg"
 	},
 	{
 		id: 2,
@@ -24,7 +24,7 @@ const PRODUCTS = [
 		description: "მოქნილი LED ზოლი ინტერიერის განათებისთვის. 12V DC, 5 მეტრი, თეთრი სინათლე.",
 		price: "45₾",
 		category: "განათება",
-		image: "img/el2.jpeg"
+		image: "img/electricity-02.jpg"
 	},
 	{
 		id: 3,

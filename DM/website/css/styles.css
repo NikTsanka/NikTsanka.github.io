@@ -23,9 +23,20 @@
 	--shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
 	--shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.16);
 	--border: #ddeedd;
-	--transition: all 0.3s ease;
+	/* Explicit property list — `all` forces the browser to watch every
+	   animatable property, which costs far more than naming the few we use.
+	   `visibility` must stay in this list: the dropdown relies on it being
+	   transitioned so the menu stays hit-testable while it fades out. Drop it
+	   and the menu hides the instant the cursor leaves the trigger, which makes
+	   it impossible to reach. */
+	--transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
 	--radius: 8px;
 	--radius-lg: 16px;
+
+	/* Lightning-bolt watermark pattern, tiled — green version for light backgrounds */
+	--bolt-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170' viewBox='0 0 170 170'%3E%3Cpath d='M92 8 L46 80 L74 80 L60 162 L130 66 L96 66 Z' fill='%233CB371' fill-opacity='0.07'/%3E%3Cpath d='M26 96 L10 122 L20 122 L12 150 L40 114 L26 114 Z' fill='%233CB371' fill-opacity='0.05'/%3E%3C/svg%3E");
+	/* white version, for dark green backgrounds (banners) */
+	--bolt-pattern-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170' viewBox='0 0 170 170'%3E%3Cpath d='M92 8 L46 80 L74 80 L60 162 L130 66 L96 66 Z' fill='%23ffffff' fill-opacity='0.05'/%3E%3Cpath d='M26 96 L10 122 L20 122 L12 150 L40 114 L26 114 Z' fill='%23ffffff' fill-opacity='0.035'/%3E%3C/svg%3E");
 }
 
 html {
@@ -34,9 +45,18 @@ html {
 }
 
 body {
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-family: 'Noto Sans Georgian', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	color: var(--text-dark);
-	background: var(--white);
+	background-color: var(--bg-light);
+	background-image:
+		radial-gradient(circle at 10% 6%, rgba(60, 179, 113, 0.12), transparent 38%),
+		radial-gradient(circle at 90% 94%, rgba(224, 123, 26, 0.07), transparent 42%),
+		var(--bolt-pattern);
+	background-repeat: no-repeat, no-repeat, repeat;
+	/* `fixed` repaints the whole backdrop on every scroll frame and is ignored
+	   outright by iOS Safari — `scroll` looks the same here and stays smooth. */
+	background-attachment: scroll;
+	background-size: 100% 60vh, 100% 60vh, 170px 170px;
 	line-height: 1.6;
 }
 
@@ -86,6 +106,91 @@ ul {
 	max-width: 1200px;
 	margin: 0 auto;
 	padding: 0 24px;
+}
+
+/* ===== ICONS =====
+   Emoji render differently on every OS (and often in the wrong colour), so
+   icons are SVG masks tinted with currentColor instead. Each icon sizes itself
+   to 1em, which means the existing font-size on a container still controls it. */
+.ico {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	flex: none;
+	background-color: currentColor;
+	-webkit-mask-image: var(--ico);
+	mask-image: var(--ico);
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
+	vertical-align: -0.135em;
+}
+
+.ico-bolt {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z'/%3E%3C/svg%3E");
+}
+
+.ico-flame {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E");
+}
+
+.ico-lock {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='11' x='3' y='11' rx='2'/%3E%3Cpath d='M7 11V7a5 5 0 0 1 10 0v4'/%3E%3C/svg%3E");
+}
+
+.ico-video {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m22 8-6 4 6 4V8Z'/%3E%3Crect width='14' height='12' x='2' y='6' rx='2'/%3E%3C/svg%3E");
+}
+
+.ico-shield {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E");
+}
+
+.ico-award {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526'/%3E%3Ccircle cx='12' cy='8' r='6'/%3E%3C/svg%3E");
+}
+
+.ico-tag {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z'/%3E%3Ccircle cx='7.5' cy='7.5' r='1.5' fill='%23000'/%3E%3C/svg%3E");
+}
+
+.ico-wrench {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'/%3E%3C/svg%3E");
+}
+
+.ico-trophy {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9H4.5a2.5 2.5 0 0 1 0-5H6'/%3E%3Cpath d='M18 9h1.5a2.5 2.5 0 0 0 0-5H18'/%3E%3Cpath d='M4 22h16'/%3E%3Cpath d='M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22'/%3E%3Cpath d='M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22'/%3E%3Cpath d='M18 2H6v7a6 6 0 0 0 12 0V2Z'/%3E%3C/svg%3E");
+}
+
+.ico-pin {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0'/%3E%3Ccircle cx='12' cy='10' r='3'/%3E%3C/svg%3E");
+}
+
+.ico-phone {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384'/%3E%3C/svg%3E");
+}
+
+.ico-mail {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='20' height='16' x='2' y='4' rx='2'/%3E%3Cpath d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7'/%3E%3C/svg%3E");
+}
+
+.ico-clock {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpolyline points='12 6 12 12 16 14'/%3E%3C/svg%3E");
+}
+
+.ico-package {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z'/%3E%3Cpath d='M12 22V12'/%3E%3Cpath d='m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7'/%3E%3Cpath d='m7.5 4.27 9 5.15'/%3E%3C/svg%3E");
+}
+
+.ico-bulb {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5'/%3E%3Cpath d='M9 18h6'/%3E%3Cpath d='M10 22h4'/%3E%3C/svg%3E");
+}
+
+.ico-search {
+	--ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
 }
 
 /* ===== BUTTONS ===== */
@@ -237,6 +342,11 @@ ul {
 	visibility: hidden;
 	transform: translateY(-10px);
 	transition: var(--transition);
+	/* The menu is wider than its trigger, so a diagonal reach toward an entry
+	   briefly leaves the nav item. The transitioned `visibility` above already
+	   keeps the menu hit-testable through that moment; this delay adds a little
+	   extra room for a slower hand. */
+	transition-delay: 0.15s;
 	z-index: 100;
 	overflow: hidden;
 	border: 1px solid var(--border);
@@ -246,6 +356,8 @@ ul {
 	opacity: 1;
 	visibility: visible;
 	transform: translateY(0);
+	/* opening stays instant; only closing is delayed */
+	transition-delay: 0s;
 }
 
 .dropdown-link {
@@ -440,7 +552,10 @@ ul {
 }
 
 .section-alt {
-	background: var(--bg-light);
+	background-color: var(--bg-light);
+	background-image: var(--bolt-pattern);
+	background-repeat: repeat;
+	background-size: 170px 170px;
 }
 
 .section-header {
@@ -568,6 +683,7 @@ ul {
 	width: 66px;
 	height: 66px;
 	background: var(--green-light);
+	color: var(--green);
 	border-radius: 16px;
 	display: flex;
 	align-items: center;
@@ -579,6 +695,7 @@ ul {
 
 .service-card:hover .service-icon {
 	background: var(--green);
+	color: var(--white);
 }
 
 .service-card h3 {
@@ -618,6 +735,7 @@ ul {
 	width: 380px;
 	height: 380px;
 	background: var(--green-light);
+	color: var(--green);
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
@@ -644,6 +762,7 @@ ul {
 	height: 50px;
 	min-width: 50px;
 	background: var(--green-light);
+	color: var(--green);
 	border-radius: 12px;
 	display: flex;
 	align-items: center;
@@ -744,7 +863,8 @@ ul {
 
 /* ===== FOOTER ===== */
 .footer {
-	background: #212327;
+	background: #212327 var(--bolt-pattern-light);
+	background-size: 170px 170px;
 	color: var(--white);
 	padding: 64px 0 0;
 }
@@ -864,7 +984,9 @@ ul {
 
 /* ===== PAGE BANNER ===== */
 .page-banner {
-	background: linear-gradient(135deg, #0d2b14, var(--green-dark));
+	background: linear-gradient(135deg, #0d2b14, var(--green-dark)), var(--bolt-pattern-light);
+	background-repeat: no-repeat, repeat;
+	background-size: auto, 170px 170px;
 	padding: 100px 24px 56px;
 	text-align: center;
 	margin-top: 72px;
@@ -1049,7 +1171,10 @@ ul {
 	overflow: hidden;
 	position: relative;
 	cursor: pointer;
-	aspect-ratio: 4/3;
+	/* Most site photos are portrait (3:4). A 4:3 tile cropped away the top and
+	   bottom of every one of them — which is where the equipment actually is. */
+	aspect-ratio: 3/4;
+	background: var(--green-light);
 }
 
 .gallery-thumb {
@@ -1076,31 +1201,6 @@ ul {
 
 .gallery-item:hover .gallery-thumb {
 	transform: scale(1.07);
-}
-
-.gallery-overlay {
-	position: absolute;
-	inset: 0;
-	background: rgba(0, 0, 0, 0.5);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	opacity: 0;
-	transition: var(--transition);
-}
-
-.gallery-item:hover .gallery-overlay {
-	opacity: 1;
-}
-
-.gallery-overlay span {
-	color: var(--white);
-	font-size: 0.88rem;
-	font-weight: 600;
-	background: rgba(0, 0, 0, 0.4);
-	padding: 8px 18px;
-	border-radius: 50px;
-	border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* ===== PRODUCTS ===== */
@@ -1327,6 +1427,77 @@ ul {
 	background: #f0f0f0;
 }
 
+/* Close/nav buttons placed directly on the fixed overlay (gallery lightbox) */
+.lightbox > .lightbox-close {
+	top: 20px;
+	right: 20px;
+	width: 42px;
+	height: 42px;
+	font-size: 1.1rem;
+	z-index: 2;
+}
+
+.lightbox-nav {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 48px;
+	height: 48px;
+	background: rgba(255, 255, 255, 0.12);
+	border: none;
+	border-radius: 50%;
+	color: var(--white);
+	font-size: 1.8rem;
+	line-height: 1;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background 0.2s ease, transform 0.2s ease;
+	z-index: 2;
+}
+
+.lightbox-nav:hover {
+	background: rgba(255, 255, 255, 0.25);
+}
+
+.lightbox-prev {
+	left: 16px;
+}
+
+.lightbox-prev:hover {
+	transform: translateY(-50%) translateX(-3px);
+}
+
+.lightbox-next {
+	right: 16px;
+}
+
+.lightbox-next:hover {
+	transform: translateY(-50%) translateX(3px);
+}
+
+@media (max-width: 640px) {
+	.lightbox-nav {
+		width: 40px;
+		height: 40px;
+		font-size: 1.5rem;
+	}
+
+	.lightbox-prev {
+		left: 6px;
+	}
+
+	.lightbox-next {
+		right: 6px;
+	}
+
+	.lightbox > .lightbox-close {
+		top: 12px;
+		right: 12px;
+	}
+}
+
 /* ===== CONTACT ===== */
 .contact-grid {
 	display: grid;
@@ -1356,6 +1527,17 @@ ul {
 	display: flex;
 	gap: 14px;
 	align-items: flex-start;
+	min-width: 0;
+}
+
+/* The email address is one long unbreakable token and was spilling out of the
+   card on narrow columns. */
+.contact-card>div {
+	min-width: 0;
+}
+
+.contact-card p {
+	overflow-wrap: anywhere;
 }
 
 .contact-card-icon {
@@ -1363,6 +1545,7 @@ ul {
 	height: 50px;
 	min-width: 50px;
 	background: var(--green-light);
+	color: var(--green);
 	border-radius: 12px;
 	display: flex;
 	align-items: center;
