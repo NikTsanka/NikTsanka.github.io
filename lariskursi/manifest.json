@@ -1,0 +1,27 @@
+{
+  "name": "ლარის კურსი — LarisKursi",
+  "short_name": "ლარის კურსი",
+  "description": "ეროვნული ბანკის ოფიციალური ვალუტის კურსები, ლარის კონვერტორი და ისტორიული გრაფიკები.",
+  "lang": "ka",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0F172A",
+  "theme_color": "#0F172A",
+  "categories": ["finance", "utilities"],
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    { "name": "კალკულატორი", "url": "./index.html#calculator" },
+    { "name": "კურსები", "url": "./index.html#rates" },
+    { "name": "გრაფიკები", "url": "./index.html#charts" }
+  ]
+}

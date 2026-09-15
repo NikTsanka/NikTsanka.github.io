@@ -1,0 +1,391 @@
+<!doctype html>
+<!--
+  LarisKursi — ლარის კურსი
+  Live GEL exchange rates & currency converter, powered by the National Bank of Georgia API.
+
+  Deployed at https://niktsanka.github.io/lariskursi/ (GitHub Pages).
+  If the site ever moves to its own domain, update the canonical link, og:url,
+  the JSON-LD @id/url values below, and sitemap.xml.
+
+  hreflang note: the UI ships bilingual (ka/en) via an in-page toggle on a single URL.
+  If separate localized URLs are ever published (e.g. /en/), add:
+    <link rel="alternate" hreflang="ka" href="https://niktsanka.github.io/lariskursi/">
+    <link rel="alternate" hreflang="en" href="https://niktsanka.github.io/lariskursi/en/">
+    <link rel="alternate" hreflang="x-default" href="https://niktsanka.github.io/lariskursi/">
+-->
+<!-- lang is switched at runtime by js/i18n.js; "ka" is the default market. -->
+<html lang="ka" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0F172A">
+
+<title>ლარის კურსი — ვალუტის კურსები და კონვერტორი | ეროვნული ბანკი</title>
+<meta name="description" content="ლარის კურსი დღეს: ეროვნული ბანკის ოფიციალური ვალუტის კურსები — USD, EUR, GBP და სხვა. უფასო ლარის კალკულატორი და კურსის ისტორიული გრაფიკები.">
+<meta name="keywords" content="ლარის კურსი, ვალუტის კურსი, დოლარის კურსი, ევროს კურსი, ლარის კალკულატორი, ეროვნული ბანკი, GEL exchange rate, USD to GEL, lari converter">
+<meta name="author" content="LarisKursi">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://niktsanka.github.io/lariskursi/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ლარის კურსი — LarisKursi">
+<meta property="og:locale" content="ka_GE">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:title" content="ლარის კურსი — ვალუტის კურსები და კონვერტორი">
+<meta property="og:description" content="ეროვნული ბანკის ოფიციალური ვალუტის კურსები რეალურ დროში, ლარის კალკულატორი და ისტორიული გრაფიკები.">
+<meta property="og:url" content="https://niktsanka.github.io/lariskursi/">
+<meta property="og:image" content="https://niktsanka.github.io/lariskursi/og-image.png">
+<meta property="og:image:alt" content="ლარის კურსი — ვალუტის კონვერტორი">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ლარის კურსი — ვალუტის კურსები და კონვერტორი">
+<meta name="twitter:description" content="ეროვნული ბანკის ოფიციალური კურსები, ლარის კალკულატორი და ისტორიული გრაფიკები.">
+<meta name="twitter:image" content="https://niktsanka.github.io/lariskursi/og-image.png">
+
+<!-- Icons / PWA -->
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="favicon.svg">
+<link rel="manifest" href="manifest.json">
+
+<!-- Fonts: Inter for Latin + numerals, Noto Sans Georgian for Georgian text -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://nbg.gov.ge">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Georgian:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+
+<!--
+  Apply the saved theme/language before first paint so there is no flash of the
+  wrong theme. This is the only inline script on the page; app.js owns everything
+  afterwards.
+-->
+<script>
+(function () {
+  try {
+    var theme = localStorage.getItem('lk:theme');
+    if (theme !== 'dark' && theme !== 'light') {
+      theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('lang', localStorage.getItem('lk:lang') === 'en' ? 'en' : 'ka');
+  } catch (e) { /* storage blocked — the markup defaults are already sensible */ }
+})();
+</script>
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://niktsanka.github.io/lariskursi/#app",
+      "name": "ლარის კურსი — LarisKursi",
+      "url": "https://niktsanka.github.io/lariskursi/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": ["ka", "en"],
+      "description": "ეროვნული ბანკის ოფიციალური ვალუტის კურსები, ლარის კონვერტორი და ისტორიული გრაფიკები.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GEL" },
+      "featureList": [
+        "Live GEL exchange rates",
+        "Currency converter",
+        "Historical rate charts",
+        "Rate alerts"
+      ]
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://niktsanka.github.io/lariskursi/#org",
+      "name": "LarisKursi",
+      "url": "https://niktsanka.github.io/lariskursi/"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://niktsanka.github.io/lariskursi/#website",
+      "url": "https://niktsanka.github.io/lariskursi/",
+      "name": "ლარის კურსი",
+      "publisher": { "@id": "https://niktsanka.github.io/lariskursi/#org" },
+      "inLanguage": "ka"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "მთავარი", "item": "https://niktsanka.github.io/lariskursi/" },
+        { "@type": "ListItem", "position": 2, "name": "კალკულატორი", "item": "https://niktsanka.github.io/lariskursi/#calculator" },
+        { "@type": "ListItem", "position": 3, "name": "კურსები", "item": "https://niktsanka.github.io/lariskursi/#rates" },
+        { "@type": "ListItem", "position": 4, "name": "გრაფიკები", "item": "https://niktsanka.github.io/lariskursi/#charts" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main" data-i18n="skipLink">გადასვლა მთავარ შიგთავსზე</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="#main">
+      <span class="brand-mark" aria-hidden="true">₾</span>
+      <span class="brand-text">
+        <strong data-i18n="brandName">ლარის კურსი</strong>
+        <small>LarisKursi</small>
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="Main">
+      <a href="#calculator" data-i18n="navCalculator">კალკულატორი</a>
+      <a href="#rates" data-i18n="navRates">კურსები</a>
+      <a href="#charts" data-i18n="navCharts">გრაფიკები</a>
+      <a href="#alerts" data-i18n="navAlerts">შეტყობინებები</a>
+    </nav>
+
+    <div class="header-actions">
+      <button id="lang-toggle" class="icon-btn" type="button" title="ქართული / English">
+        <span id="lang-label">EN</span>
+      </button>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-pressed="true">
+        <span id="theme-icon" aria-hidden="true">🌙</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO + CALCULATOR ============ -->
+  <section class="hero" id="calculator" aria-labelledby="hero-title">
+    <div class="container">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="heroEyebrow">საქართველოს ეროვნული ბანკის ოფიციალური კურსები</p>
+        <h1 id="hero-title" data-i18n="heroTitle">ლარის კურსი და ვალუტის კონვერტორი</h1>
+        <p class="hero-sub" data-i18n="heroSub">გადაიყვანეთ ნებისმიერი ვალუტა ლარში და პირიქით — ოფიციალური, ყოველდღიურად განახლებადი კურსით.</p>
+      </div>
+
+      <div class="card calc-card" role="region" aria-labelledby="calc-heading">
+        <h2 id="calc-heading" class="visually-hidden" data-i18n="calcHeading">ვალუტის კალკულატორი</h2>
+
+        <div class="calc-grid">
+          <div class="field field-amount">
+            <label for="amount-from" data-i18n="labelAmount">თანხა</label>
+            <input id="amount-from" class="input" type="number" inputmode="decimal"
+                   value="1000" min="0" step="any" autocomplete="off">
+          </div>
+
+          <div class="field">
+            <label for="currency-from" data-i18n="labelFrom">საიდან</label>
+            <div class="select-wrap">
+              <span class="select-flag" id="flag-from" aria-hidden="true">🇬🇪</span>
+              <select id="currency-from" class="input select"></select>
+            </div>
+          </div>
+
+          <div class="swap-wrap">
+            <button id="swap-btn" class="swap-btn" type="button" title="⇄">
+              <span aria-hidden="true">⇄</span>
+            </button>
+          </div>
+
+          <div class="field field-amount">
+            <label for="amount-to" data-i18n="labelResult">შედეგი</label>
+            <input id="amount-to" class="input result-input" type="text"
+                   readonly aria-live="polite" value="—">
+          </div>
+
+          <div class="field">
+            <label for="currency-to" data-i18n="labelTo">სად</label>
+            <div class="select-wrap">
+              <span class="select-flag" id="flag-to" aria-hidden="true">🇺🇸</span>
+              <select id="currency-to" class="input select"></select>
+            </div>
+          </div>
+
+          <div class="calc-actions">
+            <button id="copy-btn" class="ghost-btn" type="button">
+              <span aria-hidden="true">📋</span> <span data-i18n="copy">კოპირება</span>
+            </button>
+            <button id="share-btn" class="ghost-btn" type="button">
+              <span aria-hidden="true">🔗</span> <span data-i18n="share">გაზიარება</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="calc-footer">
+          <p id="pair-summary" class="pair-summary" aria-live="polite">
+            <span class="skeleton skeleton-text"></span>
+          </p>
+          <div class="calc-footer-right">
+            <span id="updated-at" class="updated-at"></span>
+            <button id="refresh-btn" class="ghost-btn" type="button">
+              <span aria-hidden="true">🔄</span> <span data-i18n="refresh">განახლება</span>
+            </button>
+          </div>
+        </div>
+
+        <p id="global-error" class="error-banner" role="alert" hidden></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TODAY'S RATES ============ -->
+  <section class="section" id="rates" aria-labelledby="rates-heading">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2 id="rates-heading" data-i18n="ratesHeading">დღევანდელი ოფიციალური კურსები</h2>
+          <p class="section-sub" data-i18n="ratesSub">დააწკაპუნეთ ვალუტაზე, რომ ის კალკულატორში ჩაიტვირთოს.</p>
+        </div>
+        <div class="field field-search">
+          <label for="rates-search" class="visually-hidden" data-i18n="labelSearch">ვალუტის ძებნა</label>
+          <input id="rates-search" class="input" type="search" autocomplete="off"
+                 placeholder="ძებნა: USD, ევრო…">
+        </div>
+      </div>
+
+      <div class="card table-card">
+        <div class="table-scroll">
+          <table class="rates-table">
+            <caption class="visually-hidden" data-i18n="tableCaption">საქართველოს ეროვნული ბანკის ოფიციალური ვალუტის კურსები ლართან მიმართებაში</caption>
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="thCurrency">ვალუტა</th>
+                <th scope="col" data-i18n="thCode">კოდი</th>
+                <th scope="col" class="num" data-i18n="thRate">კურსი (₾)</th>
+                <th scope="col" class="num" data-i18n="thChange">ცვლილება</th>
+              </tr>
+            </thead>
+            <!-- Rows are injected by js/app.js; skeletons reserve space to avoid layout shift -->
+            <tbody id="rates-body">
+              <tr class="skeleton-row"><td colspan="4"><span class="skeleton skeleton-row-bar"></span></td></tr>
+              <tr class="skeleton-row"><td colspan="4"><span class="skeleton skeleton-row-bar"></span></td></tr>
+              <tr class="skeleton-row"><td colspan="4"><span class="skeleton skeleton-row-bar"></span></td></tr>
+              <tr class="skeleton-row"><td colspan="4"><span class="skeleton skeleton-row-bar"></span></td></tr>
+              <tr class="skeleton-row"><td colspan="4"><span class="skeleton skeleton-row-bar"></span></td></tr>
+              <tr class="skeleton-row"><td colspan="4"><span class="skeleton skeleton-row-bar"></span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p id="rates-empty" class="empty-state" hidden data-i18n="noResults">ვალუტა ვერ მოიძებნა.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HISTORICAL CHART ============ -->
+  <section class="section" id="charts" aria-labelledby="charts-heading">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2 id="charts-heading" data-i18n="chartsHeading">კურსის ისტორია</h2>
+          <p class="section-sub" data-i18n="chartsSub">აირჩიეთ ვალუტა და პერიოდი — გრაფიკი აჩვენებს კურსს ლართან მიმართებაში.</p>
+        </div>
+        <div class="field">
+          <label for="chart-currency" class="visually-hidden" data-i18n="labelChartCurrency">გრაფიკის ვალუტა</label>
+          <div class="select-wrap">
+            <span class="select-flag" id="flag-chart" aria-hidden="true">🇺🇸</span>
+            <select id="chart-currency" class="input select"></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card chart-card">
+        <div class="range-tabs" role="tablist" aria-label="Range">
+          <button class="range-tab is-active" type="button" role="tab" aria-selected="true"  data-range="7d" data-i18n="range7d">7 დღე</button>
+          <button class="range-tab" type="button" role="tab" aria-selected="false" data-range="1m" data-i18n="range1m">1 თვე</button>
+          <button class="range-tab" type="button" role="tab" aria-selected="false" data-range="6m" data-i18n="range6m">6 თვე</button>
+          <button class="range-tab" type="button" role="tab" aria-selected="false" data-range="1y" data-i18n="range1y">1 წელი</button>
+        </div>
+
+        <div class="chart-stats" id="chart-stats" hidden>
+          <div class="stat"><span class="stat-label" data-i18n="statMin">მინიმუმი</span><strong id="stat-min">—</strong></div>
+          <div class="stat"><span class="stat-label" data-i18n="statMax">მაქსიმუმი</span><strong id="stat-max">—</strong></div>
+          <div class="stat"><span class="stat-label" data-i18n="statChange">ცვლილება</span><strong id="stat-change">—</strong></div>
+        </div>
+
+        <!-- Fixed-height wrapper reserves space so the canvas never causes layout shift -->
+        <div class="chart-wrap">
+          <canvas id="rate-chart" role="img" aria-label="Historical exchange rate chart"></canvas>
+          <div id="chart-overlay" class="chart-overlay">
+            <span class="spinner" aria-hidden="true"></span>
+            <p id="chart-message" data-i18n="chartLoading">მონაცემები იტვირთება…</p>
+            <button id="chart-retry" class="ghost-btn" type="button" hidden>
+              <span aria-hidden="true">🔄</span> <span data-i18n="retry">თავიდან ცდა</span>
+            </button>
+          </div>
+        </div>
+        <p class="chart-note" data-i18n="chartNote">გრძელი პერიოდებისთვის მონაცემები შერჩევითია (კვირეული წერტილები), რათა ეროვნული ბანკის სერვისი არ გადაიტვირთოს.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RATE ALERTS ============ -->
+  <section class="section" id="alerts" aria-labelledby="alerts-heading">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2 id="alerts-heading" data-i18n="alertsHeading">კურსის შეტყობინებები</h2>
+          <p class="section-sub" data-i18n="alertsSub">დააყენეთ სამიზნე კურსი — გვერდი გამოგიჩენთ ნიშანს, როცა პირობა შესრულდება. მონაცემები ინახება მხოლოდ თქვენს ბრაუზერში.</p>
+        </div>
+      </div>
+
+      <div class="card alert-card">
+        <form id="alert-form" class="alert-form">
+          <div class="field">
+            <label for="alert-currency" data-i18n="labelAlertCurrency">ვალუტა</label>
+            <select id="alert-currency" class="input select"></select>
+          </div>
+          <div class="field">
+            <label for="alert-direction" data-i18n="labelAlertDirection">პირობა</label>
+            <select id="alert-direction" class="input select">
+              <option value="below" data-i18n="alertBelow">ნაკლებია ვიდრე</option>
+              <option value="above" data-i18n="alertAbove">მეტია ვიდრე</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="alert-value" data-i18n="labelAlertValue">სამიზნე კურსი (₾)</label>
+            <input id="alert-value" class="input" type="number" step="any" min="0" placeholder="2.68" required>
+          </div>
+          <button class="primary-btn" type="submit" data-i18n="alertAdd">დამატება</button>
+        </form>
+        <ul id="alert-list" class="alert-list"></ul>
+        <p id="alert-empty" class="empty-state" data-i18n="alertEmpty">შეტყობინებები ჯერ არ გაქვთ.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-brand"><span aria-hidden="true">₾</span> <strong data-i18n="brandName">ლარის კურსი</strong></p>
+      <p class="footer-note" data-i18n="footerAttribution">კურსებს აქვეყნებს საქართველოს ეროვნული ბანკი.</p>
+      <p class="footer-note"><a href="https://nbg.gov.ge" target="_blank" rel="noopener noreferrer">nbg.gov.ge</a></p>
+    </div>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="#calculator" data-i18n="navCalculator">კალკულატორი</a>
+      <a href="#rates" data-i18n="navRates">კურსები</a>
+      <a href="#charts" data-i18n="navCharts">გრაფიკები</a>
+      <a href="#alerts" data-i18n="navAlerts">შეტყობინებები</a>
+    </nav>
+    <div class="footer-meta">
+      <p id="footer-updated" class="footer-note"></p>
+      <p class="footer-note" data-i18n="footerDisclaimer">ინფორმაცია საინფორმაციო ხასიათისაა და არ წარმოადგენს ფინანსურ რჩევას.</p>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<!-- App scripts: deferred so parsing is never blocked. Chart.js is lazy-loaded by js/chart.js -->
+<script src="js/i18n.js" defer></script>
+<script src="js/api.js" defer></script>
+<script src="js/calculator.js" defer></script>
+<script src="js/chart.js" defer></script>
+<script src="js/app.js" defer></script>
+</body>
+</html>

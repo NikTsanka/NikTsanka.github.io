@@ -1,0 +1,8 @@
+# robots.txt for niktsanka.github.io
+# A robots.txt is only read from the domain root, so it lives here rather than
+# inside a project folder.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://niktsanka.github.io/lariskursi/sitemap.xml
