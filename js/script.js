@@ -400,7 +400,7 @@ function cycleSleepTimer() {
 	clearInterval(sleepTimerInterval);
 
 	if (minutes === 0) {
-		btn.innerHTML = '<i class="fas fa-moon"></i>';
+		btn.innerHTML = '<i class="fas fa-hourglass-half"></i>';
 		btn.title = 'Sleep timer: Off';
 		btn.classList.remove('active');
 		return;
@@ -420,7 +420,7 @@ function cycleSleepTimer() {
 		clearInterval(sleepTimerInterval);
 		audio.pause();
 		sleepTimerIndex = 0;
-		btn.innerHTML = '<i class="fas fa-moon"></i>';
+		btn.innerHTML = '<i class="fas fa-hourglass-half"></i>';
 		btn.classList.remove('active');
 		showToast('Sleep timer: Radio paused', true);
 	}, minutes * 60 * 1000);
@@ -430,7 +430,7 @@ function updateSleepTimerDisplay(seconds) {
 	var mins = Math.floor(seconds / 60);
 	var secs = seconds % 60;
 	document.getElementById('sleepTimerBtn').innerHTML =
-		'<i class="fas fa-moon"></i><span class="timer-countdown">' + mins + ':' + (secs < 10 ? '0' : '') + secs + '</span>';
+		'<i class="fas fa-hourglass-half"></i><span class="timer-countdown">' + mins + ':' + (secs < 10 ? '0' : '') + secs + '</span>';
 }
 
 // Browser notifications
