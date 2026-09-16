@@ -968,6 +968,15 @@
 			display: flex;
 		}
 
+		/* მობილურზე მენიუ ჰამბურგერის ღილაკიდან მარჯვნივ იშლება, რომ ეკრანიდან არ გავიდეს */
+		@media (max-width: 768px) {
+			.nav-dropdown {
+				left: 0;
+				right: auto;
+				max-width: 70vw;
+			}
+		}
+
 		.nav-dropdown a {
 			width: 100%;
 		}
