@@ -775,6 +775,28 @@ a:hover { text-decoration: underline; }
 .footer-links { display: flex; flex-direction: column; gap: 6px; }
 .footer-links a { color: var(--text-muted); font-size: 0.88rem; }
 
+/* canka.dev blinking cursor credit */
+.footer-credit {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-faint);
+}
+.canka-built-link {
+  color: var(--accent-emerald);
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity var(--t-fast);
+}
+.canka-built-link:hover { opacity: 0.8; }
+.blink-cursor { animation: blink-caret 1s step-end infinite; }
+@keyframes blink-caret { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .blink-cursor { animation: none; }
+}
+
 /* ==========================================================================
    Skeletons & toast
    ========================================================================== */
