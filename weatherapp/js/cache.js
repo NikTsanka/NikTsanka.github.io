@@ -18,7 +18,10 @@
   var TTL = {
     city: 15 * 60 * 1000,
     cities: 24 * 60 * 60 * 1000,
-    timezones: 24 * 60 * 60 * 1000
+    timezones: 24 * 60 * 60 * 1000,
+    /* Open-Meteo recomputes its forecast roughly hourly, so asking more often than that
+       returns the same numbers. */
+    forecast: 60 * 60 * 1000
   };
 
   var MAX_CITY_ENTRIES = 80;

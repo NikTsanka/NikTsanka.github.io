@@ -6,9 +6,7 @@ JavaScript — no framework, no build step, no bundler, no npm dependency, no CD
 Deployed at <https://niktsanka.github.io/weatherapp/>, and it also runs from a
 double-clicked `index.html` over `file://`.
 
-> **Status:** complete. Phases 1-4 are all built: the dashboard, persisted favourites,
-> hash routing, the city detail view, global settings, the meeting planner, the time-zone
-> browser and the climate chart.
+> **Status:** complete, plus a seven-day forecast added after Phase 4.
 
 ## Running it locally
 
@@ -38,7 +36,7 @@ everything it owns lives under `weatherapp/` and it writes nothing at the reposi
 5. **Hard-refresh** (`Ctrl+Shift+R`, or `Cmd+Shift+R` on macOS). The Pages CDN caches
    assets for roughly 10 minutes, so a fresh deploy can otherwise serve the old CSS or JS.
 
-Local assets carry a manual version query (`./css/styles.css?v=4`). Bump the `v` value
+Local assets carry a manual version query (`./css/styles.css?v=5`). Bump the `v` value
 when you change a file and want to force every visitor past that CDN cache.
 
 A `.nojekyll` file already exists at the repository root, so Jekyll does not process the
@@ -54,6 +52,7 @@ weatherapp/
   css/views.css          states, settings panel, detail view
   css/planner.css        view tabs, planner grid, zone browser
   css/chart.css          the climate chart
+  css/forecast.css       the seven-day outlook and sun times
   data/fixtures.js       real API responses, captured 2026-09-18
   js/…                   see load order below
   tools/verify.mjs       development only — never loaded by the app
@@ -85,6 +84,7 @@ an IIFE under `'use strict'` that attaches to the single global `window.WTW`.
 | 13 | `js/dashboard.js` | `WTW.dashboard` — the favourites list and the card grid | `ui`, `api`, `settings` |
 | 14 | `js/detail.js` | `WTW.detail` — the single-city view and its DST block | `ui`, `clock`, `api` |
 | 15 | `js/chart.js` | `WTW.chart` — the inline-SVG climate chart | `ui`, `units` |
+| 15b | `js/forecast.js` | `WTW.forecast` — the seven-day outlook and sun times | `ui`, `units`, `weather`, `api` |
 | 16 | `js/planner.js` | `WTW.planner` — the meeting planner and its time maths | `ui`, `clock`, `detail` |
 | 17 | `js/zones.js` | `WTW.zones` — the time-zone browser | `ui`, `clock`, `units` |
 | 18 | `js/app.js` | bootstrap and event wiring | everything above |
@@ -171,9 +171,41 @@ Cities grouped by IANA zone, collapsible with `aria-expanded`, sorted by each zo
 computed with `Intl.DateTimeFormat(zone, { timeZoneName: 'longOffset' })`. Roughly half the
 zones are on summer time at any moment, so that order genuinely shifts through the year.
 
+## The seven-day forecast
+
+`worldtimeweather.com` has **no forecast endpoint** — only current weather and climate
+normals. So the outlook comes from [Open-Meteo](https://open-meteo.com), the upstream that
+site already credits: keyless, HTTPS, and `Access-Control-Allow-Origin: *`, so it works
+from Pages and from a double-clicked file alike. It is the app's **second and last**
+permitted origin, and `tools/verify.mjs` checks its CORS header from both the Pages origin
+and `Origin: null`.
+
+Open-Meteo reports raw **WMO codes** rather than the string keys worldtimeweather.com
+emits, so `js/weather.js` carries a code → condition bridge. Every pairing the live API was
+observed using (0 clear, 3 overcast, 45 fog, 51/53/55 drizzle, 61 light rain, 80/81 rain
+showers, 95 thunderstorm, 96 hail) is reproduced exactly, so the same sky never gets two
+different icons; the rest follow the WMO table, and freezing and grain variants fold into
+their nearest mapped key. `verify.mjs` fails if any code in the map points at a condition
+the icon set does not have.
+
+The request always asks for **Celsius and millimetres** and converts in `js/units.js`. That
+keeps one cache entry per city rather than one per unit setting, and the conversion already
+existed there for the climate normals. Sunrise and sunset are requested in the city's own
+IANA zone, so they come back as bare local wall clock (`2026-09-18T06:43`) and are rendered
+by slicing out the time rather than parsing — no zone maths can shift them.
+
+Forecasts cache for **one hour**, which is roughly how often Open-Meteo recomputes. There
+is no fixture fallback: a forecast from a snapshot captured weeks ago would be worse than
+none. If the request fails the panel shows a quiet line and a Retry, and the rest of the
+city page — clock, current weather, DST block, climate chart — renders regardless.
+
+It is fetched **only on a city page**, one request at a time. Putting it on the dashboard
+would mean seven extra requests on every load.
+
 ## Endpoints used
 
-Everything comes from `https://worldtimeweather.com/api/v1/` over HTTPS:
+Everything comes from `https://worldtimeweather.com/api/v1/` over HTTPS, except the
+forecast:
 
 | Endpoint | Used for |
 |---|---|
@@ -181,6 +213,7 @@ Everything comes from `https://worldtimeweather.com/api/v1/` over HTTPS:
 | `city/{slug}.json` | one city's time, weather and climate normals |
 | `timezones.json` | the time-zone browser |
 | `api/health.php` | not used by the app; checked by `tools/verify.mjs` |
+| `api.open-meteo.com/v1/forecast` | the seven-day outlook, sunrise, sunset and UV index |
 
 `index.json` is documentation only. Weather ultimately comes from
 [Open-Meteo](https://open-meteo.com), which is why both are credited in the footer.
@@ -203,6 +236,7 @@ fresh cache  ->  network  ->  stale cache (labelled)  ->  bundled fixtures (labe
 | Kind | TTL | Why |
 |---|---|---|
 | `city/{slug}` | 15 minutes | The API regenerates every 30 min behind `Cache-Control: max-age=900`. Asking sooner returns a byte-identical file. |
+| `forecast/{slug}` | 1 hour | Open-Meteo recomputes roughly hourly. |
 | `cities.json` | 24 hours | The city list changes rarely. |
 | `timezones.json` | 24 hours | Same. |
 
@@ -245,6 +279,9 @@ path segment starting with `_`.
   not persist. Nothing throws.
 - **Hash routing, not clean URLs.** GitHub Pages cannot rewrite unknown paths to
   `index.html`, so `/weatherapp/city/tokyo` is impossible. Links use `#city=<slug>`.
+- **Two upstreams, so two things can break.** A city page needs `worldtimeweather.com` for
+  everything and `api.open-meteo.com` for the forecast panel only; the page degrades to
+  a Retry line if the second is unreachable.
 - **Hard dependency on the API's CORS header.** If `Access-Control-Allow-Origin` ever stops
   being `*`, `file://` testing breaks immediately; if it stops including
   `https://niktsanka.github.io`, the deployed site breaks too. `verify.mjs` reports the raw

@@ -68,7 +68,9 @@
     'snow-3': CLOUD + flakes(3),
     showers: CLOUD + '<path d="M9.5 19l-1.2 3M14.5 19l-1.2 3"/>',
     'showers-violent': CLOUD + '<path d="M8 19l-1.4 3.4M12 19l-1.4 3.4M16 19l-1.4 3.4"/>',
-    storm: CLOUD + '<path d="M13 18.4 10 22h3.2L11 25"/>',
+    /* Kept inside the 0 0 24 24 viewBox: an earlier bolt reached y=25 and had its tail
+       clipped off at every size. */
+    storm: CLOUD + '<path d="M13 18.5 10.8 21.4h2.4L11.2 23.8"/>',
     'storm-hail': CLOUD + '<path d="M13.5 18.4 11 21.6h2.6"/><circle cx="8.6" cy="20.8" r=".7"/><circle cx="16" cy="21.4" r=".7"/>',
     unknown: CLOUD_HIGH + '<path d="M10.6 19.4a1.5 1.5 0 1 1 1.9 1.5v.8"/><path d="M12.5 23.2v.1"/>'
   };
@@ -98,6 +100,26 @@
     unknown:           { label: 'Unknown conditions', day: 'unknown' }
   };
 
+  /* Open-Meteo reports raw WMO codes rather than the string keys worldtimeweather.com
+     emits, so the forecast needs this bridge. Every pairing below that the live API
+     exercises was confirmed against it in the Phase 0 survey (0 clear, 1 mainly_clear,
+     2 partly_cloudy, 3 overcast, 45 fog, 51/53/55 drizzle, 61 light_rain, 80/81
+     rain_showers, 95 thunderstorm, 96 thunderstorm_hail); the rest follow the WMO table.
+     Freezing and grain variants fold into their nearest mapped key rather than inventing
+     icons that the current-weather path would never use. */
+  var WMO = {
+    0: 'clear', 1: 'mainly_clear', 2: 'partly_cloudy', 3: 'overcast',
+    45: 'fog', 48: 'rime_fog',
+    51: 'light_drizzle', 53: 'drizzle', 55: 'heavy_drizzle',
+    56: 'light_drizzle', 57: 'drizzle',
+    61: 'light_rain', 63: 'rain', 65: 'heavy_rain',
+    66: 'light_rain', 67: 'rain',
+    71: 'light_snow', 73: 'snow', 75: 'heavy_snow', 77: 'light_snow',
+    80: 'rain_showers', 81: 'rain_showers', 82: 'violent_showers',
+    85: 'light_snow', 86: 'heavy_snow',
+    95: 'thunderstorm', 96: 'thunderstorm_hail', 99: 'thunderstorm_hail'
+  };
+
   function get(condition) {
     var key = typeof condition === 'string' ? condition : 'unknown';
     return Object.prototype.hasOwnProperty.call(CONDITIONS, key) ? CONDITIONS[key] : CONDITIONS.unknown;
@@ -112,6 +134,13 @@
     },
 
     label: function (condition) { return get(condition).label; },
+
+    /* An unknown or absent code degrades to `unknown`, never to an empty slot. */
+    fromWmo: function (code) {
+      return Object.prototype.hasOwnProperty.call(WMO, code) ? WMO[code] : 'unknown';
+    },
+
+    WMO: WMO,
 
     /* isDay drives the day/night icon variant; unmapped keys degrade to `unknown`. */
     icon: function (condition, isDay) {

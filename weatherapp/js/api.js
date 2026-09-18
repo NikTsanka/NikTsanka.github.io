@@ -11,6 +11,11 @@
   var normalize = WTW.normalize;
 
   var BASE = 'https://worldtimeweather.com/api/v1/';
+  /* The second permitted origin. Open-Meteo is keyless, HTTPS and answers with
+     Access-Control-Allow-Origin: *, so it works from Pages and from file:// alike. It is
+     also the upstream worldtimeweather.com already credits for its weather. */
+  var METEO = 'https://api.open-meteo.com/v1/forecast';
+  var FORECAST_DAYS = 7;
   var TIMEOUT_MS = 12000;
 
   var inflight = Object.create(null);
@@ -126,6 +131,8 @@
   WTW.api = {
     BASE: BASE,
 
+    METEO: METEO,
+
     citiesUrl: function () { return BASE + 'cities.json'; },
     timezonesUrl: function () { return BASE + 'timezones.json'; },
     /* Slugs are not all bare words - the index contains "st.-john's-ag" - so encode. */
@@ -144,6 +151,36 @@
         var f = fixtures();
         return f ? f.timezones : null;
       }, force);
+    },
+
+    /* Always asks for Celsius and millimetres: converting in units.js keeps one cache
+       entry per city instead of one per unit setting, and the conversion already exists
+       there for the climate normals. The city's own IANA zone is passed so sunrise and
+       sunset come back as its local wall clock. */
+    forecastUrl: function (city) {
+      var coords = (city && city.coordinates) || {};
+      return METEO +
+        '?latitude=' + encodeURIComponent(coords.latitude) +
+        '&longitude=' + encodeURIComponent(coords.longitude) +
+        '&daily=' + encodeURIComponent([
+          'weather_code', 'temperature_2m_max', 'temperature_2m_min',
+          'precipitation_probability_max', 'precipitation_sum', 'uv_index_max',
+          'sunrise', 'sunset'
+        ].join(',')) +
+        '&timezone=' + encodeURIComponent(city.time.timezone || 'UTC') +
+        '&forecast_days=' + FORECAST_DAYS +
+        '&temperature_unit=celsius&precipitation_unit=mm&timeformat=iso8601';
+    },
+
+    getForecast: function (city, force) {
+      var coords = (city && city.coordinates) || {};
+      if (typeof coords.latitude !== 'number' || typeof coords.longitude !== 'number') {
+        return Promise.reject(apiError('parse', 'This city has no coordinates, so no forecast can be requested.'));
+      }
+      /* No fixture fallback: the bundled snapshot predates this endpoint, and a forecast
+         from a captured file would be worse than none. */
+      return load('forecast', city.slug, WTW.api.forecastUrl(city), normalize.forecast,
+        function () { return null; }, force);
     },
 
     getCity: function (slug, force) {

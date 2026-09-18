@@ -16,6 +16,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = 'https://worldtimeweather.com/api/v1/';
 const HEALTH = 'https://worldtimeweather.com/api/health.php';
+const METEO = 'https://api.open-meteo.com/v1/forecast';
 const SAMPLE = process.argv.includes('--all') ? Infinity : 40;
 
 const results = [];
@@ -25,11 +26,29 @@ const fail = (name, detail = '') => results.push({ ok: false, name, detail });
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
 const isStr = (v) => typeof v === 'string' && v.length > 0;
 
-async function getJson(url) {
-  const res = await fetch(url);
+const PAGES_ORIGIN = 'https://niktsanka.github.io';
+
+/* An Origin header has to be sent explicitly: node's fetch omits it, and a server that
+   echoes the origin back has nothing to echo, so the response looks like it has no CORS
+   header at all. A browser always sends one, so a check without it proves nothing. */
+async function getJson(url, origin = PAGES_ORIGIN) {
+  const res = await fetch(url, { headers: { Origin: origin } });
   const acao = res.headers.get('access-control-allow-origin');
   const body = res.ok ? await res.json() : null;
   return { res, acao, body };
+}
+
+/* file:// pages send Origin: null. Only a wildcard satisfies that, which is why local
+   double-click testing works at all. */
+async function checkFileOrigin(label, url) {
+  try {
+    const res = await fetch(url, { headers: { Origin: 'null' } });
+    const acao = res.headers.get('access-control-allow-origin');
+    if (acao === '*') { pass(`${label}: CORS from file://`, 'origin null is accepted'); }
+    else { fail(`${label}: CORS from file://`, `Access-Control-Allow-Origin: ${acao ?? '(absent)'}`); }
+  } catch (err) {
+    fail(`${label}: CORS from file://`, err.message);
+  }
 }
 
 /* ---------- 1. endpoints, CORS and shape ---------- */
@@ -116,6 +135,19 @@ function checkCityDoc(slug, doc, iconKeys, problems) {
   }
 }
 
+/* Every WMO code weather.js claims to understand must resolve to a real condition key,
+   or the forecast would render an empty icon slot. */
+function checkWmoMap() {
+  const icons = iconMapKeys();
+  const wmo = wmoMapKeys();
+  const bad = Object.entries(wmo).filter(([, key]) => !icons.has(key));
+  if (bad.length) {
+    fail('weather.js: WMO map', bad.map(([c, k]) => `${c} -> ${k}`).join(', '));
+  } else {
+    pass('weather.js: WMO map', `${Object.keys(wmo).length} codes map to known conditions`);
+  }
+}
+
 function iconMapKeys() {
   const source = readFileSync(join(ROOT, 'js', 'weather.js'), 'utf8');
   const block = source.slice(source.indexOf('var CONDITIONS'), source.indexOf('function get('));
@@ -148,6 +180,7 @@ async function checkApi() {
     checkCors('cities.json', acao);
     if (!res.ok) { fail('cities.json: reachable', `HTTP ${res.status}`); }
     else { pass('cities.json: reachable', `HTTP ${res.status}`); rows = checkCities(body); }
+    await checkFileOrigin('cities.json', BASE + 'cities.json');
   } catch (err) { fail('cities.json: reachable', err.message); }
 
   try {
@@ -191,6 +224,68 @@ async function checkApi() {
     if (res.status === 404) { pass('unknown slug', 'HTTP 404, as the not-found state expects'); }
     else { fail('unknown slug', `expected HTTP 404, got ${res.status}`); }
   } catch (err) { fail('unknown slug', err.message); }
+}
+
+/* ---------- 1b. the forecast upstream ---------- */
+
+/* Open-Meteo is the app's second permitted origin. It has to clear the same two bars as
+   the first: a permissive CORS header, and a shape normalize.forecast still understands. */
+async function checkForecast() {
+  const wmoKeys = new Set(Object.keys(wmoMapKeys()).map(Number));
+  const url = `${METEO}?latitude=41.7225&longitude=44.7925` +
+    '&daily=weather_code,temperature_2m_max,temperature_2m_min,' +
+    'precipitation_probability_max,precipitation_sum,uv_index_max,sunrise,sunset' +
+    '&timezone=Asia%2FTbilisi&forecast_days=7&temperature_unit=celsius' +
+    '&precipitation_unit=mm&timeformat=iso8601';
+
+  try {
+    const { res, acao, body } = await getJson(url);
+    if (!res.ok) { fail('open-meteo: reachable', `HTTP ${res.status}`); return; }
+    pass('open-meteo: reachable', `HTTP ${res.status} over https:`);
+    checkCors('open-meteo', acao);
+    await checkFileOrigin('open-meteo', url);
+
+    const daily = body?.daily;
+    if (!daily || !Array.isArray(daily.time)) {
+      fail('open-meteo: shape', 'no daily.time array');
+      return;
+    }
+    pass('open-meteo: shape', `${daily.time.length} days under .daily`);
+
+    const problems = [];
+    for (const field of ['weather_code', 'temperature_2m_max', 'temperature_2m_min',
+      'precipitation_probability_max', 'sunrise', 'sunset']) {
+      if (!Array.isArray(daily[field])) { problems.push(`daily.${field} is missing`); }
+      else if (daily[field].length !== daily.time.length) {
+        problems.push(`daily.${field} has ${daily[field].length} entries, expected ${daily.time.length}`);
+      }
+    }
+    for (const code of daily.weather_code ?? []) {
+      if (!wmoKeys.has(code)) { problems.push(`WMO code ${code} is not in weather.js's map`); }
+    }
+    /* Sunrise must be bare local wall clock: forecast.js slices the time out of it and
+       would silently shift the hour if an offset ever appeared. */
+    for (const t of (daily.sunrise ?? []).slice(0, 2)) {
+      if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(t)) {
+        problems.push(`sunrise "${t}" is not bare local wall clock`);
+      }
+    }
+    if (problems.length) {
+      fail('open-meteo: fields', [...new Set(problems)].join('; '));
+    } else {
+      pass('open-meteo: fields', 'every field normalize.forecast reads is present and aligned');
+    }
+  } catch (err) {
+    fail('open-meteo: reachable', err.message);
+  }
+}
+
+function wmoMapKeys() {
+  const source = readFileSync(join(ROOT, 'js', 'weather.js'), 'utf8');
+  const block = source.slice(source.indexOf('var WMO = {'), source.indexOf('function get('));
+  const out = {};
+  for (const match of block.matchAll(/(\d+):\s*'([a-z_]+)'/g)) { out[match[1]] = match[2]; }
+  return out;
 }
 
 /* ---------- 2. static scan of the shipped source ---------- */
@@ -255,6 +350,8 @@ function scanSource() {
 
 scanSource();
 await checkApi();
+await checkForecast();
+checkWmoMap();
 
 let failed = 0;
 console.log('\nWorld Time & Weather - verification\n');

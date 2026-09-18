@@ -181,6 +181,15 @@
     weatherPanel.appendChild(readout);
     root.appendChild(weatherPanel);
 
+    /* The forecast comes from a second upstream and arrives later, so it mounts into a
+       placeholder rather than holding up the rest of the page. */
+    var forecastPanel = el('section', 'panel');
+    forecastPanel.appendChild(el('h3', 'panel__title', 'Next seven days'));
+    var forecastSlot = el('div');
+    forecastPanel.appendChild(forecastSlot);
+    root.appendChild(forecastPanel);
+    WTW.forecast.mount(forecastSlot, city, { settings: settings });
+
     root.appendChild(dstBlock(city));
 
     /* Climate normals are optional in the schema, so the panel is omitted rather than

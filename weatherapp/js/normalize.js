@@ -175,10 +175,56 @@
     };
   }
 
+  /* Open-Meteo's daily forecast. A SECOND upstream shape, so it gets the same treatment
+     as the first: nothing outside this file reads an Open-Meteo field name either.
+
+     It answers with parallel arrays rather than a list of objects, and every array is
+     optional, so each day is assembled by index with a missing value becoming null.
+     Temperatures are metric-only here (we ask for Celsius explicitly), which is why
+     units.js converts them - the same exception as the climate normals. */
+  function forecast(raw) {
+    var daily = raw && raw.daily;
+    if (!daily || !Array.isArray(daily.time) || daily.time.length === 0) { return null; }
+
+    var at = function (array, i) {
+      return Array.isArray(array) && isFinite(array[i]) && array[i] !== null ? array[i] : null;
+    };
+    var text = function (array, i) {
+      return Array.isArray(array) && typeof array[i] === 'string' ? array[i] : null;
+    };
+
+    var days = [];
+    for (var i = 0; i < daily.time.length; i++) {
+      var code = at(daily.weather_code, i);
+      days.push({
+        date: text(daily.time, i),
+        condition: WTW.weather.fromWmo(code),
+        wmoCode: code,
+        tmaxC: at(daily.temperature_2m_max, i),
+        tminC: at(daily.temperature_2m_min, i),
+        precipitationChance: at(daily.precipitation_probability_max, i),
+        precipitationMm: at(daily.precipitation_sum, i),
+        uvIndex: at(daily.uv_index_max, i),
+        /* Sunrise and sunset come back as local wall clock with no offset, because we
+           asked for the city's own zone. Kept as text: they are only ever displayed. */
+        sunrise: text(daily.sunrise, i),
+        sunset: text(daily.sunset, i)
+      });
+    }
+
+    return {
+      timezone: str(raw.timezone),
+      utcOffsetSeconds: num(raw.utc_offset_seconds),
+      elevation: num(raw.elevation),
+      days: days
+    };
+  }
+
   WTW.normalize = {
     cities: cities,
     timezones: timezones,
     city: city,
+    forecast: forecast,
     fold: fold,
     parseInCity: parseInCity
   };

@@ -1,0 +1,64 @@
+/* forecast.css - the seven-day outlook and the sun-times block on a city page.
+   Reads tokens.css; no colour literal here. */
+
+.forecast { display: flex; flex-direction: column; gap: var(--s4); }
+
+.forecast__scroll { overflow-x: auto; margin: 0 calc(var(--s1) * -1); padding: 0 var(--s1); }
+.forecast__scroll:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--r-sm); }
+
+.forecast__days {
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(96px, 1fr);
+  gap: var(--s2); margin: 0; padding: 0; list-style: none; min-width: max-content;
+}
+
+.forecast__day {
+  display: flex; flex-direction: column; align-items: center; gap: var(--s1);
+  padding: var(--s3) var(--s2);
+  border: 1px solid var(--border); border-radius: var(--r-md);
+  background: var(--surface-2); text-align: center;
+}
+.forecast__day--today { border-color: var(--accent); background: var(--accent-soft); }
+
+.forecast__weekday {
+  margin: 0; font-size: .76rem; font-weight: 700;
+  letter-spacing: .03em; text-transform: uppercase; color: var(--text-muted);
+}
+.forecast__day--today .forecast__weekday { color: var(--accent); }
+
+.forecast__icon { width: 34px; height: 34px; color: var(--day); }
+.forecast__icon svg { width: 100%; height: 100%; }
+
+.forecast__temps {
+  margin: 0; display: flex; align-items: baseline; gap: var(--s2);
+  font-family: var(--font-display); font-variant-numeric: tabular-nums;
+}
+.forecast__high { font-size: 1.05rem; font-weight: 700; }
+.forecast__low { font-size: .88rem; color: var(--text-muted); }
+
+.forecast__cond {
+  margin: 0; font-size: .72rem; color: var(--text-muted); line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.forecast__rain {
+  margin: 0; display: inline-flex; align-items: center; gap: 3px;
+  font-size: .74rem; font-variant-numeric: tabular-nums; color: var(--chart-min);
+}
+.forecast__rain svg { width: 13px; height: 13px; }
+/* A dry day should not shout a raindrop at the reader. */
+.forecast__rain--dry { color: var(--text-faint); }
+
+.forecast__sun { display: flex; flex-direction: column; gap: var(--s2); }
+.forecast__subtitle {
+  margin: 0; font-size: .72rem; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase; color: var(--text-muted);
+}
+
+.forecast__source { margin: 0; font-size: .76rem; color: var(--text-faint); }
+.forecast__pending { margin: 0; font-size: .86rem; color: var(--text-muted); }
+
+@media (max-width: 560px) {
+  .forecast__days { grid-auto-columns: minmax(84px, 1fr); }
+  .forecast__day { padding: var(--s2) var(--s1); }
+  .forecast__cond { display: none; }
+}
