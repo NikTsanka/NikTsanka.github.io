@@ -34,14 +34,19 @@
 .state__link { font-size: .88rem; }
 .state--error .state__icon { color: var(--danger); }
 
-.app-footer { padding: var(--s5) var(--s4) var(--s6); text-align: center; color: var(--text-faint); font-size: .8rem; }
+/* One row: attribution on the left, the build credit on the right. They stack and
+   centre only when there is genuinely no room for both. */
+.app-footer {
+  max-width: 1180px; margin: 0 auto;
+  padding: var(--s5) var(--s4) var(--s6);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--s2) var(--s4);
+  color: var(--text-faint); font-size: .8rem;
+}
 .app-footer p { margin: 0; }
 
 /* canka.dev blinking cursor credit - same pattern as the other sites in this repo. */
-.footer-credit {
-  max-width: 1180px; margin: var(--s4) auto 0; padding-top: var(--s4);
-  border-top: 1px solid var(--border); font-size: .82rem;
-}
+.footer-credit { font-size: .82rem; }
 .canka-built-link {
   color: var(--accent); font-weight: 700; text-decoration: none;
   transition: opacity var(--dur) var(--ease);
@@ -157,6 +162,7 @@
 .detail__out { align-self: flex-start; font-size: .88rem; }
 
 @media (max-width: 560px) {
+  .app-footer { justify-content: center; text-align: center; }
   .detail { padding: var(--s4); }
   .detail__title { font-size: 1.4rem; }
   .clock--xl .clock__hm { font-size: 2.8rem; }
