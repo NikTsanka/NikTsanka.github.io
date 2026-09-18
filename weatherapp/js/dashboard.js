@@ -82,20 +82,61 @@
     delete slots[slug];
   }
 
+  /* ---------- lazy mini forecast ---------- */
+
+  /* A forecast per card would be seven extra requests on every load, so each card asks
+     only once it is actually scrolled into view - and shares the same one-hour cache
+     entry the city page uses, so opening a city afterwards costs nothing. */
+  var observer = null;
+  var pendingCities = Object.create(null);
+
+  function fillMiniForecast(card, city) {
+    if (!card.__forecastSlot || card.__forecastDone) { return; }
+    card.__forecastDone = true;
+    api.getForecast(city).then(function (res) {
+      if (!card.isConnected) { return; }
+      var row = WTW.forecast.mini(res.data, { settings: settings.get() });
+      if (row) { card.__forecastSlot.appendChild(row); }
+    }, function () {
+      /* A missing mini forecast is not worth a message on a dashboard card. */
+    });
+  }
+
+  function observeCard(card, city) {
+    if (typeof global.IntersectionObserver !== 'function') {
+      fillMiniForecast(card, city);
+      return;
+    }
+    if (!observer) {
+      observer = new global.IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) { return; }
+          observer.unobserve(entry.target);
+          var pending = pendingCities[entry.target.dataset.slug];
+          if (pending) { fillMiniForecast(entry.target, pending); }
+        });
+      }, { rootMargin: '200px' });
+    }
+    pendingCities[city.slug] = city;
+    observer.observe(card);
+  }
+
   /* ---------- rendering ---------- */
 
   function loadCity(slug) {
     fill(slug, ui.skeletonCard());
     return api.getCity(slug).then(function (res) {
       if (slugs.indexOf(slug) < 0) { return; }
-      fill(slug, ui.card(res.data, {
+      var card = ui.card(res.data, {
         settings: settings.get(),
         source: res.source,
         isFirst: slugs.indexOf(slug) === 0,
         isLast: slugs.indexOf(slug) === slugs.length - 1,
         onRemove: remove,
         onMove: move
-      }));
+      });
+      fill(slug, card);
+      observeCard(card, res.data);
     }, function (err) {
       if (slugs.indexOf(slug) < 0) { return; }
       var name = index && index.bySlug[slug] ? index.bySlug[slug].name : slug;

@@ -224,7 +224,14 @@ third of the world and the wrong column would be compared. The comparison is mad
 Celsius and then stated in the chosen unit, because a degree of difference is a different
 size in Fahrenheit.
 
-It is fetched **only on a city page**, one request at a time. Putting it on the dashboard
+### On the dashboard
+
+Each card carries a three-day strip, but it is **lazy**: an `IntersectionObserver` waits
+until the card is actually scrolled into view before asking. A forecast per card up front
+would be seven extra requests on every load; on a short window only the visible cards ask,
+and the rest follow as you scroll. Cards share the same one-hour cache entry the city page
+uses, so opening a city after seeing its card costs nothing. If the request fails the strip
+is simply absent — a dashboard card is no place for an error message. Putting it on the dashboard
 would mean seven extra requests on every load.
 
 ## Endpoints used
@@ -326,6 +333,9 @@ path segment starting with `_`.
 - **The chart tooltip is pointer-only.** It is an enhancement for mouse and touch; the
   visually-hidden table is the accessible route to the same numbers, so the tooltip
   deliberately adds no extra tab stops.
+- **The card strips need `IntersectionObserver`.** Where it is missing the strip loads
+  immediately instead, which is the old seven-requests behaviour; every target browser has
+  had it for years.
 - **The planner plans across your dashboard cities**, not an independent selection. Add or
   remove cities from the search box and the open planner updates in place.
 - **The planner grid is always 24-hour**, regardless of the 12/24-hour setting: a

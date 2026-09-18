@@ -159,6 +159,28 @@
     return box;
   }
 
+  /* The three-day strip on a dashboard card. Deliberately tiny: a weekday initial, an
+     icon and the high. Anything more competes with the clock, which is the card's hero. */
+  function mini(forecast, options) {
+    var opts = options || {};
+    var unit = (opts.settings || {}).temperatureUnit;
+    if (!forecast || !Array.isArray(forecast.days) || forecast.days.length < 2) { return null; }
+
+    var row = el('ul', 'card__forecast');
+    forecast.days.slice(1, 4).forEach(function (day, i) {
+      var item = el('li', 'card__forecast-day');
+      item.appendChild(el('span', 'card__forecast-day-name', weekday(day.date, i + 1)));
+      var icon = el('span', 'card__forecast-icon');
+      icon.appendChild(ui.rawSvg(weather.icon(day.condition, true)));
+      item.appendChild(icon);
+      item.appendChild(el('span', 'card__forecast-temp', temperature(day.tmaxC, unit)));
+      item.setAttribute('aria-label', dayLabel(day.date) + ': ' + weather.label(day.condition) +
+        ', high ' + temperature(day.tmaxC, unit));
+      row.appendChild(item);
+    });
+    return row;
+  }
+
   /* Mounts into a placeholder so the detail view can render synchronously and fill in
      when the forecast lands. A failure leaves a quiet line, not a red error: the forecast
      is an extra, and the page is still useful without it. */
@@ -192,6 +214,7 @@
 
   WTW.forecast = {
     render: render,
+    mini: mini,
     mount: mount,
     weekday: weekday,
     clockText: clockText,

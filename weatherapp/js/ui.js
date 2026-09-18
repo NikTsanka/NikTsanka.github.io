@@ -228,6 +228,11 @@
     }
     if (actions.firstChild) { root.appendChild(actions); }
 
+    /* Filled later, only if the card is actually scrolled into view. */
+    var forecastSlot = el('div', 'card__forecast-slot');
+    root.insertBefore(forecastSlot, meta.nextSibling);
+    root.__forecastSlot = forecastSlot;
+
     root.__clock = handle;
     return root;
   }

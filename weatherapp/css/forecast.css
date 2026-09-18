@@ -87,3 +87,23 @@
   .forecast__day { padding: var(--s2) var(--s1); }
   .forecast__cond { display: none; }
 }
+
+/* ---------- the three-day strip on a dashboard card ---------- */
+
+.card__forecast-slot:empty { display: none; }
+.card__forecast {
+  display: flex; gap: var(--s1); margin: var(--s1) 0 0; padding: 0; list-style: none;
+}
+.card__forecast-day {
+  flex: 1 1 0; display: flex; align-items: center; justify-content: center; gap: 3px;
+  padding: 3px var(--s1); border-radius: var(--r-sm);
+  background: var(--surface-2); font-size: .72rem; color: var(--text-muted);
+}
+.card__forecast-day-name { font-weight: 700; }
+.card__forecast-icon { display: grid; place-items: center; width: 15px; height: 15px; color: var(--day); }
+.card__forecast-icon svg { width: 100%; height: 100%; }
+.card__forecast-temp { font-variant-numeric: tabular-nums; color: var(--text); font-weight: 500; }
+
+@media (max-width: 380px) {
+  .card__forecast-day-name { display: none; }
+}
