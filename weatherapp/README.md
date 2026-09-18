@@ -175,10 +175,19 @@ conversion is unavoidable; it happens in `js/units.js` and nowhere else.
 
 Because every city's day is already laid on one shared timeline, the best meeting window is
 a counting problem: for each column, how many cities are inside their own working hours?
-The planner states the answer in a sentence and rings the winning columns. Ties are kept as
-a **run** rather than collapsed to one hour — "10:00 to 17:00" is more useful than "10:00" —
-and a scattered tie loses to a genuine unbroken window. If nobody overlaps at all it says
-so and suggests widening the working day rather than showing an empty result.
+The planner states the answer in a sentence and rings the winning columns. Consecutive
+columns are reported as one window — "10:00 to 17:00" is more useful than eight separate
+hours — and the longest window leads.
+
+**Every tied window is shown, not just the first.** Six cities across Europe, the US and
+Japan typically produce two equally good answers: one that leaves New York asleep at 04:00
+and one that leaves Tokyo up at 22:00. Showing only the earlier of them made the planner
+look arbitrary — adding a seventh city would flip the answer with no explanation — so all
+of them are ringed and the sentence says *"17:00 works equally well"*. Which trade-off is
+acceptable is the reader's call, not the app's.
+
+If nobody overlaps at all it says so and suggests widening the working day rather than
+showing an empty result.
 
 ## Air quality
 

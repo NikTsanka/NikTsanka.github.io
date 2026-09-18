@@ -4,8 +4,11 @@
    is a counting problem: for each column, how many cities are inside their own working
    hours? The best columns are the ones with the highest count.
 
-   Ties are kept as a run rather than collapsed to a single hour - "13:00 to 16:00" is a
-   more useful answer than "13:00", and a caller who wants one hour can take the first. */
+   TIES ARE REPORTED, NOT HIDDEN. Six cities across Europe, the US and Japan typically
+   produce two equally good windows - one that leaves New York asleep and one that leaves
+   Tokyo up late - and silently picking the earlier of them made the planner look
+   arbitrary: adding a seventh city would flip the answer with no explanation. Every window
+   at the top count is returned and marked, longest run first. */
 (function (global) {
   'use strict';
 
@@ -13,8 +16,19 @@
 
   function pad(n) { return (n < 10 ? '0' : '') + n; }
 
-  /* hoursByCity[city][column] is that city's local hour in that column, or null.
-     Returns the longest run of columns that share the highest count. */
+  /* Consecutive columns are one window; "10:00 to 17:00" beats listing eight hours. */
+  function runsOf(columns) {
+    var runs = [];
+    var run = [];
+    for (var i = 0; i < columns.length; i++) {
+      if (run.length && columns[i] === columns[i - 1] + 1) { run.push(columns[i]); }
+      else { if (run.length) { runs.push(run); } run = [columns[i]]; }
+    }
+    if (run.length) { runs.push(run); }
+    return runs;
+  }
+
+  /* hoursByCity[city][column] is that city's local hour in that column, or null. */
   function best(hoursByCity, startH, endH) {
     var cities = hoursByCity.length;
     if (cities === 0) { return null; }
@@ -32,21 +46,30 @@
     }
 
     var top = Math.max.apply(null, counts);
-    if (top === 0) { return { columns: [], count: 0, total: cities, counts: counts }; }
-
-    /* The longest unbroken run at the top count, so a scattered tie does not win over a
-       genuine window. */
-    var bestRun = [];
-    var run = [];
-    for (c = 0; c < columns; c++) {
-      if (counts[c] === top) {
-        run.push(c);
-        if (run.length > bestRun.length) { bestRun = run.slice(); }
-      } else {
-        run = [];
-      }
+    if (top === 0) {
+      return { columns: [], runs: [], count: 0, total: cities, counts: counts };
     }
-    return { columns: bestRun, count: top, total: cities, counts: counts };
+
+    var winning = [];
+    for (c = 0; c < columns; c++) {
+      if (counts[c] === top) { winning.push(c); }
+    }
+
+    /* A longer window is genuinely more useful than a single hour, so it leads; equal
+       runs keep their natural order through the day. */
+    var runs = runsOf(winning).sort(function (a, b) {
+      return (b.length - a.length) || (a[0] - b[0]);
+    });
+
+    return { columns: winning, runs: runs, count: top, total: cities, counts: counts };
+  }
+
+  function label(run) {
+    var first = run[0];
+    var last = run[run.length - 1];
+    return run.length === 1
+      ? pad(first) + ':00'
+      : pad(first) + ':00 to ' + pad((last + 1) % 24) + ':00';
   }
 
   /* One plain sentence. It names the reference city because the columns are its hours. */
@@ -57,21 +80,30 @@
         'or accept that someone will be up late.';
     }
 
-    var first = result.columns[0];
-    var last = result.columns[result.columns.length - 1];
-    var window = result.columns.length === 1
-      ? pad(first) + ':00'
-      : pad(first) + ':00 to ' + pad((last + 1) % 24) + ':00';
-
     var who;
     if (result.total === 1) { who = 'the only city is'; }
     else if (result.count === result.total) { who = 'all ' + result.total + ' cities are'; }
     else if (result.count === 1) { who = 'one of ' + result.total + ' cities is'; }
     else { who = result.count + ' of ' + result.total + ' cities are'; }
 
-    return 'Best overlap: ' + window + ' in ' + referenceName + ', when ' + who +
-      ' inside working hours.';
+    var sentence = 'Best overlap: ' + label(result.runs[0]) + ' in ' + referenceName +
+      ', when ' + who + ' inside working hours.';
+
+    var others = result.runs.slice(1);
+    if (others.length === 0) { return sentence; }
+
+    /* Listing every tie would be noise; naming two and counting the rest is enough to
+       show that the first was a choice among equals rather than the only answer. */
+    var parts = others.slice(0, 2).map(label);
+    var extra = others.length - parts.length;
+    if (extra > 0) { parts.push(extra + ' other window' + (extra === 1 ? '' : 's')); }
+
+    var list = parts.length === 1
+      ? parts[0]
+      : parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1];
+
+    return sentence + ' ' + list + (parts.length === 1 ? ' works' : ' work') + ' equally well.';
   }
 
-  WTW.overlap = { best: best, describe: describe };
+  WTW.overlap = { best: best, describe: describe, label: label };
 })(typeof window !== 'undefined' ? window : globalThis);
