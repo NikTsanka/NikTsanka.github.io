@@ -155,8 +155,8 @@
     head.appendChild(headRow);
     table.appendChild(head);
 
-    /* Every cell's local time, computed once and shared by the rows and the overlap
-       search below - the same numbers must drive both or they could disagree. */
+    /* Every cell's local time, computed once. partsIn caches its formatter, so this is
+       one Intl construction per zone rather than one per cell. */
     var matrix = cities.map(function (city) {
       var cells = [];
       for (var h = 0; h < 24; h++) {
@@ -165,23 +165,15 @@
       return cells;
     });
 
-    var overlap = WTW.overlap.best(
-      matrix.map(function (cells) { return cells.map(function (c) { return c.hour; }); }),
-      startH, endH);
-    var bestColumns = (overlap && overlap.columns) || [];
-    for (var b = 0; b < bestColumns.length; b++) {
-      headRow.children[bestColumns[b] + 1].classList.add('grid__hour--best');
-    }
-
     var body = el('tbody');
     cities.forEach(function (city, i) {
-      body.appendChild(cityRow(city, base, matrix[i], refParts, refOffset, startH, endH, bestColumns));
+      body.appendChild(cityRow(city, base, matrix[i], refParts, refOffset, startH, endH));
     });
     table.appendChild(body);
-    return { table: table, overlap: overlap, referenceName: refCity.name };
+    return table;
   }
 
-  function cityRow(city, base, cells, refParts, refOffset, startH, endH, bestColumns) {
+  function cityRow(city, base, cells, refParts, refOffset, startH, endH) {
     var row = el('tr');
     var here = partsIn(city.timezone, base);
     var offset = clock.offsetAt(city.timezone, new Date(base));
@@ -206,8 +198,7 @@
     for (var h = 0; h < 24; h++) {
       var cellParts = cells[h];
       var band = bandFor(cellParts.hour, startH, endH);
-      var cell = el('td', 'cell cell--' + band +
-        (bestColumns.indexOf(h) >= 0 ? ' cell--best' : ''), pad(cellParts.hour));
+      var cell = el('td', 'cell cell--' + band, pad(cellParts.hour));
       /* Non-integer offsets mean the hour number alone hides the minutes, so the exact
          local time goes in the accessible name and the tooltip. */
       cell.title = city.name + ' ' + cellParts.hhmm + ' (' + BAND_LABEL[band] + ')';
@@ -264,20 +255,11 @@
 
     section.appendChild(controls(state, update));
 
-    var built = grid(state);
-
-    var summary = WTW.overlap.describe(built.overlap, built.referenceName);
-    if (summary) {
-      var line = el('p', 'planner__overlap' + (built.overlap.count === 0 ? ' planner__overlap--none' : ''), summary);
-      line.setAttribute('role', 'status');
-      section.appendChild(line);
-    }
-
     var scroller = el('div', 'grid__scroll');
     scroller.setAttribute('role', 'region');
     scroller.setAttribute('aria-label', 'Hour-by-hour comparison, scrolls horizontally');
     scroller.tabIndex = 0;
-    scroller.appendChild(built.table);
+    scroller.appendChild(grid(state));
     section.appendChild(scroller);
     section.appendChild(legend());
 

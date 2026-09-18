@@ -36,7 +36,7 @@ everything it owns lives under `weatherapp/` and it writes nothing at the reposi
 5. **Hard-refresh** (`Ctrl+Shift+R`, or `Cmd+Shift+R` on macOS). The Pages CDN caches
    assets for roughly 10 minutes, so a fresh deploy can otherwise serve the old CSS or JS.
 
-Local assets carry a manual version query (`./css/styles.css?v=8`). Bump the `v` value
+Local assets carry a manual version query (`./css/styles.css?v=9`). Bump the `v` value
 when you change a file and want to force every visitor past that CDN cache.
 
 A `.nojekyll` file already exists at the repository root, so Jekyll does not process the
@@ -90,9 +90,8 @@ an IIFE under `'use strict'` that attaches to the single global `window.WTW`.
 | 15b | `js/hourly.js` | `WTW.hourly` — the next 24 hours as a sparkline | `ui`, `units`, `clock` |
 | 15c | `js/forecast.js` | `WTW.forecast` — the seven-day outlook and sun times | `ui`, `units`, `weather`, `hourly`, `api` |
 | 15d | `js/timemath.js` | `WTW.timemath` — wall clock to instant, in a named zone | `clock` |
-| 15e | `js/overlap.js` | `WTW.overlap` — the best shared working window | — |
 | 15f | `js/air.js` | `WTW.air` — current air quality and its banding | `ui`, `api` |
-| 16 | `js/planner.js` | `WTW.planner` — the meeting planner | `ui`, `clock`, `timemath`, `overlap` |
+| 16 | `js/planner.js` | `WTW.planner` — the meeting planner | `ui`, `clock`, `timemath` |
 | 17 | `js/zones.js` | `WTW.zones` — the time-zone browser | `ui`, `clock`, `units` |
 | 18 | `js/app.js` | bootstrap and event wiring | everything above |
 
@@ -170,44 +169,6 @@ screen readers rely on.
 
 `tmax` / `tmin` / `prcp` are metric-only in the API, so this is the one place unit
 conversion is unavoidable; it happens in `js/units.js` and nowhere else.
-
-### When can we all talk?
-
-Because every city's day is already laid on one shared timeline, the best meeting window is
-a counting problem: for each column, how many cities are inside their own working hours?
-The planner states the answer in a sentence and rings the winning columns. Consecutive
-columns are reported as one window — "10:00 to 17:00" is more useful than eight separate
-hours — and the longest window leads.
-
-**Every tied window is shown, not just the first.** Six cities across Europe, the US and
-Japan typically produce two equally good answers: one that leaves New York asleep at 04:00
-and one that leaves Tokyo up at 22:00. Showing only the earlier of them made the planner
-look arbitrary — adding a seventh city would flip the answer with no explanation — so all
-of them are ringed and the sentence says *"17:00 works equally well"*. Which trade-off is
-acceptable is the reader's call, not the app's.
-
-If nobody overlaps at all it says so and suggests widening the working day rather than
-showing an empty result.
-
-## Air quality
-
-From `air-quality-api.open-meteo.com` — same operator as the forecast, same keyless HTTPS
-and `Access-Control-Allow-Origin: *`. It is the **third and last** permitted origin.
-
-The banding follows the European AQI because its scale is fixed and published (0–20 good,
-20–40 fair, and so on past 100). The raw index is always printed beside the word: *"Fair"*
-alone is an opinion, the number is the fact. A failure leaves nothing behind — no block, no
-message, and the empty slot collapses to zero height.
-
-## Installing it
-
-`site.webmanifest` gives the app a name, an icon and a theme colour when it is added to a
-home screen. Its `scope` and `start_url` are **relative**, so an installed copy claims
-`/weatherapp/` and nothing else on `niktsanka.github.io`.
-
-There is still **no service worker**, deliberately. On a shared domain a wrong scope would
-hijack the sibling sites outright, which is a much worse failure than having no offline
-mode.
 
 ## The time-zone browser
 
