@@ -21,8 +21,18 @@
     return slug ? '#city=' + encodeURIComponent(slug) : '';
   }
 
+  var VIEWS = ['planner', 'zones'];
+
+  function hashForView(name) {
+    return VIEWS.indexOf(name) >= 0 ? '#' + name : '';
+  }
+
   function parse() {
     var hash = global.location.hash || '';
+
+    var view = /^#([a-z]+)$/.exec(hash);
+    if (view && VIEWS.indexOf(view[1]) >= 0) { return { name: view[1], slug: null }; }
+
     var match = /^#city=(.+)$/.exec(hash);
     if (match) {
       var slug = decode(match[1]).trim();
@@ -45,8 +55,10 @@
   }
 
   WTW.router = {
+    VIEWS: VIEWS,
     route: parse,
     hashFor: hashFor,
+    hashForView: hashForView,
 
     /* Setting location.hash is the only navigation primitive used here. */
     go: function (slug) {

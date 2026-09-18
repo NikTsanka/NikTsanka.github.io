@@ -10,8 +10,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap">
-  <link rel="stylesheet" href="./css/styles.css?v=2">
-  <link rel="stylesheet" href="./css/views.css?v=2">
+  <link rel="stylesheet" href="./css/tokens.css?v=3">
+  <link rel="stylesheet" href="./css/styles.css?v=3">
+  <link rel="stylesheet" href="./css/views.css?v=3">
+  <link rel="stylesheet" href="./css/planner.css?v=3">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -65,6 +67,12 @@
       </button>
       <ul id="search-results" class="search__results is-hidden" role="listbox" aria-label="City search results"></ul>
     </div>
+
+    <nav class="tabs" aria-label="Views">
+      <a class="tabs__link" id="tab-dashboard" href="#">Cities</a>
+      <a class="tabs__link" id="tab-planner" href="#planner">Planner</a>
+      <a class="tabs__link" id="tab-zones" href="#zones">Time zones</a>
+    </nav>
   </header>
 
   <div id="notice-area" class="notice-area" aria-live="polite"></div>
@@ -80,6 +88,8 @@
     </section>
 
     <div id="detail-root"></div>
+    <div id="planner-root"></div>
+    <div id="zones-root"></div>
   </main>
 
   <footer class="app-footer">
@@ -91,20 +101,22 @@
 
   <!-- Classic scripts, explicit load order. No ES modules: a module script is blocked
        over file:// (origin null), and this app must run from a double-clicked file. -->
-  <script defer src="./data/fixtures.js?v=2"></script>
-  <script defer src="./js/storage.js?v=2"></script>
-  <script defer src="./js/cache.js?v=2"></script>
-  <script defer src="./js/units.js?v=2"></script>
-  <script defer src="./js/weather.js?v=2"></script>
-  <script defer src="./js/normalize.js?v=2"></script>
-  <script defer src="./js/api.js?v=2"></script>
-  <script defer src="./js/clock.js?v=2"></script>
-  <script defer src="./js/settings.js?v=2"></script>
-  <script defer src="./js/search.js?v=2"></script>
-  <script defer src="./js/router.js?v=2"></script>
-  <script defer src="./js/ui.js?v=2"></script>
-  <script defer src="./js/dashboard.js?v=2"></script>
-  <script defer src="./js/detail.js?v=2"></script>
-  <script defer src="./js/app.js?v=2"></script>
+  <script defer src="./data/fixtures.js?v=3"></script>
+  <script defer src="./js/storage.js?v=3"></script>
+  <script defer src="./js/cache.js?v=3"></script>
+  <script defer src="./js/units.js?v=3"></script>
+  <script defer src="./js/weather.js?v=3"></script>
+  <script defer src="./js/normalize.js?v=3"></script>
+  <script defer src="./js/api.js?v=3"></script>
+  <script defer src="./js/clock.js?v=3"></script>
+  <script defer src="./js/settings.js?v=3"></script>
+  <script defer src="./js/search.js?v=3"></script>
+  <script defer src="./js/router.js?v=3"></script>
+  <script defer src="./js/ui.js?v=3"></script>
+  <script defer src="./js/dashboard.js?v=3"></script>
+  <script defer src="./js/detail.js?v=3"></script>
+  <script defer src="./js/planner.js?v=3"></script>
+  <script defer src="./js/zones.js?v=3"></script>
+  <script defer src="./js/app.js?v=3"></script>
 </body>
 </html>

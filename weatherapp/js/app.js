@@ -25,12 +25,56 @@
   }
 
   function showDashboard() {
-    clearDetail();
     detailSlug = null;
     dom.dashboard.hidden = false;
     /* Focus returns to the card that opened the detail view, not to the top of the page. */
     if (lastTrigger) { dashboard.focusCard(lastTrigger); }
     lastTrigger = null;
+  }
+
+  /* ---------- planner and zone browser ---------- */
+
+  function focusTitle(id) {
+    var title = doc.getElementById(id);
+    if (title) { title.focus(); }
+  }
+
+  /* takeFocus is false when the planner is re-rendered because the favourites list
+     changed - the reader is probably still typing in the search box. */
+  function showPlanner(takeFocus) {
+    if (!index) {
+      dom.plannerRoot.appendChild(ui.stateForError({ kind: 'network' }, function () { start(); }));
+      return;
+    }
+    /* The planner compares whatever is on the dashboard, so it needs no picker of its
+       own and no extra requests: cities.json already carries every city's IANA zone. */
+    dom.plannerRoot.textContent = '';
+    WTW.planner.render(dom.plannerRoot, index, dashboard.slugs());
+    if (takeFocus !== false) { focusTitle('planner-title'); }
+  }
+
+  function showZones() {
+    dom.zonesRoot.appendChild(ui.skeletonCard());
+    api.getTimezones().then(function (res) {
+      if (WTW.router.route().name !== 'zones') { return; }
+      WTW.zones.render(dom.zonesRoot, res.data, index);
+      focusTitle('zones-title');
+    }, function (err) {
+      if (WTW.router.route().name !== 'zones') { return; }
+      dom.zonesRoot.textContent = '';
+      dom.zonesRoot.appendChild(ui.stateForError(err, showZones));
+    });
+  }
+
+  function updateTabs(routeName) {
+    var active = routeName === 'planner' ? 'tab-planner'
+      : routeName === 'zones' ? 'tab-zones' : 'tab-dashboard';
+    ['tab-dashboard', 'tab-planner', 'tab-zones'].forEach(function (id) {
+      var tab = doc.getElementById(id);
+      if (!tab) { return; }
+      if (id === active) { tab.setAttribute('aria-current', 'page'); }
+      else { tab.removeAttribute('aria-current'); }
+    });
   }
 
   function showDetail(slug) {
@@ -75,8 +119,22 @@
     if (heading) { heading.tabIndex = -1; heading.focus(); }
   }
 
+  /* Every route starts from a clean slate: the views that are not being shown are emptied
+     rather than hidden, so their clocks are destroyed and nothing keeps ticking off-screen. */
+  function clearViews() {
+    clearDetail();
+    dom.plannerRoot.textContent = '';
+    dom.zonesRoot.textContent = '';
+    dom.dashboard.hidden = true;
+  }
+
   function onRoute(route) {
-    if (route.name === 'city') { showDetail(route.slug); } else { showDashboard(); }
+    clearViews();
+    updateTabs(route.name);
+    if (route.name === 'city') { showDetail(route.slug); }
+    else if (route.name === 'planner') { showPlanner(); }
+    else if (route.name === 'zones') { showZones(); }
+    else { showDashboard(); }
   }
 
   /* ---------- settings panel ---------- */
@@ -102,7 +160,10 @@
      minutes the API would hand back a byte-identical file, so the cache is reused. */
   function refresh() {
     dom.refresh.classList.add('is-busy');
-    var work = detailSlug ? showDetail(detailSlug) : dashboard.loadAll();
+    var view = router.route().name;
+    var work = view === 'city' ? showDetail(detailSlug)
+      : view === 'dashboard' ? dashboard.loadAll()
+        : Promise.resolve();
     var done = function () { dom.refresh.classList.remove('is-busy'); };
     return Promise.resolve(work).then(done, done);
   }
@@ -136,6 +197,8 @@
     dom = {
       dashboard: doc.getElementById('dashboard'),
       detailRoot: doc.getElementById('detail-root'),
+      plannerRoot: doc.getElementById('planner-root'),
+      zonesRoot: doc.getElementById('zones-root'),
       grid: doc.getElementById('card-grid'),
       noticeArea: doc.getElementById('notice-area'),
       refresh: doc.getElementById('refresh-btn'),
@@ -156,6 +219,11 @@
     dom.settingsPanel.appendChild(settings.panel());
     settings.subscribe(onSettingsChange);
 
+    /* Adding or removing a city while the planner is open must update the planner. */
+    dashboard.onChange(function () {
+      if (router.route().name === 'planner') { showPlanner(false); }
+    });
+
     WTW.search.bind({
       list: function () { return index ? index.list : null; },
       isAdded: function (slug) { return dashboard.has(slug); },
@@ -174,7 +242,7 @@
     doc.addEventListener('keydown', function (event) {
       if (event.key !== 'Escape') { return; }
       if (!dom.settingsPanel.hidden) { toggleSettings(false); dom.settingsBtn.focus(); return; }
-      if (detailSlug) { router.go(null); }
+      if (router.route().name !== 'dashboard') { router.go(null); }
     });
 
     doc.addEventListener('click', function (event) {

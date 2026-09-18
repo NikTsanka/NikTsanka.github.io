@@ -19,6 +19,15 @@
   var index = null;
   var slots = Object.create(null);
   var lastRefresh = null;
+  var changeListeners = [];
+
+  /* The favourites list is shared state: the planner plans across it, so anything that
+     mutates it has to say so or the planner silently shows a stale set of cities. */
+  function emitChange() {
+    for (var i = 0; i < changeListeners.length; i++) {
+      try { changeListeners[i](slugs.slice()); } catch (err) { /* keep going */ }
+    }
+  }
 
   function cssEscape(value) {
     return typeof global.CSS !== 'undefined' && global.CSS.escape
@@ -142,6 +151,7 @@
         stateArea.textContent = '';
         slugs = DEFAULT_SLUGS.slice();
         save();
+        emitChange();
         loadAll();
       }
     }));
@@ -154,6 +164,7 @@
     slugs.push(slug);
     save();
     stateArea.textContent = '';
+    emitChange();
     loadCity(slug).then(reorderDom);
   }
 
@@ -164,6 +175,7 @@
     save();
     dropSlot(slug);
     reorderDom();
+    emitChange();
     if (slugs.length === 0) { showEmpty(); }
   }
 
@@ -174,6 +186,7 @@
     slugs.splice(to, 0, slugs.splice(from, 1)[0]);
     save();
     reorderDom();
+    emitChange();
     /* Focus follows the card that moved, so a keyboard reorder can continue. */
     focusCard(slug);
   }
@@ -196,6 +209,7 @@
     },
 
     setIndex: function (value) { index = value; },
+    onChange: function (fn) { changeListeners.push(fn); },
     slugs: function () { return slugs.slice(); },
     has: function (slug) { return slugs.indexOf(slug) >= 0; },
     loadAll: loadAll,

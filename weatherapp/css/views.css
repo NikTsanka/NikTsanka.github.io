@@ -97,7 +97,7 @@
   margin: 0; font-family: var(--font-display); font-size: 1.7rem;
   font-weight: 700; letter-spacing: -.02em;
 }
-.detail__title:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+.detail__title:focus { outline: none; }
 .detail__zone { margin: 0; font-size: .86rem; color: var(--text-muted); overflow-wrap: anywhere; }
 
 .clock--xl .clock__hm { font-size: 4rem; }

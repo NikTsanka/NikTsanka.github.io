@@ -1,0 +1,150 @@
+/* planner.css - the view tabs, the meeting planner grid and the zone browser.
+   Third stylesheet only because each file is held under the ~300 line ceiling; it uses
+   the same tokens and declares no colour literal of its own. */
+
+/* ---------- view tabs ---------- */
+
+.tabs {
+  max-width: 1180px; margin: 0 auto;
+  display: flex; gap: 2px; padding: 2px;
+  border: 1px solid var(--border); border-radius: var(--r-md);
+  background: var(--surface-2); width: fit-content;
+}
+.tabs__link {
+  padding: var(--s1) var(--s4); border-radius: 9px;
+  font-size: .86rem; font-weight: 500; text-decoration: none; color: var(--text-muted);
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.tabs__link:hover { color: var(--text); }
+.tabs__link[aria-current="page"] {
+  background: var(--accent); color: var(--accent-text); font-weight: 700;
+}
+
+/* ---------- shared view chrome ---------- */
+
+.view { display: flex; flex-direction: column; gap: var(--s4); }
+.view__title {
+  margin: 0; font-family: var(--font-display); font-size: 1.4rem;
+  font-weight: 700; letter-spacing: -.02em;
+}
+/* These headings are focused programmatically after a route change so a screen
+   reader announces the new view. They are not in the tab order, so a ring here
+   signals nothing to a keyboard user and reads as a text input to everyone else. */
+.view__title:focus { outline: none; }
+.view__lede { margin: calc(var(--s3) * -1) 0 0; max-width: 62ch; color: var(--text-muted); font-size: .9rem; }
+
+/* ---------- planner controls ---------- */
+
+.planner__controls {
+  display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--s3);
+  padding: var(--s4); border: 1px solid var(--border); border-radius: var(--r-md);
+  background: var(--surface-solid);
+}
+.field { display: flex; flex-direction: column; gap: var(--s1); }
+.field__label {
+  font-size: .72rem; font-weight: 700; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--text-muted);
+}
+.field__input {
+  padding: var(--s2) var(--s3); font: inherit; font-size: .9rem; color: var(--text);
+  border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--surface-2);
+}
+.field__input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
+.btn--quiet {
+  background: var(--surface-2); color: var(--text); border-color: var(--border); font-weight: 500;
+}
+.btn--quiet:hover { background: var(--surface); border-color: var(--border-strong); }
+
+/* ---------- the hour grid ---------- */
+
+.grid__scroll {
+  overflow-x: auto; border: 1px solid var(--border);
+  border-radius: var(--r-md); background: var(--surface-solid);
+}
+.grid__scroll:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.grid { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+.grid__caption {
+  padding: var(--s3) var(--s4); text-align: left;
+  font-size: .84rem; color: var(--text-muted); border-bottom: 1px solid var(--border);
+}
+.grid__corner, .grid__city {
+  position: sticky; left: 0; z-index: 2;
+  min-width: 190px; padding: var(--s2) var(--s3); text-align: left;
+  background: var(--surface-solid); border-right: 1px solid var(--border);
+}
+.grid__corner { font-size: .72rem; letter-spacing: .04em; text-transform: uppercase; color: var(--text-muted); }
+.grid__hour {
+  width: 34px; padding: var(--s1) 0; font-size: .7rem; font-weight: 500;
+  color: var(--text-faint); text-align: center;
+}
+.grid tbody tr + tr .grid__city, .grid tbody tr + tr .cell { border-top: 1px solid var(--border); }
+
+.grid__city { font-weight: 400; }
+.grid__city-name { display: block; font-weight: 700; font-size: .92rem; }
+.grid__city-time { display: block; font-size: .82rem; color: var(--text); }
+.grid__city-meta { display: block; font-size: .74rem; color: var(--text-muted); }
+.grid__day {
+  margin-left: var(--s1); padding: 0 var(--s1); border-radius: var(--r-pill);
+  font-size: .7rem; font-weight: 700;
+  background: var(--warn-soft); color: var(--warn);
+}
+
+.cell {
+  width: 34px; padding: var(--s2) 0; text-align: center;
+  font-size: .78rem; font-weight: 500;
+}
+.cell--night   { background: var(--band-night-bg);   color: var(--band-night-fg); }
+.cell--morning { background: var(--band-morning-bg); color: var(--band-morning-fg); }
+.cell--work    { background: var(--band-work-bg);    color: var(--band-work-fg); font-weight: 700; }
+.cell--evening { background: var(--band-evening-bg); color: var(--band-evening-fg); }
+/* A zone whose offset is not a whole hour - the number shown is the hour it starts in. */
+.cell--offbeat { font-style: italic; }
+
+.legend { display: flex; flex-wrap: wrap; gap: var(--s4); margin: 0; padding: 0; list-style: none; }
+.legend__item { display: flex; align-items: center; gap: var(--s2); font-size: .8rem; color: var(--text-muted); }
+.legend__swatch { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--border); }
+.legend__swatch--night   { background: var(--band-night-bg); }
+.legend__swatch--morning { background: var(--band-morning-bg); }
+.legend__swatch--work    { background: var(--band-work-bg); }
+.legend__swatch--evening { background: var(--band-evening-bg); }
+
+/* ---------- zone browser ---------- */
+
+.zones { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.zone { border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--surface-solid); }
+.zone.is-open { border-color: var(--border-strong); }
+
+.zone__toggle {
+  display: flex; align-items: center; gap: var(--s3); width: 100%;
+  padding: var(--s2) var(--s3); font: inherit; text-align: left;
+  border: 0; border-radius: var(--r-sm); background: none; color: var(--text); cursor: pointer;
+}
+.zone__toggle:hover { background: var(--surface-2); }
+.zone__chevron { display: grid; place-items: center; width: 16px; height: 16px; color: var(--text-faint); }
+.zone__chevron svg { width: 100%; height: 100%; transition: transform var(--dur) var(--ease); }
+.zone.is-open .zone__chevron svg { transform: rotate(90deg); }
+.zone__name { flex: 1 1 auto; font-size: .9rem; overflow-wrap: anywhere; }
+.zone__offset { font-variant-numeric: tabular-nums; font-size: .82rem; font-weight: 700; color: var(--accent); }
+.zone__count { min-width: 74px; text-align: right; font-size: .76rem; color: var(--text-faint); }
+
+.zone__cities {
+  margin: 0; padding: var(--s2) var(--s3) var(--s3) var(--s6);
+  list-style: none; display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3);
+  border-top: 1px solid var(--border);
+}
+/* display:flex beats the user agent's [hidden] { display: none }, so a collapsed group
+   would stay on screen with aria-expanded="false" lying about it. */
+.zone__cities[hidden] { display: none; }
+.zone__city { display: inline-flex; align-items: center; gap: var(--s1); font-size: .86rem; text-decoration: none; }
+.zone__city:hover { text-decoration: underline; }
+.zone__flag { font-size: .95rem; }
+
+@media (max-width: 560px) {
+  .tabs { width: 100%; }
+  .tabs__link { flex: 1 1 0; text-align: center; padding: var(--s1) var(--s2); }
+  .planner__controls { padding: var(--s3); gap: var(--s2); }
+  .field { flex: 1 1 140px; }
+  .grid__corner, .grid__city { min-width: 150px; }
+  .zone__count { display: none; }
+}

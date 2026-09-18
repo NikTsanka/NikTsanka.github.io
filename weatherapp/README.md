@@ -6,9 +6,9 @@ JavaScript — no framework, no build step, no bundler, no npm dependency, no CD
 Deployed at <https://niktsanka.github.io/weatherapp/>, and it also runs from a
 double-clicked `index.html` over `file://`.
 
-> **Status:** Phases 1 and 2 are complete - the dashboard, persisted favourites, hash
-> routing, the city detail view and the global settings. The meeting planner and zone
-> browser (Phase 3) and the climate chart (Phase 4) are not built yet.
+> **Status:** Phases 1-3 are complete - the dashboard, persisted favourites, hash routing,
+> the city detail view, the global settings, the meeting planner and the time-zone browser.
+> The climate chart (Phase 4) is not built yet.
 
 ## Running it locally
 
@@ -38,7 +38,7 @@ everything it owns lives under `weatherapp/` and it writes nothing at the reposi
 5. **Hard-refresh** (`Ctrl+Shift+R`, or `Cmd+Shift+R` on macOS). The Pages CDN caches
    assets for roughly 10 minutes, so a fresh deploy can otherwise serve the old CSS or JS.
 
-Local assets carry a manual version query (`./css/styles.css?v=2`). Bump the `v` value
+Local assets carry a manual version query (`./css/styles.css?v=3`). Bump the `v` value
 when you change a file and want to force every visitor past that CDN cache.
 
 A `.nojekyll` file already exists at the repository root, so Jekyll does not process the
@@ -49,17 +49,20 @@ site and no file is dropped for starting with `_`.
 ```
 weatherapp/
   index.html
-  css/styles.css         tokens, layout, header, search, cards
+  css/tokens.css         the palette and scale - the only file with colour literals
+  css/styles.css         base layout, header, search, cards
   css/views.css          states, settings panel, detail view
+  css/planner.css        view tabs, planner grid, zone browser
   data/fixtures.js       real API responses, captured 2026-09-18
   js/…                   see load order below
   tools/verify.mjs       development only — never loaded by the app
   README.md
 ```
 
-Two files deviate from a single `styles.css` and a single `app.js`: the ~300-line ceiling
-applies per file and both had outgrown it, so each was split along its natural seam
-(`views.css`, and `dashboard.js` / `search.js` / `settings.js` / `router.js` / `detail.js`).
+The stylesheet and `app.js` are split rather than single files: the ~300-line ceiling
+applies per file and both had outgrown it, so each was divided along its natural seam
+(`views.css` and `planner.css`; `dashboard.js`, `search.js`, `settings.js`, `router.js`,
+`detail.js`, `planner.js`, `zones.js`).
 
 Scripts are plain `<script defer>` tags, so they execute in document order. Each file is
 an IIFE under `'use strict'` that attaches to the single global `window.WTW`.
@@ -80,7 +83,9 @@ an IIFE under `'use strict'` that attaches to the single global `window.WTW`.
 | 12 | `js/ui.js` | `WTW.ui` — shared DOM primitives, the city card, designed states | `units`, `weather`, `clock`, `router` |
 | 13 | `js/dashboard.js` | `WTW.dashboard` — the favourites list and the card grid | `ui`, `api`, `settings` |
 | 14 | `js/detail.js` | `WTW.detail` — the single-city view and its DST block | `ui`, `clock`, `api` |
-| 15 | `js/app.js` | bootstrap and event wiring | everything above |
+| 15 | `js/planner.js` | `WTW.planner` — the meeting planner and its time maths | `ui`, `clock`, `detail` |
+| 16 | `js/zones.js` | `WTW.zones` — the time-zone browser | `ui`, `clock`, `units` |
+| 17 | `js/app.js` | bootstrap and event wiring | everything above |
 
 **No ES modules.** A module script is blocked over `file://` (origin `null`), and this app
 has to run from a double-clicked file, so there is no `type="module"`, no `import` and no
@@ -107,6 +112,41 @@ The detail view is not modal — it replaces the dashboard — so there is no fo
 wrong. Focus moves to its heading on open, Escape closes it, and focus returns to the card
 that opened it.
 
+## The meeting planner
+
+Three views share the header: **Cities** (`#`), **Planner** (`#planner`) and **Time zones**
+(`#zones`).
+
+The planner compares whatever is on your dashboard, so it needs no picker of its own and
+makes no extra requests — `cities.json` already carries every city's IANA zone. Pick a
+date, a time and which city that time is expressed in; each row then shows that city's
+local time, its UTC offset, the difference from the reference city, and a **+1 day** or
+**−1 day** marker whenever the local date differs.
+
+**Every offset is computed with `Intl` for the date being planned**, never from
+`time.utc_offset_seconds`. That field is the offset *today*: plan a call for a date on the
+other side of a DST boundary and it is wrong by an hour, and wrong differently for each
+city — precisely the mistake a meeting planner exists to prevent. Concretely, London is
+4 hours behind Tbilisi in January and 3 hours behind in July; the planner shows both
+correctly, and there are tests that fail if that ever collapses to one answer.
+
+Each row is a 24-column strip. **A column is one absolute instant**, derived once from the
+reference city's wall clock — that is what makes overlapping working hours line up
+vertically. Cells are coloured night / early morning / working hours / evening, working
+hours default to 09:00–18:00 and are configurable and persisted in `wtw:pref:planner`.
+Non-integer offsets (+05:45 Kathmandu, +09:30 and +10:30 Adelaide, +12:45 Chatham) are
+handled in both the maths and the display; because the hour number alone would hide the
+minutes, those cells are italic and every cell carries the exact local time in its
+`aria-label` and tooltip. The grid is a real `<table>` with row and column headers inside a
+keyboard-scrollable region.
+
+## The time-zone browser
+
+Cities grouped by IANA zone, collapsible with `aria-expanded`, sorted by each zone's
+**current** offset — `timezones.json` carries no offset data at all, so the order is
+computed with `Intl.DateTimeFormat(zone, { timeZoneName: 'longOffset' })`. Roughly half the
+zones are on summer time at any moment, so that order genuinely shifts through the year.
+
 ## Endpoints used
 
 Everything comes from `https://worldtimeweather.com/api/v1/` over HTTPS:
@@ -115,7 +155,7 @@ Everything comes from `https://worldtimeweather.com/api/v1/` over HTTPS:
 |---|---|
 | `cities.json` | the search index (413 cities) |
 | `city/{slug}.json` | one city's time, weather and climate normals |
-| `timezones.json` | the zone browser (Phase 3 — fetched but not yet displayed) |
+| `timezones.json` | the time-zone browser |
 | `api/health.php` | not used by the app; checked by `tools/verify.mjs` |
 
 `index.json` is documentation only. Weather ultimately comes from
@@ -194,6 +234,10 @@ path segment starting with `_`.
 - **`climate_normals` was present on all 413 cities** when the API was surveyed, so the
   absent-normals path has never been exercised against real data. Phase 4 will handle it
   defensively.
+- **The planner plans across your dashboard cities**, not an independent selection. Add or
+  remove cities from the search box and the open planner updates in place.
+- **The planner grid is always 24-hour**, regardless of the 12/24-hour setting: a
+  24-column strip of a day is inherently a 24-hour view.
 - **The January/July offsets are computed with `Intl`, not from the API.**
   `time.utc_offset_seconds` is today's offset and would be wrong across a DST boundary. If
   a browser does not know the zone at all, the API's `winter`/`summer` values are shown
