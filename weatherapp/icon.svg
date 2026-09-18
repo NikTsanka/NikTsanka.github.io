@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="World Time and Weather">
+  <title>World Time &amp; Weather</title>
+  <!--
+    The browser-tab logo. Colour literals live here rather than in tokens.css because a
+    favicon is a standalone document: it never sees the app's stylesheets, and a tab strip
+    can be light or dark, so the mark carries its own background instead of inheriting one.
+
+    Deliberately a plain dial. Earlier drafts added sun rays and a cloud; both turned to
+    mush at 16px, which is the only size that really matters for a tab. The single amber
+    minute hand is the whole weather cue.
+  -->
+  <defs>
+    <linearGradient id="badge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#17304f"/>
+      <stop offset="1" stop-color="#0e1c31"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="14" fill="url(#badge)"/>
+  <circle cx="32" cy="32" r="20.5" fill="none" stroke="#7fc8f0" stroke-width="4.5"/>
+  <path d="M32 32V18.5" stroke="#eef4fb" stroke-width="5" stroke-linecap="round"/>
+  <path d="M32 32l10 7" stroke="#f3a44e" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="32" cy="32" r="3.1" fill="#eef4fb"/>
+</svg>

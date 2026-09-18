@@ -47,6 +47,8 @@ site and no file is dropped for starting with `_`.
 ```
 weatherapp/
   index.html
+  icon.svg               the tab logo (carries its own colours - see the file header)
+  apple-touch-icon.png   180x180 raster for an iOS home screen
   css/tokens.css         the palette and scale - the only file with colour literals
   css/styles.css         base layout, header, search, cards
   css/views.css          states, settings panel, detail view
@@ -289,6 +291,8 @@ path segment starting with `_`.
 - **The app must stay in its own subfolder.** Every path is relative and lowercase, and
   nothing is ever written to the repository root — a root `index.html`, `_config.yml` or
   `404.html` would break the sibling sites.
+- **The logo is a plain dial on purpose.** Sun rays and a cloud were both tried and both
+  turned to mush at 16px, which is the only size a browser tab ever shows.
 - **Country flags render as two letters on Windows.** They are regional-indicator code
   points, which Windows has no glyphs for. This is a platform font gap, not a bug, and it
   is why the country code is not repeated next to the flag.
