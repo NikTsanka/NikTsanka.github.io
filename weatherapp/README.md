@@ -6,9 +6,9 @@ JavaScript — no framework, no build step, no bundler, no npm dependency, no CD
 Deployed at <https://niktsanka.github.io/weatherapp/>, and it also runs from a
 double-clicked `index.html` over `file://`.
 
-> **Status:** Phase 1 (core dashboard) is complete. Favourites, hash routing and the city
-> detail view (Phase 2), the meeting planner and zone browser (Phase 3), and the climate
-> chart (Phase 4) are not built yet.
+> **Status:** Phases 1 and 2 are complete - the dashboard, persisted favourites, hash
+> routing, the city detail view and the global settings. The meeting planner and zone
+> browser (Phase 3) and the climate chart (Phase 4) are not built yet.
 
 ## Running it locally
 
@@ -38,7 +38,7 @@ everything it owns lives under `weatherapp/` and it writes nothing at the reposi
 5. **Hard-refresh** (`Ctrl+Shift+R`, or `Cmd+Shift+R` on macOS). The Pages CDN caches
    assets for roughly 10 minutes, so a fresh deploy can otherwise serve the old CSS or JS.
 
-Local assets carry a manual version query (`./css/styles.css?v=1`). Bump the `v` value
+Local assets carry a manual version query (`./css/styles.css?v=2`). Bump the `v` value
 when you change a file and want to force every visitor past that CDN cache.
 
 A `.nojekyll` file already exists at the repository root, so Jekyll does not process the
@@ -49,12 +49,17 @@ site and no file is dropped for starting with `_`.
 ```
 weatherapp/
   index.html
-  css/styles.css
+  css/styles.css         tokens, layout, header, search, cards
+  css/views.css          states, settings panel, detail view
   data/fixtures.js       real API responses, captured 2026-09-18
   js/…                   see load order below
   tools/verify.mjs       development only — never loaded by the app
   README.md
 ```
+
+Two files deviate from a single `styles.css` and a single `app.js`: the ~300-line ceiling
+applies per file and both had outgrown it, so each was split along its natural seam
+(`views.css`, and `dashboard.js` / `search.js` / `settings.js` / `router.js` / `detail.js`).
 
 Scripts are plain `<script defer>` tags, so they execute in document order. Each file is
 an IIFE under `'use strict'` that attaches to the single global `window.WTW`.
@@ -68,13 +73,39 @@ an IIFE under `'use strict'` that attaches to the single global `window.WTW`.
 | 5 | `js/weather.js` | `WTW.weather` — condition labels and inline SVG icons | — |
 | 6 | `js/normalize.js` | `WTW.normalize` — raw API JSON to the internal model | `weather` |
 | 7 | `js/api.js` | `WTW.api` — all network access and the fallback chain | `cache`, `normalize` |
-| 8 | `js/clock.js` | `WTW.clock` — the single global ticker | `weather` |
-| 9 | `js/ui.js` | `WTW.ui` — DOM construction and search matching | `units`, `weather`, `normalize`, `clock` |
-| 10 | `js/app.js` | bootstrap, visible set, event wiring | everything above |
+| 8 | `js/clock.js` | `WTW.clock` — the single global ticker, and zone-offset maths | `weather` |
+| 9 | `js/settings.js` | `WTW.settings` — the four persisted preferences and their panel | `storage`, `clock` |
+| 10 | `js/search.js` | `WTW.search` — match, rank and drive the search box | `units`, `normalize` |
+| 11 | `js/router.js` | `WTW.router` — hash routing | — |
+| 12 | `js/ui.js` | `WTW.ui` — shared DOM primitives, the city card, designed states | `units`, `weather`, `clock`, `router` |
+| 13 | `js/dashboard.js` | `WTW.dashboard` — the favourites list and the card grid | `ui`, `api`, `settings` |
+| 14 | `js/detail.js` | `WTW.detail` — the single-city view and its DST block | `ui`, `clock`, `api` |
+| 15 | `js/app.js` | bootstrap and event wiring | everything above |
 
 **No ES modules.** A module script is blocked over `file://` (origin `null`), and this app
 has to run from a double-clicked file, so there is no `type="module"`, no `import` and no
 `export` anywhere in the shipped source. `tools/verify.mjs` greps for exactly that.
+
+## Routing, favourites and settings
+
+Links are `#city=<slug>`, driven by `hashchange`. An incoming `?city=<slug>` is normalised
+to the hash form on first load so older links keep working. `pushState` is never called:
+it throws a `SecurityError` on `file://` in Chrome, and one code path has to serve both
+targets. An unknown slug renders a designed "city not found" state with a link back.
+
+Favourites live in `wtw:pref:favourites` — add from the search box, remove and reorder with
+the up/down buttons on each card. No drag-and-drop: it has no keyboard equivalent without a
+second, hidden implementation. The buttons are always visible rather than hover-only, so
+they work on a touch screen.
+
+Settings live in `wtw:pref:settings`: °C/°F, km/h / mph, 24-hour / 12-hour, and
+light / dark / auto. `auto` removes `data-theme` entirely so the `prefers-color-scheme`
+block in the stylesheet takes over. Both `wtw:pref:` keys are deliberately exempt from the
+cache sweep, so bumping the cache version never resets what you chose.
+
+The detail view is not modal — it replaces the dashboard — so there is no focus trap to get
+wrong. Focus moves to its heading on open, Escape closes it, and focus returns to the card
+that opened it.
 
 ## Endpoints used
 
@@ -163,6 +194,10 @@ path segment starting with `_`.
 - **`climate_normals` was present on all 413 cities** when the API was surveyed, so the
   absent-normals path has never been exercised against real data. Phase 4 will handle it
   defensively.
+- **The January/July offsets are computed with `Intl`, not from the API.**
+  `time.utc_offset_seconds` is today's offset and would be wrong across a DST boundary. If
+  a browser does not know the zone at all, the API's `winter`/`summer` values are shown
+  instead and the view says so.
 
 ## Attribution
 

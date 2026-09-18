@@ -1,5 +1,6 @@
-/* ui.js - DOM construction and search matching. Builds nodes, never strings, except for
-   the inline SVG we author ourselves. Nothing here fetches or stores anything. */
+/* ui.js - shared DOM primitives, the city card, skeletons and the designed states.
+   Builds nodes, never strings, except for the inline SVG we author ourselves.
+   Nothing here fetches or stores anything. */
 (function (global) {
   'use strict';
 
@@ -7,9 +8,17 @@
   var doc = global.document;
   var units = WTW.units;
   var weather = WTW.weather;
-  var normalize = WTW.normalize;
 
   var STALE_AFTER_MS = 2 * 60 * 60 * 1000;
+
+  var GLYPH = {
+    close: '<path d="m6 6 12 12M18 6 6 18"/>',
+    up: '<path d="M12 19V5M6 11l6-6 6 6"/>',
+    down: '<path d="M12 5v14M6 13l6 6 6-6"/>',
+    error: '<path d="M12 8v5"/><path d="M12 16.5v.1"/><circle cx="12" cy="12" r="9"/>',
+    empty: '<circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/>',
+    offline: '<path d="M4 8a14 14 0 0 1 16 0M7.5 11.5a9 9 0 0 1 9 0M10.5 15a4.5 4.5 0 0 1 3 0M12 19v.1"/><path d="m3 3 18 18"/>'
+  };
 
   function el(tag, className, text) {
     var node = doc.createElement(tag);
@@ -18,7 +27,15 @@
     return node;
   }
 
-  function svg(markup) {
+  function svg(body) {
+    var holder = el('span');
+    holder.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+      'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ' +
+      'focusable="false">' + body + '</svg>';
+    return holder.firstChild;
+  }
+
+  function rawSvg(markup) {
     var holder = el('span');
     holder.innerHTML = markup;
     return holder.firstChild;
@@ -26,6 +43,16 @@
 
   function chip(text, modifier) {
     return el('span', 'chip' + (modifier ? ' chip--' + modifier : ''), text);
+  }
+
+  function iconButton(glyph, label, onClick, disabled) {
+    var btn = el('button', 'icon-btn icon-btn--bare');
+    btn.type = 'button';
+    btn.setAttribute('aria-label', label);
+    btn.appendChild(svg(glyph));
+    if (disabled) { btn.disabled = true; }
+    btn.addEventListener('click', onClick);
+    return btn;
   }
 
   /* ---------- skeletons ---------- */
@@ -45,19 +72,13 @@
 
   /* ---------- states ---------- */
 
-  var STATE_ICONS = {
-    error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M12 8v5"/><path d="M12 16.5v.1"/><circle cx="12" cy="12" r="9"/></svg>',
-    empty: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg>',
-    offline: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 8a14 14 0 0 1 16 0M7.5 11.5a9 9 0 0 1 9 0M10.5 15a4.5 4.5 0 0 1 3 0M12 19v.1"/><path d="m3 3 18 18"/></svg>'
-  };
-
   function state(options) {
     var opts = options || {};
     var box = el('div', 'state' + (opts.tone ? ' state--' + opts.tone : ''));
     box.setAttribute('role', opts.tone === 'error' ? 'alert' : 'status');
 
     var icon = el('div', 'state__icon');
-    icon.appendChild(svg(STATE_ICONS[opts.icon] || STATE_ICONS.empty));
+    icon.appendChild(svg(GLYPH[opts.icon] || GLYPH.empty));
     box.appendChild(icon);
     box.appendChild(el('h3', 'state__title', opts.title || 'Something went wrong'));
     if (opts.text) { box.appendChild(el('p', 'state__text', opts.text)); }
@@ -68,8 +89,8 @@
       btn.addEventListener('click', opts.onAction);
       box.appendChild(btn);
     }
-    if (opts.linkLabel && opts.linkHref) {
-      var link = el('a', null, opts.linkLabel);
+    if (opts.linkLabel && opts.linkHref !== undefined) {
+      var link = el('a', 'state__link', opts.linkLabel);
       link.href = opts.linkHref;
       box.appendChild(link);
     }
@@ -79,50 +100,45 @@
   /* Maps an api.js error envelope onto a designed state. Every branch has a Retry. */
   function stateForError(error, onRetry) {
     var kind = (error && error.kind) || 'network';
+    var common = { tone: 'error', actionLabel: 'Retry', onAction: onRetry };
+
     if (kind === 'offline') {
-      return state({
-        tone: 'error', icon: 'offline', title: 'You are offline',
-        text: 'Showing nothing rather than something wrong. Reconnect and try again.',
-        actionLabel: 'Retry', onAction: onRetry
-      });
+      common.icon = 'offline';
+      common.title = 'You are offline';
+      common.text = 'Showing nothing rather than something wrong. Reconnect and try again.';
+    } else if (kind === 'notfound') {
+      common.icon = 'error';
+      common.title = 'City not found';
+      common.text = 'The API has no entry with that slug. It may have been renamed.';
+    } else if (kind === 'http') {
+      common.icon = 'error';
+      common.title = 'The API is not answering properly';
+      common.text = (error && error.message) || 'The API returned an error response.';
+    } else {
+      common.icon = 'error';
+      common.title = 'Could not reach the API';
+      common.text = (error && error.message) || 'The request failed.';
     }
-    if (kind === 'notfound') {
-      return state({
-        tone: 'error', icon: 'error', title: 'City not found',
-        text: 'The API has no entry with that slug. It may have been renamed.',
-        actionLabel: 'Retry', onAction: onRetry
-      });
-    }
-    if (kind === 'http') {
-      return state({
-        tone: 'error', icon: 'error', title: 'The API is not answering properly',
-        text: (error && error.message) || 'The API returned an error response.',
-        actionLabel: 'Retry', onAction: onRetry
-      });
-    }
-    return state({
-      tone: 'error', icon: 'error', title: 'Could not reach the API',
-      text: (error && error.message) || 'The request failed.',
-      actionLabel: 'Retry', onAction: onRetry
-    });
+    return state(common);
   }
 
   function notice(text, onDismiss) {
     var box = el('div', 'notice');
     box.appendChild(el('p', null, text));
-    var btn = el('button', 'icon-btn icon-btn--bare', null);
-    btn.type = 'button';
-    btn.setAttribute('aria-label', 'Dismiss this notice');
-    btn.appendChild(svg('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>'));
-    btn.addEventListener('click', function () {
+    box.appendChild(iconButton(GLYPH.close, 'Dismiss this notice', function () {
       box.remove();
       if (typeof onDismiss === 'function') { onDismiss(); }
-    });
-    box.appendChild(btn);
+    }));
     return box;
   }
 
   /* ---------- city card ---------- */
+
+  function sourceChip(source) {
+    if (source === 'stale-cache') { return chip('Cached copy', 'warn'); }
+    if (source === 'fixtures') { return chip('Bundled snapshot', 'warn'); }
+    return null;
+  }
 
   function card(city, options) {
     var opts = options || {};
@@ -133,6 +149,7 @@
     root.dataset.slug = city.slug;
 
     var head = el('div', 'card__head');
+
     /* Regional-indicator pair. Windows has no flag glyphs and falls back to the two
        letters, which is why the country code is not repeated in the line below. */
     var flag = el('span', 'card__flag', units.flag(city.countryCode));
@@ -140,18 +157,15 @@
     head.appendChild(flag);
 
     var names = el('div', 'card__names');
-    names.appendChild(el('h3', 'card__name', city.name));
+    var heading = el('h3', 'card__name');
+    var link = el('a', 'card__link', city.name);
+    link.href = WTW.router.hashFor(city.slug);
+    link.dataset.slug = city.slug;
+    heading.appendChild(link);
+    names.appendChild(heading);
     names.appendChild(el('p', 'card__zone', city.time.timezone || 'Unknown time zone'));
     head.appendChild(names);
 
-    if (typeof opts.onRemove === 'function') {
-      var remove = el('button', 'icon-btn icon-btn--bare card__remove');
-      remove.type = 'button';
-      remove.setAttribute('aria-label', 'Remove ' + city.name);
-      remove.appendChild(svg('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>'));
-      remove.addEventListener('click', function () { opts.onRemove(city.slug); });
-      head.appendChild(remove);
-    }
     root.appendChild(head);
 
     /* Live region announces the minute; clock.js hides the seconds from it. */
@@ -170,21 +184,17 @@
       timezone: city.time.timezone,
       offsetSeconds: city.time.utcOffsetSeconds,
       dateEl: dateLine,
-      onPhase: function (phase) {
-        root.className = 'card card--' + phase;
-      }
+      onPhase: function (phase) { root.className = 'card card--' + phase; }
     });
-    if (handle.degraded) {
-      chips.appendChild(chip('Offset only', 'warn'));
-    }
-    if (opts.source === 'stale-cache') { chips.appendChild(chip('Cached copy', 'warn')); }
-    if (opts.source === 'fixtures') { chips.appendChild(chip('Bundled snapshot', 'warn')); }
+    if (handle.degraded) { chips.appendChild(chip('Offset only', 'warn')); }
+    var srcChip = sourceChip(opts.source);
+    if (srcChip) { chips.appendChild(srcChip); }
     if (isOutOfDate(city)) { chips.appendChild(chip('May be out of date', 'warn')); }
     root.appendChild(chips);
 
     var weatherRow = el('div', 'card__weather');
     var icon = el('div', 'card__icon');
-    icon.appendChild(svg(weather.icon(w && w.condition, w && w.isDay)));
+    icon.appendChild(rawSvg(weather.icon(w && w.condition, w && w.isDay)));
     weatherRow.appendChild(icon);
 
     var readout = el('div');
@@ -201,6 +211,23 @@
     if (age) { meta.appendChild(el('span', null, 'Observed ' + age)); }
     root.appendChild(meta);
 
+    /* Reorder is up/down buttons on purpose: drag-and-drop has no keyboard equivalent
+       without a second, hidden implementation. The row sits at the foot of the card and
+       is always visible - a hover-only control is unreachable on a touch screen, and
+       reserving its width in the header squeezed the time-zone line. */
+    var actions = el('div', 'card__actions');
+    if (typeof opts.onMove === 'function') {
+      actions.appendChild(iconButton(GLYPH.up, 'Move ' + city.name + ' earlier',
+        function () { opts.onMove(city.slug, -1); }, opts.isFirst));
+      actions.appendChild(iconButton(GLYPH.down, 'Move ' + city.name + ' later',
+        function () { opts.onMove(city.slug, 1); }, opts.isLast));
+    }
+    if (typeof opts.onRemove === 'function') {
+      actions.appendChild(iconButton(GLYPH.close, 'Remove ' + city.name,
+        function () { opts.onRemove(city.slug); }));
+    }
+    if (actions.firstChild) { root.appendChild(actions); }
+
     root.__clock = handle;
     return root;
   }
@@ -215,73 +242,19 @@
     return false;
   }
 
-  /* ---------- search ---------- */
-
-  /* Subsequence match: "nyk" finds "New York". Returns the first matching index and how
-     far the match is spread, which is what the ranking below sorts on. */
-  function subsequence(haystack, needle) {
-    var i = 0, j = 0, first = -1, last = -1;
-    while (i < haystack.length && j < needle.length) {
-      if (haystack.charAt(i) === needle.charAt(j)) {
-        if (first < 0) { first = i; }
-        last = i;
-        j++;
-      }
-      i++;
-    }
-    return j === needle.length ? { first: first, spread: last - first } : null;
-  }
-
-  function search(list, query, limit) {
-    var q = normalize.fold(query).replace(/\s+/g, '');
-    if (!q) { return []; }
-    var hits = [];
-    for (var i = 0; i < list.length; i++) {
-      var city = list[i];
-      var m = subsequence(city.foldedName.replace(/\s+/g, ''), q);
-      var viaCode = false;
-      if (!m) {
-        m = subsequence(city.foldedCode, q);
-        viaCode = !!m;
-      }
-      if (m) {
-        hits.push({ city: city, first: m.first + (viaCode ? 100 : 0), spread: m.spread, length: city.name.length });
-      }
-    }
-    hits.sort(function (a, b) {
-      return (a.first - b.first) || (a.spread - b.spread) || (a.length - b.length) ||
-        a.city.name.localeCompare(b.city.name);
-    });
-    return hits.slice(0, limit || 40).map(function (h) { return h.city; });
-  }
-
-  function searchOption(city, id, alreadyAdded) {
-    var li = el('li', 'search__option');
-    li.id = id;
-    li.setAttribute('role', 'option');
-    li.setAttribute('aria-selected', 'false');
-    li.dataset.slug = city.slug;
-
-    var flagEl = el('span', 'search__option__flag', units.flag(city.countryCode));
-    flagEl.setAttribute('aria-hidden', 'true');
-    li.appendChild(flagEl);
-    li.appendChild(el('span', 'search__option__name', city.name + ', ' + city.countryCode));
-    li.appendChild(el('span', 'search__option__zone', city.timezone || ''));
-    if (alreadyAdded) { li.appendChild(el('span', 'search__option__added', 'Added')); }
-    return li;
-  }
-
   WTW.ui = {
+    GLYPH: GLYPH,
     el: el,
     svg: svg,
+    rawSvg: rawSvg,
     chip: chip,
+    iconButton: iconButton,
     card: card,
     skeletonCard: skeletonCard,
     state: state,
     stateForError: stateForError,
+    sourceChip: sourceChip,
     notice: notice,
-    search: search,
-    searchOption: searchOption,
     isOutOfDate: isOutOfDate
   };
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -169,9 +169,6 @@
       hmEl.appendChild(span('clock__colon', ':'));
       hmEl.appendChild(minuteNode);
 
-      var periodEl = null;
-      if (hour12) { periodEl = span('clock__suffix', ''); hmEl.appendChild(periodEl); }
-
       var secEl = span('clock__sec', '');
       secEl.setAttribute('aria-hidden', 'true');
       var secNode = doc.createTextNode('00');
@@ -181,6 +178,11 @@
       container.textContent = '';
       container.appendChild(hmEl);
       container.appendChild(secEl);
+
+      /* AM/PM goes after the seconds so the line reads "11:00:34 AM". It stays outside
+         the aria-hidden seconds so it is still announced with the minute. */
+      var periodEl = null;
+      if (hour12) { periodEl = span('clock__suffix', ''); container.appendChild(periodEl); }
 
       var entry = {
         timezone: opts.timezone,
@@ -224,6 +226,49 @@
     hourIn: function (timezone, date, offsetSeconds) {
       var d = date || new Date();
       return zoneSupported(timezone) ? intlParts(timezone, d).hour24 : offsetParts(offsetSeconds, d).hour24;
+    },
+
+    /* The zone's offset ON A GIVEN DATE, computed by Intl. This is the only correct way
+       to ask the question: the API's utc_offset_seconds is today's offset and would be
+       wrong on the other side of a DST boundary. Returns seconds, or null if the browser
+       does not know the zone. */
+    offsetAt: function (timezone, date) {
+      if (!zoneSupported(timezone)) { return null; }
+      var key = 'o|' + timezone;
+      if (!formatters[key]) {
+        formatters[key] = new Intl.DateTimeFormat('en-GB', {
+          timeZone: timezone, timeZoneName: 'longOffset'
+        });
+      }
+      var parts = formatters[key].formatToParts(date || new Date());
+      var name = '';
+      for (var i = 0; i < parts.length; i++) {
+        if (parts[i].type === 'timeZoneName') { name = parts[i].value; }
+      }
+      /* "GMT" alone means UTC; otherwise "GMT+05:45" / "GMT-03:30". */
+      var m = /GMT([+-])(\d{1,2}):?(\d{2})?/.exec(name);
+      if (!m) { return /GMT/.test(name) ? 0 : null; }
+      var seconds = (parseInt(m[2], 10) * 3600) + (parseInt(m[3] || '0', 10) * 60);
+      return m[1] === '-' ? -seconds : seconds;
+    },
+
+    /* The viewer's own zone, for the DST comparison. Undefined on very old engines. */
+    userTimeZone: function () {
+      try {
+        var tz = new Intl.DateTimeFormat().resolvedOptions().timeZone;
+        return typeof tz === 'string' && tz ? tz : null;
+      } catch (err) { return null; }
+    },
+
+    longDate: function (timezone, date) {
+      if (!zoneSupported(timezone)) { return null; }
+      var key = 'l|' + timezone;
+      if (!formatters[key]) {
+        formatters[key] = new Intl.DateTimeFormat(LOCALE, {
+          timeZone: timezone, weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        });
+      }
+      return formatters[key].format(date || new Date());
     }
   };
 
