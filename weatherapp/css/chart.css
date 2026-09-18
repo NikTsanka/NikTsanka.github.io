@@ -1,0 +1,67 @@
+/* chart.css - the climate-normals figure. Reads tokens.css; no colour literal here. */
+
+.chart { margin: 0; display: flex; flex-direction: column; gap: var(--s3); }
+.chart__caption {
+  order: -1; font-size: .8rem; color: var(--text-muted); font-variant-numeric: tabular-nums;
+}
+.chart__note { margin: 0; font-size: .78rem; color: var(--text-faint); }
+
+.chart__plot { position: relative; }
+.chart__svg { display: block; width: 100%; height: auto; overflow: visible; touch-action: pan-y; }
+
+.chart__grid { stroke: var(--chart-grid); stroke-width: 1; }
+.chart__axis { font-size: 11px; fill: var(--text-faint); font-family: var(--font-ui); }
+.chart__axis--left { text-anchor: end; }
+.chart__axis--right { text-anchor: start; }
+.chart__month {
+  font-size: 11px; fill: var(--text-muted); font-family: var(--font-ui); text-anchor: middle;
+}
+
+.chart__bar { fill: var(--chart-bar); }
+.chart__band { fill: var(--chart-band); }
+.chart__line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart__line--max { stroke: var(--chart-max); }
+.chart__line--min { stroke: var(--chart-min); }
+.chart__marker { stroke: var(--text-faint); stroke-width: 1; stroke-dasharray: 3 3; }
+.chart__hit { fill: transparent; cursor: crosshair; }
+
+/* The band and the bars draw in on first render; the reduced-motion block below turns
+   this off rather than merely shortening it. */
+.chart__band, .chart__bar { animation: chart-in 420ms var(--ease) both; }
+@keyframes chart-in { from { opacity: 0; } }
+
+.chart__tip {
+  position: absolute; top: 0; z-index: 3;
+  transform: translateX(-50%);
+  min-width: 132px; padding: var(--s2) var(--s3);
+  border: 1px solid var(--border); border-radius: var(--r-sm);
+  background: var(--surface-solid); box-shadow: var(--shadow-md);
+  font-size: .78rem; pointer-events: none;
+}
+.chart__tip[hidden] { display: none; }
+.chart__tip strong { display: block; margin-bottom: var(--s1); font-size: .82rem; }
+.chart__tip-list {
+  display: grid; grid-template-columns: auto auto; gap: 2px var(--s2); margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.chart__tip-list dt { color: var(--text-muted); }
+.chart__tip-list dd { margin: 0; text-align: right; }
+
+.chart__legend {
+  display: flex; flex-wrap: wrap; gap: var(--s4); margin: 0; padding: 0; list-style: none;
+}
+.chart__legend-item {
+  display: flex; align-items: center; gap: var(--s2); font-size: .78rem; color: var(--text-muted);
+}
+.chart__swatch { width: 16px; height: 10px; border-radius: 3px; }
+.chart__swatch--band { background: var(--chart-band); border: 1px solid var(--chart-max); }
+.chart__swatch--bar { background: var(--chart-bar); }
+
+@media (max-width: 560px) {
+  .chart__tip { min-width: 118px; font-size: .74rem; }
+  .chart__legend { gap: var(--s3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart__band, .chart__bar { animation: none; }
+}

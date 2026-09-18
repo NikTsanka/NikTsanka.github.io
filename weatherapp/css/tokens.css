@@ -50,6 +50,12 @@
   --band-evening-bg: hsl(34 84% 82%);
   --band-evening-fg: hsl(26 72% 20%);
 
+  --chart-band:    hsl(28 88% 55% / .15);
+  --chart-max:     hsl(24 82% 42%);
+  --chart-min:     hsl(205 76% 38%);
+  --chart-bar:     hsl(198 58% 52% / .55);
+  --chart-grid:    hsl(212 24% 84%);
+
   --shadow-sm: 0 1px 2px hsl(214 40% 20% / .07), 0 2px 8px hsl(214 40% 20% / .05);
   --shadow-md: 0 2px 6px hsl(214 40% 20% / .08), 0 12px 28px hsl(214 40% 20% / .09);
 
@@ -93,6 +99,12 @@
   --band-work-fg:    hsl(156 58% 86%);
   --band-evening-bg: hsl(28 44% 29%);
   --band-evening-fg: hsl(34 78% 86%);
+
+  --chart-band:    hsl(30 86% 62% / .16);
+  --chart-max:     hsl(30 92% 66%);
+  --chart-min:     hsl(200 88% 66%);
+  --chart-bar:     hsl(198 66% 56% / .5);
+  --chart-grid:    hsl(214 24% 28%);
 
   --shadow-sm: 0 1px 2px hsl(220 60% 2% / .5), 0 2px 8px hsl(220 60% 2% / .35);
   --shadow-md: 0 2px 8px hsl(220 60% 2% / .55), 0 14px 32px hsl(220 60% 2% / .45);
@@ -138,6 +150,12 @@
     --band-work-fg:    hsl(156 58% 86%);
     --band-evening-bg: hsl(28 44% 29%);
     --band-evening-fg: hsl(34 78% 86%);
+
+    --chart-band:    hsl(30 86% 62% / .16);
+    --chart-max:     hsl(30 92% 66%);
+    --chart-min:     hsl(200 88% 66%);
+    --chart-bar:     hsl(198 66% 56% / .5);
+    --chart-grid:    hsl(214 24% 28%);
 
     --shadow-sm: 0 1px 2px hsl(220 60% 2% / .5), 0 2px 8px hsl(220 60% 2% / .35);
     --shadow-md: 0 2px 8px hsl(220 60% 2% / .55), 0 14px 32px hsl(220 60% 2% / .45);

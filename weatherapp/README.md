@@ -6,9 +6,9 @@ JavaScript — no framework, no build step, no bundler, no npm dependency, no CD
 Deployed at <https://niktsanka.github.io/weatherapp/>, and it also runs from a
 double-clicked `index.html` over `file://`.
 
-> **Status:** Phases 1-3 are complete - the dashboard, persisted favourites, hash routing,
-> the city detail view, the global settings, the meeting planner and the time-zone browser.
-> The climate chart (Phase 4) is not built yet.
+> **Status:** complete. Phases 1-4 are all built: the dashboard, persisted favourites,
+> hash routing, the city detail view, global settings, the meeting planner, the time-zone
+> browser and the climate chart.
 
 ## Running it locally
 
@@ -38,7 +38,7 @@ everything it owns lives under `weatherapp/` and it writes nothing at the reposi
 5. **Hard-refresh** (`Ctrl+Shift+R`, or `Cmd+Shift+R` on macOS). The Pages CDN caches
    assets for roughly 10 minutes, so a fresh deploy can otherwise serve the old CSS or JS.
 
-Local assets carry a manual version query (`./css/styles.css?v=3`). Bump the `v` value
+Local assets carry a manual version query (`./css/styles.css?v=4`). Bump the `v` value
 when you change a file and want to force every visitor past that CDN cache.
 
 A `.nojekyll` file already exists at the repository root, so Jekyll does not process the
@@ -53,6 +53,7 @@ weatherapp/
   css/styles.css         base layout, header, search, cards
   css/views.css          states, settings panel, detail view
   css/planner.css        view tabs, planner grid, zone browser
+  css/chart.css          the climate chart
   data/fixtures.js       real API responses, captured 2026-09-18
   js/…                   see load order below
   tools/verify.mjs       development only — never loaded by the app
@@ -83,9 +84,10 @@ an IIFE under `'use strict'` that attaches to the single global `window.WTW`.
 | 12 | `js/ui.js` | `WTW.ui` — shared DOM primitives, the city card, designed states | `units`, `weather`, `clock`, `router` |
 | 13 | `js/dashboard.js` | `WTW.dashboard` — the favourites list and the card grid | `ui`, `api`, `settings` |
 | 14 | `js/detail.js` | `WTW.detail` — the single-city view and its DST block | `ui`, `clock`, `api` |
-| 15 | `js/planner.js` | `WTW.planner` — the meeting planner and its time maths | `ui`, `clock`, `detail` |
-| 16 | `js/zones.js` | `WTW.zones` — the time-zone browser | `ui`, `clock`, `units` |
-| 17 | `js/app.js` | bootstrap and event wiring | everything above |
+| 15 | `js/chart.js` | `WTW.chart` — the inline-SVG climate chart | `ui`, `units` |
+| 16 | `js/planner.js` | `WTW.planner` — the meeting planner and its time maths | `ui`, `clock`, `detail` |
+| 17 | `js/zones.js` | `WTW.zones` — the time-zone browser | `ui`, `clock`, `units` |
+| 18 | `js/app.js` | bootstrap and event wiring | everything above |
 
 **No ES modules.** A module script is blocked over `file://` (origin `null`), and this app
 has to run from a double-clicked file, so there is no `type="module"`, no `import` and no
@@ -139,6 +141,28 @@ handled in both the maths and the display; because the hour number alone would h
 minutes, those cells are italic and every cell carries the exact local time in its
 `aria-label` and tooltip. The grid is a real `<table>` with row and column headers inside a
 keyboard-scrollable region.
+
+## The climate chart
+
+On a city page, `climate_normals` is drawn as hand-written inline SVG — no chart library,
+no canvas, no image request. Twelve months, the average high and low as a filled band with
+a line along each edge, rainfall as bars on a **secondary right-hand axis**, and the period
+(e.g. 2021-2025) and units stated in the caption. Both axes snap to round tick values.
+
+The tooltip gives the month's high, low, rainfall and **wet days**, and works on tap as
+well as hover: each month has a transparent hit area listening for `pointerenter` *and*
+`pointerdown`, because a touch never fires an enter event of its own.
+
+The SVG is `aria-hidden`, and a **visually-hidden `<table>`** beside it carries exactly the
+same numbers with proper row and column headers. That table is both the screen-reader
+version and the fallback if the SVG never renders; both are formatted from one prepared set
+of values, so they cannot drift apart. The table sits inside a visually-hidden `<div>`
+rather than wearing the class itself — `width: 1px` does not shrink a `<table>`, which
+sizes to its content, and setting `display: block` on it would strip the table semantics
+screen readers rely on.
+
+`tmax` / `tmin` / `prcp` are metric-only in the API, so this is the one place unit
+conversion is unavoidable; it happens in `js/units.js` and nowhere else.
 
 ## The time-zone browser
 
@@ -232,8 +256,12 @@ path segment starting with `_`.
   points, which Windows has no glyphs for. This is a platform font gap, not a bug, and it
   is why the country code is not repeated next to the flag.
 - **`climate_normals` was present on all 413 cities** when the API was surveyed, so the
-  absent-normals path has never been exercised against real data. Phase 4 will handle it
-  defensively.
+  absent-normals path has never been exercised against real data. It is handled
+  defensively: `WTW.chart.climate()` returns `null` and the detail view omits the panel
+  rather than rendering an empty frame.
+- **The chart tooltip is pointer-only.** It is an enhancement for mouse and touch; the
+  visually-hidden table is the accessible route to the same numbers, so the tooltip
+  deliberately adds no extra tab stops.
 - **The planner plans across your dashboard cities**, not an independent selection. Add or
   remove cities from the search box and the open planner updates in place.
 - **The planner grid is always 24-hour**, regardless of the 12/24-hour setting: a

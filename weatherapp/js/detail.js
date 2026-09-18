@@ -183,6 +183,16 @@
 
     root.appendChild(dstBlock(city));
 
+    /* Climate normals are optional in the schema, so the panel is omitted rather than
+       rendered empty when a city has none. */
+    var chart = WTW.chart.climate(city.climate, settings);
+    if (chart) {
+      var climatePanel = el('section', 'panel');
+      climatePanel.appendChild(el('h3', 'panel__title', 'Climate normals'));
+      climatePanel.appendChild(chart);
+      root.appendChild(climatePanel);
+    }
+
     var page = WTW.api.pageUrl(city);
     if (page) {
       var out = el('a', 'detail__out', 'Open the full ' + city.name + ' page on worldtimeweather.com');
