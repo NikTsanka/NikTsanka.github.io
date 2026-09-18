@@ -5,7 +5,9 @@
 /* ---------- view tabs ---------- */
 
 .tabs {
-  max-width: 1180px; margin: 0 auto;
+  /* The top margin is load-bearing: without it the tab strip sits flush against the
+     search box and the two read as one control. */
+  max-width: 1180px; margin: var(--s3) auto 0;
   display: flex; gap: 2px; padding: 2px;
   border: 1px solid var(--border); border-radius: var(--r-md);
   background: var(--surface-2); width: fit-content;
