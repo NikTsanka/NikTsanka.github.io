@@ -1,7 +1,32 @@
 /* forecast.css - the seven-day outlook and the sun-times block on a city page.
    Reads tokens.css; no colour literal here. */
 
-.forecast { display: flex; flex-direction: column; gap: var(--s4); }
+.forecast { display: flex; flex-direction: column; gap: var(--s5); }
+.forecast__section { display: flex; flex-direction: column; gap: var(--s2); }
+
+/* ---------- the next 24 hours ---------- */
+
+.hourly { margin: 0; display: flex; flex-direction: column; gap: var(--s1); }
+.hourly__caption { font-size: .76rem; color: var(--text-faint); }
+.hourly__plot { position: relative; }
+.hourly__svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+.hourly__area { fill: var(--chart-band); }
+.hourly__line { fill: none; stroke: var(--chart-max); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+.hourly__dot { fill: var(--chart-max); }
+.hourly__dot--now { fill: var(--accent); }
+.hourly__bar { fill: var(--chart-bar); }
+.hourly__baseline { stroke: var(--chart-grid); stroke-width: 1; }
+
+.hourly__value {
+  font-size: 11px; font-weight: 700; fill: var(--text); text-anchor: middle;
+  font-family: var(--font-ui); font-variant-numeric: tabular-nums;
+}
+.hourly__hour {
+  font-size: 10px; fill: var(--text-faint); text-anchor: middle;
+  font-family: var(--font-ui); font-variant-numeric: tabular-nums;
+}
+.hourly__hour--now { fill: var(--accent); font-weight: 700; }
 
 .forecast__scroll { overflow-x: auto; margin: 0 calc(var(--s1) * -1); padding: 0 var(--s1); }
 .forecast__scroll:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--r-sm); }

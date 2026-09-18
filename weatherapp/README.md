@@ -36,7 +36,7 @@ everything it owns lives under `weatherapp/` and it writes nothing at the reposi
 5. **Hard-refresh** (`Ctrl+Shift+R`, or `Cmd+Shift+R` on macOS). The Pages CDN caches
    assets for roughly 10 minutes, so a fresh deploy can otherwise serve the old CSS or JS.
 
-Local assets carry a manual version query (`./css/styles.css?v=5`). Bump the `v` value
+Local assets carry a manual version query (`./css/styles.css?v=6`). Bump the `v` value
 when you change a file and want to force every visitor past that CDN cache.
 
 A `.nojekyll` file already exists at the repository root, so Jekyll does not process the
@@ -54,7 +54,7 @@ weatherapp/
   css/views.css          states, settings panel, detail view
   css/planner.css        view tabs, planner grid, zone browser
   css/chart.css          the climate chart
-  css/forecast.css       the seven-day outlook and sun times
+  css/forecast.css       the hourly strip, seven-day outlook and sun times
   data/fixtures.js       real API responses, captured 2026-09-18
   js/…                   see load order below
   tools/verify.mjs       development only — never loaded by the app
@@ -86,7 +86,8 @@ an IIFE under `'use strict'` that attaches to the single global `window.WTW`.
 | 13 | `js/dashboard.js` | `WTW.dashboard` — the favourites list and the card grid | `ui`, `api`, `settings` |
 | 14 | `js/detail.js` | `WTW.detail` — the single-city view and its DST block | `ui`, `clock`, `api` |
 | 15 | `js/chart.js` | `WTW.chart` — the inline-SVG climate chart | `ui`, `units` |
-| 15b | `js/forecast.js` | `WTW.forecast` — the seven-day outlook and sun times | `ui`, `units`, `weather`, `api` |
+| 15b | `js/hourly.js` | `WTW.hourly` — the next 24 hours as a sparkline | `ui`, `units`, `clock` |
+| 15c | `js/forecast.js` | `WTW.forecast` — the seven-day outlook and sun times | `ui`, `units`, `weather`, `hourly`, `api` |
 | 16 | `js/planner.js` | `WTW.planner` — the meeting planner and its time maths | `ui`, `clock`, `detail` |
 | 17 | `js/zones.js` | `WTW.zones` — the time-zone browser | `ui`, `clock`, `units` |
 | 18 | `js/app.js` | bootstrap and event wiring | everything above |
@@ -200,6 +201,28 @@ Forecasts cache for **one hour**, which is roughly how often Open-Meteo recomput
 is no fixture fallback: a forecast from a snapshot captured weeks ago would be worse than
 none. If the request fails the panel shows a quiet line and a Retry, and the rest of the
 city page — clock, current weather, DST block, climate chart — renders regardless.
+
+### The next 24 hours
+
+The hourly strip rides along in **the same request** as the seven-day outlook
+(`&hourly=…&forecast_hours=24`), so it costs no extra traffic at all. With the city's zone
+named, Open-Meteo starts the series at the current hour and returns bare local wall clock,
+so the labels are sliced out of the strings rather than parsed.
+
+It is a sparkline: a temperature line over precipitation-probability bars, with the
+temperature printed on the line every third hour. **Deliberately no tooltip** — printing
+the values answers the question a tooltip would, without a hover-only interaction, and the
+full 24 rows are in the visually-hidden table beside it.
+
+### Today versus the climate normal
+
+A city page states how the current reading compares with that month's normal — *"4° warmer
+than the September average of 21°"*. Both numbers are already on the page, so this costs
+no request at all. The normal is the midpoint of the month's average high and low, and the
+month is the **city's** month, not the viewer's: at a month boundary those differ for a
+third of the world and the wrong column would be compared. The comparison is made in
+Celsius and then stated in the chosen unit, because a degree of difference is a different
+size in Fahrenheit.
 
 It is fetched **only on a city page**, one request at a time. Putting it on the dashboard
 would mean seven extra requests on every load.

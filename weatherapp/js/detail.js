@@ -110,6 +110,44 @@
     return box;
   }
 
+  /* "3 degrees warmer than the September average." Both numbers are already on the page:
+     the current reading from worldtimeweather.com and the month's normal from the same
+     document. No extra request, and it is the one line that turns a bare temperature into
+     something a reader can judge.
+
+     The month is the CITY's month, not the viewer's - at the turn of a month those differ
+     for a third of the world, and the wrong column would be compared. */
+  function versusNormal(city, unit) {
+    var w = city.weather;
+    if (!w || !city.climate || typeof w.temperatureC !== 'number') { return null; }
+
+    var monthIndex;
+    try {
+      monthIndex = +new Intl.DateTimeFormat('en-GB', {
+        timeZone: city.time.timezone, month: 'numeric'
+      }).format(new Date()) - 1;
+    } catch (err) { monthIndex = new Date().getUTCMonth(); }
+
+    var month = city.climate.months[monthIndex];
+    if (!month || typeof month.tmax !== 'number' || typeof month.tmin !== 'number') { return null; }
+
+    /* The normal is the midpoint of the month's average high and low - the closest thing
+       the data has to "a typical temperature right now". */
+    var normalC = (month.tmax + month.tmin) / 2;
+    var deltaC = w.temperatureC - normalC;
+    var name = WTW.chart.MONTHS[monthIndex];
+    var normalText = units.normalTemperature(normalC, unit) + '°';
+
+    /* Compared in Celsius, then stated in the chosen unit: a degree of difference is
+       bigger in Fahrenheit, so the threshold has to live in one fixed scale. */
+    if (Math.abs(deltaC) < 1) {
+      return 'About average for ' + name + ', which is usually around ' + normalText + '.';
+    }
+    var shown = units.normalTemperature(Math.abs(deltaC) * (unit === 'f' ? 9 / 5 : 1), 'c');
+    return shown + '° ' + (deltaC > 0 ? 'warmer' : 'colder') + ' than the ' + name +
+      ' average of ' + normalText + '.';
+  }
+
   function render(city, options) {
     var opts = options || {};
     var settings = opts.settings || {};
@@ -179,12 +217,16 @@
     row(readout, 'Observed', observedLine(city));
     row(readout, 'Day or night', w && w.isDay === null ? '—' : (w && w.isDay ? 'Daytime' : 'Night'));
     weatherPanel.appendChild(readout);
+
+    var comparison = versusNormal(city, settings.temperatureUnit);
+    if (comparison) { weatherPanel.appendChild(el('p', 'detail__normal', comparison)); }
+
     root.appendChild(weatherPanel);
 
     /* The forecast comes from a second upstream and arrives later, so it mounts into a
        placeholder rather than holding up the rest of the page. */
     var forecastPanel = el('section', 'panel');
-    forecastPanel.appendChild(el('h3', 'panel__title', 'Next seven days'));
+    forecastPanel.appendChild(el('h3', 'panel__title', 'Forecast'));
     var forecastSlot = el('div');
     forecastPanel.appendChild(forecastSlot);
     root.appendChild(forecastPanel);
@@ -214,5 +256,5 @@
     return root;
   }
 
-  WTW.detail = { render: render, formatDelta: formatDelta };
+  WTW.detail = { render: render, formatDelta: formatDelta, versusNormal: versusNormal };
 })(typeof window !== 'undefined' ? window : globalThis);

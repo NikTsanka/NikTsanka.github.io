@@ -122,6 +122,17 @@
 
     var box = el('div', 'forecast');
 
+    var hourly = WTW.hourly.render(forecast.hours, opts);
+    if (hourly) {
+      var hourlyBox = el('section', 'forecast__section');
+      hourlyBox.appendChild(el('h4', 'forecast__subtitle', 'Next 24 hours'));
+      hourlyBox.appendChild(hourly);
+      box.appendChild(hourlyBox);
+    }
+
+    var daysBox = el('section', 'forecast__section');
+    daysBox.appendChild(el('h4', 'forecast__subtitle', 'Next 7 days'));
+
     var list = el('ul', 'forecast__days');
     list.setAttribute('aria-label', 'Seven day forecast');
     forecast.days.forEach(function (day, i) { list.appendChild(dayCard(day, i, unit)); });
@@ -131,7 +142,8 @@
     scroller.setAttribute('aria-label', 'Seven day forecast, scrolls horizontally');
     scroller.tabIndex = 0;
     scroller.appendChild(list);
-    box.appendChild(scroller);
+    daysBox.appendChild(scroller);
+    box.appendChild(daysBox);
 
     var sun = sunPanel(forecast.days[0]);
     if (sun) {

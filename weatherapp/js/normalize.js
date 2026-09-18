@@ -212,11 +212,27 @@
       });
     }
 
+    /* The hourly block is optional: an older cache entry predates it, and the view
+       simply omits the section when it is absent. */
+    var hours = [];
+    var hourly = raw.hourly;
+    if (hourly && Array.isArray(hourly.time)) {
+      for (var h = 0; h < hourly.time.length; h++) {
+        hours.push({
+          time: text(hourly.time, h),
+          tempC: at(hourly.temperature_2m, h),
+          precipitationChance: at(hourly.precipitation_probability, h),
+          condition: WTW.weather.fromWmo(at(hourly.weather_code, h))
+        });
+      }
+    }
+
     return {
       timezone: str(raw.timezone),
       utcOffsetSeconds: num(raw.utc_offset_seconds),
       elevation: num(raw.elevation),
-      days: days
+      days: days,
+      hours: hours
     };
   }
 

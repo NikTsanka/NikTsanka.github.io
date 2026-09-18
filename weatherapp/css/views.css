@@ -151,6 +151,13 @@
 }
 .detail__cond { color: var(--text-muted); }
 
+/* The one line that turns a bare temperature into something judgeable. */
+.detail__normal {
+  margin: var(--s4) 0 0; padding: var(--s2) var(--s3);
+  border-left: 3px solid var(--accent); border-radius: var(--r-sm);
+  background: var(--accent-soft); font-size: .88rem;
+}
+
 .readout {
   display: grid; grid-template-columns: auto 1fr; gap: var(--s2) var(--s4); margin: 0;
   font-size: .9rem;

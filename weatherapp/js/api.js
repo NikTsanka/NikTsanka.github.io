@@ -16,6 +16,7 @@
      also the upstream worldtimeweather.com already credits for its weather. */
   var METEO = 'https://api.open-meteo.com/v1/forecast';
   var FORECAST_DAYS = 7;
+  var FORECAST_HOURS = 24;
   var TIMEOUT_MS = 12000;
 
   var inflight = Object.create(null);
@@ -167,6 +168,10 @@
           'precipitation_probability_max', 'precipitation_sum', 'uv_index_max',
           'sunrise', 'sunset'
         ].join(',')) +
+        /* The next 24 hours ride along in the same request, so the hourly view costs
+           no extra traffic. With a timezone named, they start at the current hour. */
+        '&hourly=' + encodeURIComponent('temperature_2m,precipitation_probability,weather_code') +
+        '&forecast_hours=' + FORECAST_HOURS +
         '&timezone=' + encodeURIComponent(city.time.timezone || 'UTC') +
         '&forecast_days=' + FORECAST_DAYS +
         '&temperature_unit=celsius&precipitation_unit=mm&timeformat=iso8601';
