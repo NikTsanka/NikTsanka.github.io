@@ -36,7 +36,7 @@ everything it owns lives under `weatherapp/` and it writes nothing at the reposi
 5. **Hard-refresh** (`Ctrl+Shift+R`, or `Cmd+Shift+R` on macOS). The Pages CDN caches
    assets for roughly 10 minutes, so a fresh deploy can otherwise serve the old CSS or JS.
 
-Local assets carry a manual version query (`./css/styles.css?v=9`). Bump the `v` value
+Local assets carry a manual version query (`./css/styles.css?v=10`). Bump the `v` value
 when you change a file and want to force every visitor past that CDN cache.
 
 A `.nojekyll` file already exists at the repository root, so Jekyll does not process the
@@ -105,6 +105,12 @@ Links are `#city=<slug>`, driven by `hashchange`. An incoming `?city=<slug>` is 
 to the hash form on first load so older links keep working. `pushState` is never called:
 it throws a `SecurityError` on `file://` in Chrome, and one code path has to serve both
 targets. An unknown slug renders a designed "city not found" state with a link back.
+
+The **whole card** opens the city, not just its name. The anchor on the name stays the real
+link — one tab stop, a real `href`, so ctrl-click and middle-click still open a new tab —
+and a stretched `::after` on it extends the hit area over the card. The reorder and remove
+buttons sit above that overlay, so they still do their own job. (The trade-off is that text
+on a card can no longer be selected by dragging.)
 
 Favourites live in `wtw:pref:favourites` — add from the search box, remove and reorder with
 the up/down buttons on each card. No drag-and-drop: it has no keyboard equivalent without a
