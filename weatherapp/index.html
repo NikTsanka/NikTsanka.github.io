@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Live clocks and current weather for cities around the world.">
+  <title>World Time &amp; Weather</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap">
+  <link rel="stylesheet" href="./css/styles.css?v=1">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="app-header">
+    <div class="app-header__bar">
+      <h1 class="brand">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>
+          </svg>
+        </span>
+        World Time <span class="brand__amp">&amp;</span> Weather
+      </h1>
+
+      <div class="app-header__actions">
+        <button type="button" id="refresh-btn" class="icon-btn" aria-label="Refresh weather data">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+            <path d="M20 12a8 8 0 1 1-2.3-5.6"></path><path d="M20 4v4h-4"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="search" role="search">
+      <label class="visually-hidden" for="search-input">Search cities by name or country code</label>
+      <span class="search__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path>
+        </svg>
+      </span>
+      <input id="search-input" class="search__input" type="text" autocomplete="off" spellcheck="false"
+             placeholder="Add a city&hellip;" role="combobox" aria-expanded="false"
+             aria-controls="search-results" aria-autocomplete="list" aria-describedby="search-hint">
+      <p id="search-hint" class="visually-hidden">Use the up and down arrow keys to review results, Enter to add a city, Escape to close.</p>
+      <button type="button" id="search-clear" class="icon-btn icon-btn--bare is-hidden" aria-label="Clear search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <path d="m6 6 12 12M18 6 6 18"></path>
+        </svg>
+      </button>
+      <ul id="search-results" class="search__results is-hidden" role="listbox" aria-label="City search results"></ul>
+    </div>
+  </header>
+
+  <div id="notice-area" class="notice-area" aria-live="polite"></div>
+
+  <main id="main" class="main">
+    <section class="dashboard" aria-labelledby="dashboard-title">
+      <div class="section-head">
+        <h2 id="dashboard-title" class="section-title">Cities</h2>
+        <p id="dashboard-meta" class="section-meta"></p>
+      </div>
+      <div id="card-grid" class="card-grid" aria-busy="true"></div>
+      <div id="state-area" class="state-area"></div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>
+      Data from <a href="https://worldtimeweather.com/">World Time &amp; Weather</a> &middot;
+      Weather by <a href="https://open-meteo.com">Open-Meteo</a>
+    </p>
+  </footer>
+
+  <!-- Classic scripts, explicit load order. No ES modules: a module script is blocked
+       over file:// (origin null), and this app must run from a double-clicked file. -->
+  <script defer src="./data/fixtures.js?v=1"></script>
+  <script defer src="./js/storage.js?v=1"></script>
+  <script defer src="./js/cache.js?v=1"></script>
+  <script defer src="./js/units.js?v=1"></script>
+  <script defer src="./js/weather.js?v=1"></script>
+  <script defer src="./js/normalize.js?v=1"></script>
+  <script defer src="./js/api.js?v=1"></script>
+  <script defer src="./js/clock.js?v=1"></script>
+  <script defer src="./js/ui.js?v=1"></script>
+  <script defer src="./js/app.js?v=1"></script>
+</body>
+</html>
