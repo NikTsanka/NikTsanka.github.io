@@ -36,7 +36,7 @@ everything it owns lives under `weatherapp/` and it writes nothing at the reposi
 5. **Hard-refresh** (`Ctrl+Shift+R`, or `Cmd+Shift+R` on macOS). The Pages CDN caches
    assets for roughly 10 minutes, so a fresh deploy can otherwise serve the old CSS or JS.
 
-Local assets carry a manual version query (`./css/styles.css?v=6`). Bump the `v` value
+Local assets carry a manual version query (`./css/styles.css?v=8`). Bump the `v` value
 when you change a file and want to force every visitor past that CDN cache.
 
 A `.nojekyll` file already exists at the repository root, so Jekyll does not process the
@@ -48,6 +48,7 @@ site and no file is dropped for starting with `_`.
 weatherapp/
   index.html
   icon.svg               the tab logo (carries its own colours - see the file header)
+  site.webmanifest       app metadata, with a relative scope
   apple-touch-icon.png   180x180 raster for an iOS home screen
   css/tokens.css         the palette and scale - the only file with colour literals
   css/styles.css         base layout, header, search, cards
@@ -90,6 +91,7 @@ an IIFE under `'use strict'` that attaches to the single global `window.WTW`.
 | 15c | `js/forecast.js` | `WTW.forecast` — the seven-day outlook and sun times | `ui`, `units`, `weather`, `hourly`, `api` |
 | 15d | `js/timemath.js` | `WTW.timemath` — wall clock to instant, in a named zone | `clock` |
 | 15e | `js/overlap.js` | `WTW.overlap` — the best shared working window | — |
+| 15f | `js/air.js` | `WTW.air` — current air quality and its banding | `ui`, `api` |
 | 16 | `js/planner.js` | `WTW.planner` — the meeting planner | `ui`, `clock`, `timemath`, `overlap` |
 | 17 | `js/zones.js` | `WTW.zones` — the time-zone browser | `ui`, `clock`, `units` |
 | 18 | `js/app.js` | bootstrap and event wiring | everything above |
@@ -178,6 +180,26 @@ a **run** rather than collapsed to one hour — "10:00 to 17:00" is more useful 
 and a scattered tie loses to a genuine unbroken window. If nobody overlaps at all it says
 so and suggests widening the working day rather than showing an empty result.
 
+## Air quality
+
+From `air-quality-api.open-meteo.com` — same operator as the forecast, same keyless HTTPS
+and `Access-Control-Allow-Origin: *`. It is the **third and last** permitted origin.
+
+The banding follows the European AQI because its scale is fixed and published (0–20 good,
+20–40 fair, and so on past 100). The raw index is always printed beside the word: *"Fair"*
+alone is an opinion, the number is the fact. A failure leaves nothing behind — no block, no
+message, and the empty slot collapses to zero height.
+
+## Installing it
+
+`site.webmanifest` gives the app a name, an icon and a theme colour when it is added to a
+home screen. Its `scope` and `start_url` are **relative**, so an installed copy claims
+`/weatherapp/` and nothing else on `niktsanka.github.io`.
+
+There is still **no service worker**, deliberately. On a shared domain a wrong scope would
+hijack the sibling sites outright, which is a much worse failure than having no offline
+mode.
+
 ## The time-zone browser
 
 Cities grouped by IANA zone, collapsible with `aria-expanded`, sorted by each zone's
@@ -256,7 +278,8 @@ forecast:
 | `city/{slug}.json` | one city's time, weather and climate normals |
 | `timezones.json` | the time-zone browser |
 | `api/health.php` | not used by the app; checked by `tools/verify.mjs` |
-| `api.open-meteo.com/v1/forecast` | the seven-day outlook, sunrise, sunset and UV index |
+| `api.open-meteo.com/v1/forecast` | the seven-day outlook, the next 24 hours, sunrise, sunset and UV index |
+| `air-quality-api.open-meteo.com/v1/air-quality` | current air quality |
 
 `index.json` is documentation only. Weather ultimately comes from
 [Open-Meteo](https://open-meteo.com), which is why both are credited in the footer.
@@ -280,6 +303,7 @@ fresh cache  ->  network  ->  stale cache (labelled)  ->  bundled fixtures (labe
 |---|---|---|
 | `city/{slug}` | 15 minutes | The API regenerates every 30 min behind `Cache-Control: max-age=900`. Asking sooner returns a byte-identical file. |
 | `forecast/{slug}` | 1 hour | Open-Meteo recomputes roughly hourly. |
+| `air/{slug}` | 1 hour | The air-quality host reports hourly too. |
 | `cities.json` | 24 hours | The city list changes rarely. |
 | `timezones.json` | 24 hours | Same. |
 
@@ -322,9 +346,10 @@ path segment starting with `_`.
   not persist. Nothing throws.
 - **Hash routing, not clean URLs.** GitHub Pages cannot rewrite unknown paths to
   `index.html`, so `/weatherapp/city/tokyo` is impossible. Links use `#city=<slug>`.
-- **Two upstreams, so two things can break.** A city page needs `worldtimeweather.com` for
-  everything and `api.open-meteo.com` for the forecast panel only; the page degrades to
-  a Retry line if the second is unreachable.
+- **Three upstreams, so three things can break.** A city page needs `worldtimeweather.com`
+  for everything, `api.open-meteo.com` for the forecast panel and
+  `air-quality-api.open-meteo.com` for the air-quality line. The forecast degrades to a
+  Retry line; air quality degrades to nothing at all. Neither can take the page down.
 - **Hard dependency on the API's CORS header.** If `Access-Control-Allow-Origin` ever stops
   being `*`, `file://` testing breaks immediately; if it stops including
   `https://niktsanka.github.io`, the deployed site breaks too. `verify.mjs` reports the raw

@@ -1,0 +1,14 @@
+{
+  "name": "World Time & Weather",
+  "short_name": "World Time",
+  "description": "Live clocks and current weather for cities around the world.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0e1c31",
+  "theme_color": "#0e1c31",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

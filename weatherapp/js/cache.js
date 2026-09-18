@@ -21,7 +21,9 @@
     timezones: 24 * 60 * 60 * 1000,
     /* Open-Meteo recomputes its forecast roughly hourly, so asking more often than that
        returns the same numbers. */
-    forecast: 60 * 60 * 1000
+    forecast: 60 * 60 * 1000,
+    /* The air-quality host reports hourly too. */
+    air: 60 * 60 * 1000
   };
 
   var MAX_CITY_ENTRIES = 80;

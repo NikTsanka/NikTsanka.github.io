@@ -236,8 +236,25 @@
     };
   }
 
+  /* Open-Meteo's air-quality host. Same parallel-array house style as the forecast, but
+     the `current` block is a plain object rather than arrays. */
+  function air(raw) {
+    var now = raw && raw.current;
+    if (!now || typeof now !== 'object') { return null; }
+    var value = function (key) { return num(now[key]); };
+    if (value('european_aqi') === null && value('us_aqi') === null) { return null; }
+    return {
+      time: str(now.time),
+      europeanAqi: value('european_aqi'),
+      usAqi: value('us_aqi'),
+      pm25: value('pm2_5'),
+      pm10: value('pm10')
+    };
+  }
+
   WTW.normalize = {
     cities: cities,
+    air: air,
     timezones: timezones,
     city: city,
     forecast: forecast,

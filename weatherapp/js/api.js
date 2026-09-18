@@ -15,6 +15,8 @@
      Access-Control-Allow-Origin: *, so it works from Pages and from file:// alike. It is
      also the upstream worldtimeweather.com already credits for its weather. */
   var METEO = 'https://api.open-meteo.com/v1/forecast';
+  /* The third and last permitted origin. Same operator, same terms, same CORS header. */
+  var AIR = 'https://air-quality-api.open-meteo.com/v1/air-quality';
   var FORECAST_DAYS = 7;
   var FORECAST_HOURS = 24;
   var TIMEOUT_MS = 12000;
@@ -133,6 +135,7 @@
     BASE: BASE,
 
     METEO: METEO,
+    AIR: AIR,
 
     citiesUrl: function () { return BASE + 'cities.json'; },
     timezonesUrl: function () { return BASE + 'timezones.json'; },
@@ -185,6 +188,24 @@
       /* No fixture fallback: the bundled snapshot predates this endpoint, and a forecast
          from a captured file would be worse than none. */
       return load('forecast', city.slug, WTW.api.forecastUrl(city), normalize.forecast,
+        function () { return null; }, force);
+    },
+
+    airUrl: function (city) {
+      var coords = (city && city.coordinates) || {};
+      return AIR +
+        '?latitude=' + encodeURIComponent(coords.latitude) +
+        '&longitude=' + encodeURIComponent(coords.longitude) +
+        '&current=' + encodeURIComponent('european_aqi,us_aqi,pm2_5,pm10') +
+        '&timezone=' + encodeURIComponent(city.time.timezone || 'UTC');
+    },
+
+    getAir: function (city, force) {
+      var coords = (city && city.coordinates) || {};
+      if (typeof coords.latitude !== 'number' || typeof coords.longitude !== 'number') {
+        return Promise.reject(apiError('parse', 'This city has no coordinates.'));
+      }
+      return load('air', city.slug, WTW.api.airUrl(city), normalize.air,
         function () { return null; }, force);
     },
 

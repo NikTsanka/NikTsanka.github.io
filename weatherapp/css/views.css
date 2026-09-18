@@ -152,6 +152,22 @@
 .detail__cond { color: var(--text-muted); }
 
 /* The one line that turns a bare temperature into something judgeable. */
+.detail__air:empty { display: none; }
+.air__title {
+  margin: var(--s4) 0 var(--s2); font-size: .72rem; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase; color: var(--text-muted);
+}
+.air { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s1) var(--s3); }
+.air__headline { margin: 0; display: flex; align-items: baseline; gap: var(--s2); }
+.air__badge { font-weight: 700; font-size: .95rem; color: var(--aqi-good); }
+.air--fair .air__badge { color: var(--aqi-fair); }
+.air--moderate .air__badge { color: var(--aqi-moderate); }
+.air--poor .air__badge { color: var(--aqi-poor); }
+.air--very-poor .air__badge { color: var(--aqi-very-poor); }
+.air--extreme .air__badge { color: var(--aqi-extreme); }
+.air__index { font-size: .82rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.air__detail { margin: 0; font-size: .8rem; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+
 .detail__normal {
   margin: var(--s4) 0 0; padding: var(--s2) var(--s3);
   border-left: 3px solid var(--accent); border-radius: var(--r-sm);

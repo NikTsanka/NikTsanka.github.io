@@ -221,6 +221,11 @@
     var comparison = versusNormal(city, settings.temperatureUnit);
     if (comparison) { weatherPanel.appendChild(el('p', 'detail__normal', comparison)); }
 
+    /* Air quality arrives from a different host, so it fills in later or not at all. */
+    var airSlot = el('div', 'detail__air');
+    weatherPanel.appendChild(airSlot);
+    WTW.air.mount(airSlot, city);
+
     root.appendChild(weatherPanel);
 
     /* The forecast comes from a second upstream and arrives later, so it mounts into a

@@ -56,6 +56,13 @@
   --chart-bar:     hsl(198 58% 52% / .55);
   --chart-grid:    hsl(212 24% 84%);
 
+  --aqi-good:      hsl(152 55% 30%);
+  --aqi-fair:      hsl(88 55% 26%);
+  --aqi-moderate:  hsl(45 80% 26%);
+  --aqi-poor:      hsl(24 78% 36%);
+  --aqi-very-poor: hsl(0 66% 40%);
+  --aqi-extreme:   hsl(320 55% 34%);
+
   --shadow-sm: 0 1px 2px hsl(214 40% 20% / .07), 0 2px 8px hsl(214 40% 20% / .05);
   --shadow-md: 0 2px 6px hsl(214 40% 20% / .08), 0 12px 28px hsl(214 40% 20% / .09);
 
@@ -105,6 +112,13 @@
   --chart-min:     hsl(200 88% 66%);
   --chart-bar:     hsl(198 66% 56% / .5);
   --chart-grid:    hsl(214 24% 28%);
+
+  --aqi-good:      hsl(152 60% 62%);
+  --aqi-fair:      hsl(88 55% 62%);
+  --aqi-moderate:  hsl(45 85% 62%);
+  --aqi-poor:      hsl(24 88% 66%);
+  --aqi-very-poor: hsl(0 80% 70%);
+  --aqi-extreme:   hsl(320 70% 74%);
 
   --shadow-sm: 0 1px 2px hsl(220 60% 2% / .5), 0 2px 8px hsl(220 60% 2% / .35);
   --shadow-md: 0 2px 8px hsl(220 60% 2% / .55), 0 14px 32px hsl(220 60% 2% / .45);
@@ -156,6 +170,13 @@
     --chart-min:     hsl(200 88% 66%);
     --chart-bar:     hsl(198 66% 56% / .5);
     --chart-grid:    hsl(214 24% 28%);
+
+    --aqi-good:      hsl(152 60% 62%);
+    --aqi-fair:      hsl(88 55% 62%);
+    --aqi-moderate:  hsl(45 85% 62%);
+    --aqi-poor:      hsl(24 88% 66%);
+    --aqi-very-poor: hsl(0 80% 70%);
+    --aqi-extreme:   hsl(320 70% 74%);
 
     --shadow-sm: 0 1px 2px hsl(220 60% 2% / .5), 0 2px 8px hsl(220 60% 2% / .35);
     --shadow-md: 0 2px 8px hsl(220 60% 2% / .55), 0 14px 32px hsl(220 60% 2% / .45);

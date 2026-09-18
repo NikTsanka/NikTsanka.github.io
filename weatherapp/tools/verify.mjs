@@ -17,6 +17,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = 'https://worldtimeweather.com/api/v1/';
 const HEALTH = 'https://worldtimeweather.com/api/health.php';
 const METEO = 'https://api.open-meteo.com/v1/forecast';
+const AIR = 'https://air-quality-api.open-meteo.com/v1/air-quality';
 const SAMPLE = process.argv.includes('--all') ? Infinity : 40;
 
 const results = [];
@@ -288,6 +289,28 @@ function wmoMapKeys() {
   return out;
 }
 
+/* The third permitted origin. Checked for the same two things as the others. */
+async function checkAir() {
+  const url = `${AIR}?latitude=41.7225&longitude=44.7925` +
+    '&current=european_aqi,us_aqi,pm2_5,pm10&timezone=Asia%2FTbilisi';
+  try {
+    const { res, acao, body } = await getJson(url);
+    if (!res.ok) { fail('air-quality: reachable', `HTTP ${res.status}`); return; }
+    pass('air-quality: reachable', `HTTP ${res.status} over https:`);
+    checkCors('air-quality', acao);
+    await checkFileOrigin('air-quality', url);
+
+    const now = body?.current;
+    if (!now || typeof now !== 'object') { fail('air-quality: shape', 'no `current` object'); return; }
+    const missing = ['european_aqi', 'us_aqi', 'pm2_5', 'pm10']
+      .filter((f) => !isNum(now[f]));
+    if (missing.length) { fail('air-quality: fields', `missing or non-numeric: ${missing.join(', ')}`); }
+    else { pass('air-quality: fields', 'every field normalize.air reads is a number'); }
+  } catch (err) {
+    fail('air-quality: reachable', err.message);
+  }
+}
+
 /* ---------- 2. static scan of the shipped source ---------- */
 
 /* README.md is deliberately exempt from the lowercase-filename rule: it is documentation,
@@ -351,6 +374,7 @@ function scanSource() {
 scanSource();
 await checkApi();
 await checkForecast();
+await checkAir();
 checkWmoMap();
 
 let failed = 0;
