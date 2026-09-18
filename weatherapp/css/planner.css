@@ -103,6 +103,18 @@
 /* A zone whose offset is not a whole hour - the number shown is the hour it starts in. */
 .cell--offbeat { font-style: italic; }
 
+.planner__overlap {
+  margin: 0; padding: var(--s2) var(--s3);
+  border-left: 3px solid var(--accent); border-radius: var(--r-sm);
+  background: var(--accent-soft); font-size: .9rem;
+}
+.planner__overlap--none { border-left-color: var(--warn); background: var(--warn-soft); }
+
+/* The winning columns. A ring rather than a fill, so the band colour underneath - which
+   is the actual data - is not overpainted. */
+.grid__hour--best { color: var(--accent); font-weight: 700; }
+.cell--best { box-shadow: inset 0 0 0 1.5px var(--accent); }
+
 .legend { display: flex; flex-wrap: wrap; gap: var(--s4); margin: 0; padding: 0; list-style: none; }
 .legend__item { display: flex; align-items: center; gap: var(--s2); font-size: .8rem; color: var(--text-muted); }
 .legend__swatch { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--border); }

@@ -41,43 +41,9 @@
 
   /* ---------- time maths ---------- */
 
-  /* The wall-clock fields of an instant, in a given zone. */
-  function partsIn(zone, ms) {
-    var fmt = new Intl.DateTimeFormat('en-GB', {
-      timeZone: zone, year: 'numeric', month: '2-digit', day: '2-digit',
-      hour: '2-digit', minute: '2-digit', hour12: false, hourCycle: 'h23'
-    });
-    var out = {};
-    fmt.formatToParts(new Date(ms)).forEach(function (p) {
-      if (p.type !== 'literal') { out[p.type] = p.value; }
-    });
-    return {
-      year: +out.year, month: +out.month, day: +out.day,
-      hour: +out.hour, minute: +out.minute,
-      dateKey: out.year + '-' + out.month + '-' + out.day,
-      hhmm: out.hour + ':' + out.minute
-    };
-  }
-
-  /* The instant at which a given wall clock reads in a given zone. Solved by guessing
-     UTC, measuring the zone's offset at that guess and correcting - twice, because the
-     first correction can itself land on the other side of a DST transition. */
-  function instantAt(zone, y, mo, d, hh, mi) {
-    var guess = Date.UTC(y, mo - 1, d, hh, mi);
-    var offset = clock.offsetAt(zone, new Date(guess));
-    if (offset === null) { return guess; }
-    var ts = guess - (offset * 1000);
-    offset = clock.offsetAt(zone, new Date(ts));
-    return offset === null ? ts : guess - (offset * 1000);
-  }
-
-  /* Whole days between two local dates, so the +1 / -1 marker is exact rather than a
-     rounded hour difference. */
-  function dayDelta(a, b) {
-    var da = Date.UTC(a.year, a.month - 1, a.day);
-    var db = Date.UTC(b.year, b.month - 1, b.day);
-    return Math.round((da - db) / 86400000);
-  }
+  var partsIn = WTW.timemath.partsIn;
+  var instantAt = WTW.timemath.instantAt;
+  var dayDelta = WTW.timemath.dayDelta;
 
   /* ---------- band colouring ---------- */
 
@@ -189,15 +155,33 @@
     head.appendChild(headRow);
     table.appendChild(head);
 
+    /* Every cell's local time, computed once and shared by the rows and the overlap
+       search below - the same numbers must drive both or they could disagree. */
+    var matrix = cities.map(function (city) {
+      var cells = [];
+      for (var h = 0; h < 24; h++) {
+        cells.push(partsIn(city.timezone, midnight + (h * 3600000)));
+      }
+      return cells;
+    });
+
+    var overlap = WTW.overlap.best(
+      matrix.map(function (cells) { return cells.map(function (c) { return c.hour; }); }),
+      startH, endH);
+    var bestColumns = (overlap && overlap.columns) || [];
+    for (var b = 0; b < bestColumns.length; b++) {
+      headRow.children[bestColumns[b] + 1].classList.add('grid__hour--best');
+    }
+
     var body = el('tbody');
-    cities.forEach(function (city) {
-      body.appendChild(cityRow(city, base, midnight, refParts, refOffset, startH, endH));
+    cities.forEach(function (city, i) {
+      body.appendChild(cityRow(city, base, matrix[i], refParts, refOffset, startH, endH, bestColumns));
     });
     table.appendChild(body);
-    return table;
+    return { table: table, overlap: overlap, referenceName: refCity.name };
   }
 
-  function cityRow(city, base, midnight, refParts, refOffset, startH, endH) {
+  function cityRow(city, base, cells, refParts, refOffset, startH, endH, bestColumns) {
     var row = el('tr');
     var here = partsIn(city.timezone, base);
     var offset = clock.offsetAt(city.timezone, new Date(base));
@@ -220,9 +204,10 @@
     row.appendChild(header);
 
     for (var h = 0; h < 24; h++) {
-      var cellParts = partsIn(city.timezone, midnight + (h * 3600000));
+      var cellParts = cells[h];
       var band = bandFor(cellParts.hour, startH, endH);
-      var cell = el('td', 'cell cell--' + band, pad(cellParts.hour));
+      var cell = el('td', 'cell cell--' + band +
+        (bestColumns.indexOf(h) >= 0 ? ' cell--best' : ''), pad(cellParts.hour));
       /* Non-integer offsets mean the hour number alone hides the minutes, so the exact
          local time goes in the accessible name and the tooltip. */
       cell.title = city.name + ' ' + cellParts.hhmm + ' (' + BAND_LABEL[band] + ')';
@@ -279,11 +264,20 @@
 
     section.appendChild(controls(state, update));
 
+    var built = grid(state);
+
+    var summary = WTW.overlap.describe(built.overlap, built.referenceName);
+    if (summary) {
+      var line = el('p', 'planner__overlap' + (built.overlap.count === 0 ? ' planner__overlap--none' : ''), summary);
+      line.setAttribute('role', 'status');
+      section.appendChild(line);
+    }
+
     var scroller = el('div', 'grid__scroll');
     scroller.setAttribute('role', 'region');
     scroller.setAttribute('aria-label', 'Hour-by-hour comparison, scrolls horizontally');
     scroller.tabIndex = 0;
-    scroller.appendChild(grid(state));
+    scroller.appendChild(built.table);
     section.appendChild(scroller);
     section.appendChild(legend());
 

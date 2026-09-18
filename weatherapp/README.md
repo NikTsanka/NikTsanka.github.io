@@ -88,7 +88,9 @@ an IIFE under `'use strict'` that attaches to the single global `window.WTW`.
 | 15 | `js/chart.js` | `WTW.chart` — the inline-SVG climate chart | `ui`, `units` |
 | 15b | `js/hourly.js` | `WTW.hourly` — the next 24 hours as a sparkline | `ui`, `units`, `clock` |
 | 15c | `js/forecast.js` | `WTW.forecast` — the seven-day outlook and sun times | `ui`, `units`, `weather`, `hourly`, `api` |
-| 16 | `js/planner.js` | `WTW.planner` — the meeting planner and its time maths | `ui`, `clock`, `detail` |
+| 15d | `js/timemath.js` | `WTW.timemath` — wall clock to instant, in a named zone | `clock` |
+| 15e | `js/overlap.js` | `WTW.overlap` — the best shared working window | — |
+| 16 | `js/planner.js` | `WTW.planner` — the meeting planner | `ui`, `clock`, `timemath`, `overlap` |
 | 17 | `js/zones.js` | `WTW.zones` — the time-zone browser | `ui`, `clock`, `units` |
 | 18 | `js/app.js` | bootstrap and event wiring | everything above |
 
@@ -166,6 +168,15 @@ screen readers rely on.
 
 `tmax` / `tmin` / `prcp` are metric-only in the API, so this is the one place unit
 conversion is unavoidable; it happens in `js/units.js` and nowhere else.
+
+### When can we all talk?
+
+Because every city's day is already laid on one shared timeline, the best meeting window is
+a counting problem: for each column, how many cities are inside their own working hours?
+The planner states the answer in a sentence and rings the winning columns. Ties are kept as
+a **run** rather than collapsed to one hour — "10:00 to 17:00" is more useful than "10:00" —
+and a scattered tie loses to a genuine unbroken window. If nobody overlaps at all it says
+so and suggests widening the working day rather than showing an empty result.
 
 ## The time-zone browser
 
